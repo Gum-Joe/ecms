@@ -1,0 +1,12 @@
+{
+  "name": "ecms",
+  "private": true,
+  "packageManager": "yarn@3.0.2",
+  "workspaces": [
+    "packages/@ecms/*"
+  ],
+  "dependencies": {
+    "eslint": "^7.32.0",
+    "typescript": "^4.4.3"
+  }
+}
