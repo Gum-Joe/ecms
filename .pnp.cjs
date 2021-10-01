@@ -25,12 +25,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       {
         "name": "@ecms/core",
         "reference": "workspace:packages/@ecms/core"
+      },
+      {
+        "name": "@ecms/server",
+        "reference": "workspace:packages/@ecms/server"
       }
     ],
     "enableTopLevelFallback": true,
     "ignorePatternData": "(^(?:\\.yarn\\/sdks(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)|$))$)",
     "fallbackExclusionList": [
       ["@ecms/core", ["workspace:packages/@ecms/core"]],
+      ["@ecms/server", ["workspace:packages/@ecms/server"]],
       ["ecms", ["workspace:."]]
     ],
     "fallbackPool": [
@@ -85,6 +90,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/@ecms/core/",
           "packageDependencies": [
             ["@ecms/core", "workspace:packages/@ecms/core"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
+      ["@ecms/server", [
+        ["workspace:packages/@ecms/server", {
+          "packageLocation": "./packages/@ecms/server/",
+          "packageDependencies": [
+            ["@ecms/server", "workspace:packages/@ecms/server"]
           ],
           "linkType": "SOFT",
         }]

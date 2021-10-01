@@ -38,6 +38,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@ecms/server@workspace:packages/@ecms/server":
+  version: 0.0.0-use.local
+  resolution: "@ecms/server@workspace:packages/@ecms/server"
+  languageName: unknown
+  linkType: soft
+
 "@eslint/eslintrc@npm:^0.4.3":
   version: 0.4.3
   resolution: "@eslint/eslintrc@npm:0.4.3"

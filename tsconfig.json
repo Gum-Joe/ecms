@@ -9,9 +9,9 @@
 		{
 			"path": "./packages/@ecms/core"
 		},
-		/*{
+		{
 			"path": "./packages/@ecms/server"
-		},*/
+		},
 		/*{
 			"path": "./packages/@ecms/extensions"
 		},*/
