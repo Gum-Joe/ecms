@@ -32,6 +32,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ecms/core@workspace:packages/@ecms/core":
+  version: 0.0.0-use.local
+  resolution: "@ecms/core@workspace:packages/@ecms/core"
+  languageName: unknown
+  linkType: soft
+
 "@eslint/eslintrc@npm:^0.4.3":
   version: 0.4.3
   resolution: "@eslint/eslintrc@npm:0.4.3"

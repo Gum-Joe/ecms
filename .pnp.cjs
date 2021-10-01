@@ -21,11 +21,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       {
         "name": "ecms",
         "reference": "workspace:."
+      },
+      {
+        "name": "@ecms/core",
+        "reference": "workspace:packages/@ecms/core"
       }
     ],
     "enableTopLevelFallback": true,
     "ignorePatternData": "(^(?:\\.yarn\\/sdks(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)|$))$)",
     "fallbackExclusionList": [
+      ["@ecms/core", ["workspace:packages/@ecms/core"]],
       ["ecms", ["workspace:."]]
     ],
     "fallbackPool": [
@@ -73,6 +78,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["js-tokens", "npm:4.0.0"]
           ],
           "linkType": "HARD",
+        }]
+      ]],
+      ["@ecms/core", [
+        ["workspace:packages/@ecms/core", {
+          "packageLocation": "./packages/@ecms/core/",
+          "packageDependencies": [
+            ["@ecms/core", "workspace:packages/@ecms/core"]
+          ],
+          "linkType": "SOFT",
         }]
       ]],
       ["@eslint/eslintrc", [

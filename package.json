@@ -2,6 +2,9 @@
   "name": "ecms",
   "private": true,
   "packageManager": "yarn@3.0.2",
+  "scripts": {
+    "build": "tsc -b"
+  },
   "workspaces": [
     "packages/@ecms/*"
   ],

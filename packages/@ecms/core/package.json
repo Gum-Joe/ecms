@@ -1,0 +1,23 @@
+{
+  "name": "@ecms/core",
+  "version": "1.0.0",
+  "description": "Core code for ECMS, shared by all packages",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gum-Joe/ecms.git"
+  },
+  "keywords": [
+    "ecms",
+    "core"
+  ],
+  "author": "Kishan Sambhi",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Gum-Joe/ecms/issues"
+  },
+  "homepage": "https://github.com/Gum-Joe/ecms#readme"
+}
