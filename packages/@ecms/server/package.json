@@ -4,7 +4,8 @@
   "description": "ECMS, or the Event and Competitions Management System. Manage school events, whether competitions or charity events",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node lib/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,15 @@
   "bugs": {
     "url": "https://github.com/Gum-Joe/ecms/issues"
   },
-  "homepage": "https://github.com/Gum-Joe/ecms#readme"
+  "homepage": "https://github.com/Gum-Joe/ecms#readme",
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "koa": "^2.13.3",
+    "koa-logger": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.13.4",
+    "@types/koa-logger": "^3.1.2",
+    "@types/koa__router": "^8.0.8"
+  }
 }
