@@ -2,6 +2,7 @@
 // TODO: Add actual config settings here
 // Dependent on .env stuff
 
+// TODO: Configure the correct seeds here
 module.exports = {
 
 	development: {
