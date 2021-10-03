@@ -23,8 +23,10 @@
   "homepage": "https://github.com/Gum-Joe/ecms#readme",
   "dependencies": {
     "@koa/router": "^10.1.1",
+    "knex": "^0.95.11",
     "koa": "^2.13.3",
-    "koa-logger": "^3.2.1"
+    "koa-logger": "^3.2.1",
+    "pg": "^8.7.1"
   },
   "devDependencies": {
     "@types/koa": "^2.13.4",
