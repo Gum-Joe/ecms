@@ -14,8 +14,8 @@ CREATE TABLE "public".competitor_filters
  competitor_settings_id uuid NOT NULL,
  CONSTRAINT PK_competitor_filters PRIMARY KEY ( filter_id ),
  CONSTRAINT FK_comp_settings_to_filters FOREIGN KEY ( competitor_settings_id ) REFERENCES "public".competitor_settings ( competitor_settings_id ),
- CONSTRAINT check_filter_type CHECK ( type == "base" or type == "or" or type == "and" or type == "not" ),
- CONSTRAINT check_matcher_type CHECK ( matcher == "exactly" )
+ CONSTRAINT check_filter_type CHECK ( type = 'base' or type = 'or' or type = 'and' or type = 'not' ),
+ CONSTRAINT check_matcher_type CHECK ( matcher = 'exactly' )
 );
 
 CREATE INDEX fkIdx_139 ON "public".competitor_filters

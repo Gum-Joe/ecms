@@ -13,7 +13,7 @@ CREATE TABLE "public".event_only_settings
  CONSTRAINT PK_events_and_groups_clone_clone PRIMARY KEY ( event_settings_id ),
  CONSTRAINT FK_unit_to_event FOREIGN KEY ( unit_id ) REFERENCES "public".data_units ( unit_id ),
  CONSTRAINT FK_event_to_record FOREIGN KEY ( record_store ) REFERENCES "public".records ( record_id ),
- CONSTRAINT data_tracked CHECK ( data_tracked == "matches" OR data_tracked == "individual" OR data_tracked == "none" )
+ CONSTRAINT data_tracked CHECK ( data_tracked = 'matches' OR data_tracked = 'individual' OR data_tracked = 'none' )
 );
 
 CREATE INDEX fkIdx_165 ON "public".event_only_settings

@@ -9,7 +9,7 @@ CREATE TABLE "public".competitor_settings
  competitor_settings_id uuid NOT NULL DEFAULT gen_random_uuid(),
  type                   text NOT NULL,
  CONSTRAINT PK_competitor_matching PRIMARY KEY ( competitor_settings_id ),
- CONSTRAINT check_type_competitors CHECK ( type == "discrete" OR type == "inherit" OR type =="filter_parent" )
+ CONSTRAINT check_type_competitors CHECK ( type = 'discrete' OR type = 'inherit' OR type = 'filter_parent' )
 );
 
 COMMENT ON TABLE "public".competitor_settings IS 'Controls how events are matched to their competitors';
