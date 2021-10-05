@@ -51,8 +51,7 @@ CREATE TABLE "public".events_and_groups
  CONSTRAINT FK_parent_group FOREIGN KEY ( parent_id ) REFERENCES "public".events_and_groups ( event_group_id ),
  CONSTRAINT FK_event_settings FOREIGN KEY ( event_settings_id ) REFERENCES "public".event_only_settings ( event_settings_id ),
  CONSTRAINT type_checks CHECK ( type = 'event' OR type = 'group' ),
- CONSTRAINT data_tracked CHECK ( data_tracked = 'matches' OR data_tracked = 'individual' OR data_tracked = 'none' )
-
+ 
  -- Check event_settings_id is set ONLY if type is "event"
  CONSTRAINT event_setting_check CHECK ( ( event_settings_id IS NULL ) OR ((event_settings_id IS NOT NULL) AND type = 'event') )
 );
