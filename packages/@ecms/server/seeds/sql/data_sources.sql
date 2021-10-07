@@ -10,7 +10,7 @@ CREATE TABLE "public".data_sources
  module_id      uuid NOT NULL,
  event_group_id uuid NOT NULL,
  config         jsonb NOT NULL,
- CONSTRAINT "PK_data_source settings" PRIMARY KEY ( data_source_id ),
+ CONSTRAINT PK_data_source_settings PRIMARY KEY ( data_source_id ),
  CONSTRAINT FK_module_to_data_source FOREIGN KEY ( module_id ) REFERENCES "public".installed_modules ( module_id ),
  CONSTRAINT FK_data_source_to_event FOREIGN KEY ( event_group_id ) REFERENCES "public".events_and_groups ( event_group_id )
 );

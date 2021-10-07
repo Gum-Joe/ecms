@@ -10,7 +10,7 @@ CREATE TABLE "public".records
  record_name              text NOT NULL,
  current_holder_firstname text NOT NULL,
  current_holder_lastname  text NOT NULL,
- unit_id                  bigint NOT NULL,
+ unit_id                  bigserial NOT NULL,
  current_record           decimal NOT NULL,
  record_group_id          uuid NOT NULL,
  CONSTRAINT PK_records PRIMARY KEY ( record_id ),

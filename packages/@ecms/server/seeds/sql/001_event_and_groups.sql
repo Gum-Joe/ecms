@@ -26,6 +26,22 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+-- Ensure a event_settings_id is present if type is "event"
+-- This is to make sure event settings have been specified
+CREATE FUNCTION check_if_event() RETURNS trigger AS $$
+BEGIN
+	IF NEW.type IS 'event' AND NEW.event_settings_id IS NULL THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
+		RAISE NOTICE 'Foreign key violation - tried to store an event without specifying event_only_settings (please create a record in event_only_settings and point it to this event';
+			RETURN NULL;
+	ELSIF NEW.type IS NOT 'event' AND NEW.event_settings_id IS NOT NULL THEN
+		RAISE NOTICE 'Foreign key violation - tried to specifying event_only_settings for a non-event';
+			RETURN NULL;
+	ELSE
+		RETURN NEW;
+	END IF;
+END;
+$$ LANGUAGE plpgsql;
+
 -- BEGIN SQL CREATION CODE
 
 CREATE TABLE "public".events_and_groups
@@ -36,7 +52,7 @@ CREATE TABLE "public".events_and_groups
  enable_teams           boolean NOT NULL,
  enable_charity         boolean NOT NULL,
  inheritance            boolean NOT NULL,
- type                   char(5) NOT NULL,
+ type                   event_or_group NOT NULL, -- See 000_baseline_setup.sql for this type
  parent_id              uuid NULL,
  event_settings_id      uuid NULL,
  points_settings_id     uuid NULL,
@@ -50,7 +66,7 @@ CREATE TABLE "public".events_and_groups
  CONSTRAINT FK_event_to_comp_settings FOREIGN KEY ( competitor_settings_id ) REFERENCES "public".competitor_settings ( competitor_settings_id ),
  CONSTRAINT FK_parent_group FOREIGN KEY ( parent_id ) REFERENCES "public".events_and_groups ( event_group_id ),
  CONSTRAINT FK_event_settings FOREIGN KEY ( event_settings_id ) REFERENCES "public".event_only_settings ( event_settings_id ),
- CONSTRAINT type_checks CHECK ( type = 'event' OR type = 'group' ),
+ CONSTRAINT type_checks CHECK ( type = 'event' OR type = 'group' ), -- Just in case - ENUM event_or_group covers this
  
  -- Check event_settings_id is set ONLY if type is "event"
  CONSTRAINT event_setting_check CHECK ( ( event_settings_id IS NULL ) OR ((event_settings_id IS NOT NULL) AND type = 'event') )
@@ -68,6 +84,10 @@ ID of the parent group.';
 CREATE TRIGGER check_parent_group_is_group
 BEFORE INSERT OR UPDATE ON "public".events_and_groups
 FOR EACH ROW EXECUTE PROCEDURE check_if_group();
+
+CREATE TRIGGER check_valid_event
+BEFORE INSERT OR UPDATE ON "public".events_and_groups
+FOR EACH ROW EXECUTE PROCEDURE check_if_event();
 
 
 COMMENT ON COLUMN "public".events_and_groups.enable_teams IS 'Auto-inherit if parent_id present - do this manually in code';
