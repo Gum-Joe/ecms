@@ -23,7 +23,7 @@ CREATE TABLE "public".event_only_settings
 (
  event_settings_id uuid NOT NULL DEFAULT gen_random_uuid(),
  data_tracked      trackable_data NOT NULL, -- see 000_baseline_setup.sql
- unit_id           bigserial NULL,
+ unit_id           bigint NULL,
  record_store      uuid NULL,
  CONSTRAINT PK_events_and_groups_clone_clone PRIMARY KEY ( event_settings_id ),
  CONSTRAINT FK_unit_to_event FOREIGN KEY ( unit_id ) REFERENCES "public".data_units ( unit_id ),
