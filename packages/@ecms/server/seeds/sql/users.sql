@@ -8,7 +8,7 @@ CREATE TABLE "public".users
 (
  user_id   uuid NOT NULL DEFAULT gen_random_uuid(),
  name      text NOT NULL,
- auth_type char(5) NOT NULL,
+ auth_type login_types NOT NULL, -- see 000_baseline_setup.sql
  password  text NOT NULL DEFAULT md5(random()::text),
  email     text NOT NULL,
  CONSTRAINT PK_users PRIMARY KEY ( user_id ),

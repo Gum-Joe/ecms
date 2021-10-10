@@ -11,7 +11,7 @@ CREATE TABLE "public".user_groups
  CONSTRAINT PK_user_groups PRIMARY KEY ( user_group_id )
 );
 
-COMMENT ON TABLE "public".user_groups IS 'Stores the groups users can be in. Users can be in multiple groups, hence join tables';
+COMMENT ON TABLE "public".user_groups IS 'Stores the groups users can be in. Users can be in multiple groups, hence join tables are used (see join_users_groups))';
 
 
 

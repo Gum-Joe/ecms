@@ -9,7 +9,7 @@ CREATE FUNCTION check_if_event_id_is_event() RETURNS trigger AS $$
 BEGIN
 	PERFORM * FROM "public".events_and_groups WHERE event_group_id = NEW.event_id AND type = 'event';
 		IF NOT FOUND THEN
-			RAISE NOTICE 'Foreign key violation - tried to refer to record in events_and_groups that was not an event!';
+			RAISE NOTICE 'Foreign key violation - tried to refer to a row in events_and_groups that was not an event!';
 			RETURN NULL;
 		END IF;
 		RETURN NEW; -- Important to ensure the row being inserted is not modified

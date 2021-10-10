@@ -30,6 +30,7 @@ $$ LANGUAGE plpgsql;
 -- This is to make sure event settings have been specified
 CREATE FUNCTION check_if_event() RETURNS trigger AS $$
 BEGIN
+	-- First check event_settings_id is set if type event!
 	IF NEW.type IS 'event' AND NEW.event_settings_id IS NULL THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
 		RAISE NOTICE 'Foreign key violation - tried to store an event without specifying event_only_settings (please create a record in event_only_settings and point it to this event';
 			RETURN NULL;
@@ -67,9 +68,6 @@ CREATE TABLE "public".events_and_groups
  CONSTRAINT FK_parent_group FOREIGN KEY ( parent_id ) REFERENCES "public".events_and_groups ( event_group_id ),
  CONSTRAINT FK_event_settings FOREIGN KEY ( event_settings_id ) REFERENCES "public".event_only_settings ( event_settings_id ),
  CONSTRAINT type_checks CHECK ( type = 'event' OR type = 'group' ), -- Just in case - ENUM event_or_group covers this
- 
- -- Check event_settings_id is set ONLY if type is "event"
- CONSTRAINT event_setting_check CHECK ( ( event_settings_id IS NULL ) OR ((event_settings_id IS NOT NULL) AND type = 'event') )
 );
 
 CREATE INDEX fkIdx_41 ON "public".events_and_groups
