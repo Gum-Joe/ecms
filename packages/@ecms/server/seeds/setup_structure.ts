@@ -5,18 +5,29 @@
  */
 
 import { Knex } from "knex";
+import { promises as fs } from "fs";
+import { join } from "path";
 
+/** Base dir where SQL Scripts are stored */
+const SQL_BASE_DIR = join(__dirname, "sql");
+
+/** 
+ * Provisions the database for us.
+ * 
+ * Does this by running through the scripts in `./sql/` based on the numerical order from their prefix
+ * and running them directly.
+ */
 export async function seed(knex: Knex): Promise<void> {
-
-	// TODO: Replace with execution of SQLDBM generated SQL from the ERD.
-
-	// Deletes ALL existing entries
-	await knex("table_name").del();
-
-	// Inserts seed entries
-	await knex("table_name").insert([
-		{ id: 1, colName: "rowValue1" },
-		{ id: 2, colName: "rowValue2" },
-		{ id: 3, colName: "rowValue3" }
-	]);
+	console.log("Running DB provisions scripts...");
+	const fileList = await fs.readdir(SQL_BASE_DIR);
+	for (const fileName of fileList) {
+		if (fileName.endsWith(".sql")) {
+			// Valid script to run
+			const sqlToRun = await fs.readFile(join(SQL_BASE_DIR, fileName));
+			console.log(`Running script ${fileName}`);
+			await knex.raw(sqlToRun.toString());
+		} else {
+			continue;
+		}
+	}
 }

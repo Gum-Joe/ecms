@@ -45,6 +45,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
+            ["@types/node", "npm:16.10.3"],
             ["@typescript-eslint/eslint-plugin", "virtual:1aaa7625246f7802f45c91d7a61a61ca3faa570f954958879dc836e03bacccb470462a0e8268cb9c2befa69b5ed0c194062279804e214d3a7266c74768d51bc5#npm:4.32.0"],
             ["@typescript-eslint/parser", "virtual:1aaa7625246f7802f45c91d7a61a61ca3faa570f954958879dc836e03bacccb470462a0e8268cb9c2befa69b5ed0c194062279804e214d3a7266c74768d51bc5#npm:4.32.0"],
             ["eslint", "npm:7.32.0"],
@@ -103,6 +104,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/koa", "npm:2.13.4"],
             ["@types/koa-logger", "npm:3.1.2"],
             ["@types/koa__router", "npm:8.0.8"],
+            ["@types/node", "npm:16.10.3"],
             ["knex", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.95.11"],
             ["koa", "npm:2.13.3"],
             ["koa-logger", "npm:3.2.1"],
@@ -370,6 +372,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-16.10.2-9677b4eef7-83c1c3c68e.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:16.10.2"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:16.10.3", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-16.10.3-ae1d2f8739-3fd429bce8.zip/node_modules/@types/node/",
+          "packageDependencies": [
+            ["@types/node", "npm:16.10.3"]
           ],
           "linkType": "HARD",
         }]
@@ -1056,6 +1065,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["ecms", "workspace:."],
+            ["@types/node", "npm:16.10.3"],
             ["@typescript-eslint/eslint-plugin", "virtual:1aaa7625246f7802f45c91d7a61a61ca3faa570f954958879dc836e03bacccb470462a0e8268cb9c2befa69b5ed0c194062279804e214d3a7266c74768d51bc5#npm:4.32.0"],
             ["@typescript-eslint/parser", "virtual:1aaa7625246f7802f45c91d7a61a61ca3faa570f954958879dc836e03bacccb470462a0e8268cb9c2befa69b5ed0c194062279804e214d3a7266c74768d51bc5#npm:4.32.0"],
             ["eslint", "npm:7.32.0"],
