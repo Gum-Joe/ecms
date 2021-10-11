@@ -10,10 +10,11 @@ module.exports = {
 		client: "postgresql",
 		connection: {
 			host: "localhost",
-			port: 5436,
-			database: "postgres", // Maybe change this
-			user: "postgres",
-			password: "Pass2021!"
+			port: 5434,
+			database: "ecms", // Maybe change this
+			// TODO: Change to .env file
+			user: process.env.POSTGRES_USERNAME,
+			password: process.env.POSTGRES_PASSWORD
 		},
 	},
 

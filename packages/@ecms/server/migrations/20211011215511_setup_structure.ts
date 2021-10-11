@@ -76,7 +76,7 @@ export async function down(knex: Knex): Promise<void> {
 	// Drop each table in turn:
 	await Promise.all(tables.map(async (tableName) => {
 		console.log(`Dropping ${tableName}...`);
-		return knex.raw(`DROP TABLE IF EXISTS "${tableName}"" CASCADE`);
+		return knex.raw(`DROP TABLE IF EXISTS "${tableName}" CASCADE`);
 	}));
 
 	// Finally, drop types:
