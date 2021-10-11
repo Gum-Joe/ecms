@@ -6,7 +6,7 @@
 
 CREATE TABLE "public".competitor_data
 (
- competitor_data_id     bigint NOT NULL DEFAULT gen_random_uuid(),
+ competitor_data_id     bigserial NOT NULL,
  competitor_id          int NOT NULL,
  stored_data            decimal NULL,
  points                 decimal NOT NULL DEFAULT 0,

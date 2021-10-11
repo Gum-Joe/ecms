@@ -4,8 +4,6 @@
 
 -- ************************************** "public".installed_modules
 
-CREATE 
-
 CREATE TABLE "public".installed_modules
 (
  module_id       uuid NOT NULL DEFAULT gen_random_uuid(),

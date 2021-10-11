@@ -107,7 +107,7 @@ CREATE TYPE filter_matchers AS ENUM (
 );
 COMMENT ON TYPE filter_matchers IS 'Filter matchers
 -- These are the actual filter that is applied to data
--- E.g. "exactly" means a filter filitering for data that exactly matches the filter\'s parameters'
+-- E.g. "exactly" means a filter filitering for data that exactly matches the filter''s parameters';
 
 
 -- What type of match this is:
@@ -118,8 +118,8 @@ CREATE TYPE competitor_setting_types AS ENUM (
 	'discrete',
 	'inherit',
 	'filter_parent'
-)
+);
 COMMENT ON TYPE competitor_setting_types IS 'What type of match this is:
 - discrete - competitors directly set/imported - query the competitors join table with the event_group_id from event_group_id
 - inherit - all the competitors from the parent_id of event_group_id  contains
-- filter_parent: competitors filtered from the parent (parent_id). Either query the join table, or run the filters directly (latter recommended)
+- filter_parent: competitors filtered from the parent (parent_id). Either query the join table, or run the filters directly (latter recommended)';

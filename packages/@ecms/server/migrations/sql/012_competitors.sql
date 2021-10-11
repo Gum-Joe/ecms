@@ -6,7 +6,7 @@
 
 CREATE TABLE "public".competitors
 (
- competitor_id serial NOT NULL DEFAULT,
+ competitor_id serial NOT NULL,
  "id"            uuid NOT NULL,
  lastname      text NOT NULL,
  firstname     text NOT NULL,
@@ -21,9 +21,15 @@ CREATE INDEX fkIdx_90 ON "public".competitors
  team_id
 );
 
+-- Index ids as well
+CREATE INDEX fkIdx_900_competitor_id ON "public".competitors
+(
+	"id"
+);
+
 COMMENT ON TABLE "public".competitors IS 'All the competitors stored in our system. Join to the event/groups they are part of in the join_competitor_events_group table - this is because ideally for multiple events rather than copy the competitor for each one you''d just refer to the same record.';
 
-COMMENT ON COLUMN "public".competitors."id" IS 'Public ID of competitor, used so we don\'t expose raw IDs';
+COMMENT ON COLUMN "public".competitors."id" IS 'Public ID of competitor, used so we don''t expose raw IDs';
 
 
 

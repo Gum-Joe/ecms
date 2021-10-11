@@ -4,13 +4,16 @@
 
 // TODO: Configure the correct seeds here
 module.exports = {
-
+	
+	// Local Docker Dev Env
 	development: {
 		client: "postgresql",
 		connection: {
-			database: "my_db",
-			user: "username",
-			password: "password"
+			host: "localhost",
+			port: 5436,
+			database: "postgres", // Maybe change this
+			user: "postgres",
+			password: "Pass2021!"
 		},
 	},
 

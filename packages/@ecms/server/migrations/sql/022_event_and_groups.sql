@@ -31,10 +31,10 @@ $$ LANGUAGE plpgsql;
 CREATE FUNCTION check_if_event() RETURNS trigger AS $$
 BEGIN
 	-- First check event_settings_id is set if type event!
-	IF NEW.type IS 'event' AND NEW.event_settings_id IS NULL THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
+	IF NEW.type = 'event' AND NEW.event_settings_id IS NULL THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
 		RAISE NOTICE 'Foreign key violation - tried to store an event without specifying event_only_settings (please create a record in event_only_settings and point it to this event';
 			RETURN NULL;
-	ELSIF NEW.type IS NOT 'event' AND NEW.event_settings_id IS NOT NULL THEN
+	ELSIF NEW.type != 'event' AND NEW.event_settings_id IS NOT NULL THEN
 		RAISE NOTICE 'Foreign key violation - tried to specifying event_only_settings for a non-event';
 			RETURN NULL;
 	ELSE
@@ -67,7 +67,7 @@ CREATE TABLE "public".events_and_groups
  CONSTRAINT FK_event_to_comp_settings FOREIGN KEY ( competitor_settings_id ) REFERENCES "public".competitor_settings ( competitor_settings_id ),
  CONSTRAINT FK_parent_group FOREIGN KEY ( parent_id ) REFERENCES "public".events_and_groups ( event_group_id ),
  CONSTRAINT FK_event_settings FOREIGN KEY ( event_settings_id ) REFERENCES "public".event_only_settings ( event_settings_id ),
- CONSTRAINT type_checks CHECK ( type = 'event' OR type = 'group' ), -- Just in case - ENUM event_or_group covers this
+ CONSTRAINT type_checks CHECK ( type = 'event' OR type = 'group' ) -- Just in case - ENUM event_or_group covers this
 );
 
 CREATE INDEX fkIdx_41 ON "public".events_and_groups

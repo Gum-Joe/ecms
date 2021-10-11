@@ -8,7 +8,7 @@ CREATE TABLE "public".competitor_settings
 (
  competitor_settings_id uuid NOT NULL DEFAULT gen_random_uuid(),
  type                   competitor_setting_types NOT NULL, -- see 000_baseline_setup.sql
- CONSTRAINT PK_competitor_matching PRIMARY KEY ( competitor_settings_id ),
+ CONSTRAINT PK_competitor_matching PRIMARY KEY ( competitor_settings_id )
  -- CONSTRAINT check_type_competitors CHECK ( type = 'discrete' OR type = 'inherit' OR type = 'filter_parent' ) -- See ENUM (000_baseline_setup.sql)
 );
 
