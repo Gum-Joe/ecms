@@ -19,6 +19,8 @@ declare namespace NodeJS {
 		ECMS_SESSION_SECRET: string;
 		/** true or false.Determines if debug logging should occur(default false */
 		ECMS_DEBUG: string;
+		/** true or false.Silences all logging(used for testing to silence them). Not reccomended to set this. */
+		ECMS_LOG_SILENT: string;
 		/** Hostname of PostgreSQL DB */
 		ECMS_DB_HOSTNAME: string;
 		/** Port of DB */

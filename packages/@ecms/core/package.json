@@ -19,5 +19,15 @@
   "bugs": {
     "url": "https://github.com/Gum-Joe/ecms/issues"
   },
-  "homepage": "https://github.com/Gum-Joe/ecms#readme"
+  "homepage": "https://github.com/Gum-Joe/ecms#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "fast-safe-stringify": "^2.1.1",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/winston": "^2.4.4"
+  }
 }

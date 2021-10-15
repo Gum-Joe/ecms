@@ -6,12 +6,30 @@ import Koa from "koa";
 import Router from "@koa/router";
 import KoaLogger from "koa-logger";
 import dotenv from "dotenv";
+import { LoggerFactory } from "@ecms/core";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - get weird error since package.json outside src/ (and therefore rootDir)
+import packageJSON from "../package.json";
 
-import "@ecms/core/src/config";
+import { join } from "path";
+
+// Preable log line
+console.log(`ECMS v${packageJSON.version}`);
+console.log("Starting ECMS...");
 
 /** Intitalise our config into environmntal variables */
 dotenv.config();
 
+/** Load logger */
+const ECMSLoggerFactory = new LoggerFactory(
+	process.env.ECMS_LOGS_LOCATION || join(process.cwd(), "logs"),
+	(process.env.NODE_ENV === "development" && process.env.ECMS_LOG_SILENT !== "true") ?
+		"debug" :
+		((process.env.NODE_ENV === "test" || process.env.ECMS_LOG_SILENT === "true") ? "none" : "info")
+);
+const logger = ECMSLoggerFactory.createLogger("server");
+
+logger.info("ECMS Logger Loaded.");
 
 /** Initiale Koa */
 const app = new Koa();
@@ -33,7 +51,7 @@ app
 	.use(router.allowedMethods());
 
 app.listen(process.env.ECMS_PORT || 9090, () => {
-	console.log("Server started.");
+	logger.info("Server started.");
 });
 
 

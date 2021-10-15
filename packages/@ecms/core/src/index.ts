@@ -1,1 +1,1 @@
-console.log("This should compile");
+export * from "./logger";
