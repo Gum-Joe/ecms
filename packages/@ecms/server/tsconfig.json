@@ -6,7 +6,11 @@
 		"outDir": "./lib",
 		"tsBuildInfoFile": "../../../.build-cache/server.tsbuildinfo",
 	},
-	"references": [],
+	"references": [
+		{
+			"path": "../core"
+		},
+	],
 	"include": [
 		"src"
 	]

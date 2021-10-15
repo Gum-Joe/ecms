@@ -22,7 +22,9 @@
   },
   "homepage": "https://github.com/Gum-Joe/ecms#readme",
   "dependencies": {
+    "@ecms/core": "workspace:packages/@ecms/core",
     "@koa/router": "^10.1.1",
+    "dotenv": "^10.0.0",
     "knex": "^0.95.11",
     "koa": "^2.13.3",
     "koa-logger": "^3.2.1",
@@ -30,9 +32,10 @@
     "ts-node": "^10.3.0"
   },
   "devDependencies": {
+    "@types/dotenv": "^8.2.0",
     "@types/koa": "^2.13.4",
     "@types/koa-logger": "^3.1.2",
     "@types/koa__router": "^8.0.8",
-    "@types/node": "^16.10.3"
+    "@types/node": "^16.11.0"
   }
 }

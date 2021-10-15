@@ -58,11 +58,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@ecms/server@workspace:packages/@ecms/server"
   dependencies:
+    "@ecms/core": "workspace:packages/@ecms/core"
     "@koa/router": ^10.1.1
+    "@types/dotenv": ^8.2.0
     "@types/koa": ^2.13.4
     "@types/koa-logger": ^3.1.2
     "@types/koa__router": ^8.0.8
-    "@types/node": ^16.10.3
+    "@types/node": ^16.11.0
+    dotenv: ^10.0.0
     knex: ^0.95.11
     koa: ^2.13.3
     koa-logger: ^3.2.1
@@ -221,6 +224,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/dotenv@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "@types/dotenv@npm:8.2.0"
+  dependencies:
+    dotenv: "*"
+  checksum: a1f524da7dc18b09bdb6c2613b9abbbe8ca575621cce4625efc7f98daf2ba07c7dbab622c9bb394507a12c5c515f9cbbbba4aeec17b801c88faeb8e8e656d460
+  languageName: node
+  linkType: hard
+
 "@types/express-serve-static-core@npm:^4.17.18":
   version: 4.17.24
   resolution: "@types/express-serve-static-core@npm:4.17.24"
@@ -333,6 +345,13 @@ __metadata:
   version: 16.10.3
   resolution: "@types/node@npm:16.10.3"
   checksum: 3fd429bce8a4acb497dcc62b536782a5e87ccf7cd91d64a78b263ae5d66cb72bf84be9eeeff6f84ae0567b065a40b267caa66d311f9e094990a5847bbd168a29
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.11.0":
+  version: 16.11.0
+  resolution: "@types/node@npm:16.11.0"
+  checksum: 194ae80ec72f664e15e03c33f116be96aa1e85b167a19e31003c53ddfc36dabd65744e9a76c1d46b7ce2e5981d2ccb8e84a85c3ec9ac89f1471daaa885bdcfd0
   languageName: node
   linkType: hard
 
@@ -901,6 +920,13 @@ __metadata:
   dependencies:
     esutils: ^2.0.2
   checksum: fd7673ca77fe26cd5cba38d816bc72d641f500f1f9b25b83e8ce28827fe2da7ad583a8da26ab6af85f834138cf8dae9f69b0cd6ab925f52ddab1754db44d99ce
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:*, dotenv@npm:^10.0.0":
+  version: 10.0.0
+  resolution: "dotenv@npm:10.0.0"
+  checksum: f412c5fe8c24fbe313d302d2500e247ba8a1946492db405a4de4d30dd0eb186a88a43f13c958c5a7de303938949c4231c56994f97d05c4bc1f22478d631b4005
   languageName: node
   linkType: hard
 
