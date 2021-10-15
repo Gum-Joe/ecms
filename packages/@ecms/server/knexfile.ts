@@ -2,7 +2,6 @@
 // TODO: Add actual config settings here
 // Dependent on .env stuff
 import dotenv from "dotenv";
-import "@ecms/core/src/config";
 
 /** Intitalise our config into environmntal variables */
 dotenv.config();
