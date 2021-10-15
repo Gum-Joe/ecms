@@ -1,6 +1,11 @@
 // Update with your config settings.
 // TODO: Add actual config settings here
 // Dependent on .env stuff
+import dotenv from "dotenv";
+import "@ecms/core/src/config";
+
+/** Intitalise our config into environmntal variables */
+dotenv.config();
 
 // TODO: Configure the correct seeds here
 module.exports = {
@@ -9,11 +14,11 @@ module.exports = {
 	development: {
 		client: "postgresql",
 		connection: {
-			host: "localhost",
-			port: 5436,
-			database: "postgres", // Maybe change this
-			user: "postgres",
-			password: "Pass2021!"
+			host: process.env.ECMS_DB_HOSTNAME,
+			port: process.env.ECMS_DB_PORT,
+			database: process.env.ECMS_DB_DB, // Maybe change this
+			user: process.env.ECMS_DB_USERNAME,
+			password: process.env.ECMS_DB_PASSWORD
 		},
 	},
 

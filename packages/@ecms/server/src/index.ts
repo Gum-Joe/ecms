@@ -5,6 +5,13 @@
 import Koa from "koa";
 import Router from "@koa/router";
 import KoaLogger from "koa-logger";
+import dotenv from "dotenv";
+
+import "@ecms/core/src/config";
+
+/** Intitalise our config into environmntal variables */
+dotenv.config();
+
 
 /** Initiale Koa */
 const app = new Koa();
@@ -25,7 +32,7 @@ app
 	.use(router.routes())
 	.use(router.allowedMethods());
 
-app.listen(9090, () => {
+app.listen(process.env.ECMS_PORT || 9090, () => {
 	console.log("Server started.");
 });
 

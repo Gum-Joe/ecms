@@ -119,11 +119,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./packages/@ecms/server/",
           "packageDependencies": [
             ["@ecms/server", "workspace:packages/@ecms/server"],
+            ["@ecms/core", "workspace:packages/@ecms/core"],
             ["@koa/router", "npm:10.1.1"],
+            ["@types/dotenv", "npm:8.2.0"],
             ["@types/koa", "npm:2.13.4"],
             ["@types/koa-logger", "npm:3.1.2"],
             ["@types/koa__router", "npm:8.0.8"],
-            ["@types/node", "npm:16.10.3"],
+            ["@types/node", "npm:16.11.0"],
+            ["dotenv", "npm:10.0.0"],
             ["knex", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.95.11"],
             ["koa", "npm:2.13.3"],
             ["koa-logger", "npm:3.2.1"],
@@ -306,6 +309,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/dotenv", [
+        ["npm:8.2.0", {
+          "packageLocation": "./.yarn/cache/@types-dotenv-npm-8.2.0-f4d0e3d65b-a1f524da7d.zip/node_modules/@types/dotenv/",
+          "packageDependencies": [
+            ["@types/dotenv", "npm:8.2.0"],
+            ["dotenv", "npm:10.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/express", [
         ["npm:4.17.13", {
           "packageLocation": "./.yarn/cache/@types-express-npm-4.17.13-0e12fe9c24-12a2a0e6c4.zip/node_modules/@types/express/",
@@ -435,6 +448,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-node-npm-16.10.3-ae1d2f8739-3fd429bce8.zip/node_modules/@types/node/",
           "packageDependencies": [
             ["@types/node", "npm:16.10.3"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:16.11.0", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-16.11.0-75617d0fee-194ae80ec7.zip/node_modules/@types/node/",
+          "packageDependencies": [
+            ["@types/node", "npm:16.11.0"]
           ],
           "linkType": "HARD",
         }]
@@ -1155,6 +1175,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["doctrine", "npm:3.0.0"],
             ["esutils", "npm:2.0.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["dotenv", [
+        ["npm:10.0.0", {
+          "packageLocation": "./.yarn/cache/dotenv-npm-10.0.0-36b272df25-f412c5fe8c.zip/node_modules/dotenv/",
+          "packageDependencies": [
+            ["dotenv", "npm:10.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -3209,7 +3238,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tsconfig/node12", "npm:1.0.9"],
             ["@tsconfig/node14", "npm:1.0.1"],
             ["@tsconfig/node16", "npm:1.0.2"],
-            ["@types/node", "npm:16.10.3"],
+            ["@types/node", "npm:16.11.0"],
             ["@types/swc__core", null],
             ["@types/swc__wasm", null],
             ["@types/typescript", null],
