@@ -15,7 +15,7 @@ module.exports = {
 		connection: {
 			host: process.env.ECMS_DB_HOSTNAME,
 			port: process.env.ECMS_DB_PORT,
-			database: process.env.ECMS_DB_DB, // Maybe change this
+			database: process.env.ECMS_DB_DB,
 			user: process.env.ECMS_DB_USERNAME,
 			password: process.env.ECMS_DB_PASSWORD
 		},

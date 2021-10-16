@@ -1,0 +1,33 @@
+{
+  "name": "@ecms/frontend",
+  "version": "1.0.0",
+  "description": "Contains all the frontend code for ECMS, includes styles.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gum-Joe/ecms.git"
+  },
+  "keywords": [
+    "ecms",
+    "core"
+  ],
+  "author": "Kishan Sambhi",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Gum-Joe/ecms/issues"
+  },
+  "homepage": "https://github.com/Gum-Joe/ecms#readme",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "fast-safe-stringify": "^2.1.1",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/chalk": "^2.2.0",
+    "@types/winston": "^2.4.4"
+  }
+}
