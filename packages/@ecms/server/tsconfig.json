@@ -10,6 +10,9 @@
 		{
 			"path": "../core"
 		},
+		{
+			"path": "./frontend",
+		}
 	],
 	"include": [
 		"src"

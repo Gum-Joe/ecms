@@ -12,7 +12,8 @@ import koaWebpack from "koa-webpack";
 // @ts-ignore - get weird error since package.json outside src/ (and therefore rootDir)
 import packageJSON from "../package.json";
 
-import path, { join } from "path";
+import { join } from "path";
+import serve from "koa-static";
 
 // Preable log line
 console.log(`ECMS v${packageJSON.version}`);
@@ -52,16 +53,26 @@ if (process.env.NODE_ENV === "development") {
 	logger.info("Initialising Webpack Hot Reloading...");
 	koaWebpack({
 		// @ts-ignore
-		configPath: join(require.resolve("@ecms/frontend"), "webpack.config.js"),
-	}).then(
-		webpackHotReload => app.use(webpackHotReload)
-	);
+		configPath: join(__dirname, "../webpack.config.js"),
+	})
+		.then(
+			webpackHotReload => app.use(webpackHotReload)
+		)
+		.catch((err) => {
+			logger.error("ERROR during webpack HMR init!");
+			logger.error(err);
+			process.exit(1);
+		});
 }
+
 
 // Make use of the router so it can be used to route requests
 app
 	.use(router.routes())
 	.use(router.allowedMethods());
+
+// Server HTML
+app.use(serve(join(__dirname, "../public")));
 
 app.listen(process.env.ECMS_PORT || 9090, () => {
 	logger.info("Server started.");

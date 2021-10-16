@@ -12,9 +12,6 @@
 		{
 			"path": "./packages/@ecms/server"
 		},
-		{
-			"path": "./packages/@ecms/frontend"
-		},
 		/*{
 			"path": "./packages/@ecms/extensions"
 		},*/

@@ -1,0 +1,11 @@
+{
+	/* From https://github.com/Gum-Joe/2Keys/blob/v1/packages/%40twokeys/core/tsconfig.json */
+	"extends": "../../../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "./",
+		"outDir": "./lib",
+		"tsBuildInfoFile": "../../../../.build-cache/frontend.tsbuildinfo",
+		"jsx": "react",
+	},
+	"references": [],
+}
