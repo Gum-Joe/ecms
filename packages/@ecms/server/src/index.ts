@@ -52,7 +52,8 @@ app.use(KoaLogger());
 if (process.env.NODE_ENV === "development") {
 	logger.info("Initialising Webpack Hot Reloading...");
 	koaWebpack({
-		// @ts-ignore
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore - types of parent module not correct
 		configPath: join(__dirname, "../webpack.config.js"),
 	})
 		.then(
