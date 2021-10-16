@@ -3,7 +3,8 @@
   "private": true,
   "packageManager": "yarn@3.0.2",
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "watch": "tsc -b --watch"
   },
   "workspaces": [
     "packages/@ecms/*"

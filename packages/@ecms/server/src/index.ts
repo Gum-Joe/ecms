@@ -7,11 +7,12 @@ import Router from "@koa/router";
 import KoaLogger from "koa-logger";
 import dotenv from "dotenv";
 import { LoggerFactory } from "@ecms/core";
+import koaWebpack from "koa-webpack";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - get weird error since package.json outside src/ (and therefore rootDir)
 import packageJSON from "../package.json";
 
-import { join } from "path";
+import path, { join } from "path";
 
 // Preable log line
 console.log(`ECMS v${packageJSON.version}`);
@@ -44,6 +45,18 @@ router.get("/heartbeat", async (ctx, next) => {
 
 // Setup logging here
 app.use(KoaLogger());
+
+// If in dev, setup hot reload of frontend
+// From https://github.com/shellscape/koa-webpack
+if (process.env.NODE_ENV === "development") {
+	logger.info("Initialising Webpack Hot Reloading...");
+	koaWebpack({
+		// @ts-ignore
+		configPath: join(require.resolve("@ecms/frontend"), "webpack.config.js"),
+	}).then(
+		webpackHotReload => app.use(webpackHotReload)
+	);
+}
 
 // Make use of the router so it can be used to route requests
 app

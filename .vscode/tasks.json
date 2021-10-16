@@ -10,6 +10,13 @@
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"type": "yarn",
+			"task": "watch",
+			"problemMatcher": [],
+			"label": "yarn: watch",
+			"group": "build",
 		}
 	]
 }
