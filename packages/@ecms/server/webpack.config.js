@@ -10,6 +10,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
 
 module.exports = {
+	mode: (process.env.NODE_ENV === "development" ? "development" : "production"),
 	// Helped by https://webpack.js.org/guides/getting-started/
 	entry: ["./frontend/index.tsx"],
 	output: { // Copied from https://webpack.js.org/guides/getting-started/

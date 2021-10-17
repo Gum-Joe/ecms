@@ -1,0 +1,24 @@
+/** Login container for all login element */
+@import "breakpoints";
+.login-container {
+	position: absolute;
+	width: 616px;
+	height: 810px;
+	left: calc(50% - 616px/2);
+	top: calc(50% - 810px/2);
+
+	background: #202020;
+	border-radius: 7px;
+
+	box-shadow: 0px 17.248px 34.4961px rgba(0, 0, 0, 0.37), 0px 1.078px 11.319px rgba(0, 0, 0, 0.37);
+	border-radius: 3.77301px;
+
+	@include mobile {
+		position: relative;
+		width: 90vw;
+		height: 90vh;
+		margin-top: 5vh;
+		left: 0;
+		top: 0;
+	}
+}

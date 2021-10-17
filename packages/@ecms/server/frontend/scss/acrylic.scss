@@ -1,0 +1,24 @@
+/**
+ * Creates an acrylic background
+ */
+
+.acrylic {
+	// Ideally we'd use CSS effects for this, but that doesn't work.
+	// So I just used an image instead
+	background: url("../assets/BlurredBackground.jpg");
+
+	width: 100vw;
+	height: 100vh;
+	/* Dark/Shell/Background/Fill Color/Acrylic/Thin Acrylic */
+
+	//background: url("../assets/CampHillGrounds.jpg"), url("../assets/NoiseAsset_256.png"), rgba(84, 84, 84, 0.64);
+	//background-blend-mode: normal, normal, luminosity;
+	/* Blur / Acrylic */
+
+	//backdrop-filter: blur(10px);
+	/* Note: backdrop-filter has minimal browser support */
+
+	background-size: cover;
+
+	//border-radius: 7px;
+}

@@ -102,6 +102,7 @@ __metadata:
     "@types/koa__router": ^8.0.8
     "@types/node": ^16.11.0
     "@types/pg": ^8.6.1
+    "@types/prop-types": ^15.7.4
     "@types/react": ^17.0.30
     "@types/react-dom": ^17.0.9
     css-loader: ^5.2.7
@@ -117,6 +118,7 @@ __metadata:
     nodemon: ^2.0.13
     pg: ^8.7.1
     pnp-webpack-plugin: ^1.7.0
+    prop-types: ^15.7.2
     raw-loader: ^4.0.2
     react: ^17.0.2
     react-dom: ^17.0.2
@@ -577,7 +579,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/prop-types@npm:*":
+"@types/prop-types@npm:*, @types/prop-types@npm:^15.7.4":
   version: 15.7.4
   resolution: "@types/prop-types@npm:15.7.4"
   checksum: ef6e1899e59b876c273811b1bd845022fc66d5a3d11cb38a25b6c566b30514ae38fe20a40f67622f362a4f4f7f9224e22d8da101cff3d6e97e11d7b4c307cfc1
