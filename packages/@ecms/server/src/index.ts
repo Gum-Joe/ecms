@@ -3,21 +3,16 @@
  * Entry point for ECMS - starts ECMS up
  * @packageDocumentation
  */
-import Koa from "koa";
-import Router from "@koa/router";
-import KoaLogger from "koa-logger";
 import dotenv from "dotenv";
 import { LoggerFactory } from "@ecms/core";
-import koaWebpack from "koa-webpack";
 import { join } from "path";
-import serve from "koa-static";
-import combineRouters from "koa-combine-routers";
 import userRouter from "./routes/users";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - get weird error since package.json outside src/ (and therefore rootDir)
 import packageJSON from "../package.json";
 import express from "express";
 import morgan from "morgan";
+import helmet from "helmet";
 
 
 
@@ -49,8 +44,14 @@ app.get("/heartbeat", (req, res, next) => {
 	});
 });
 
+// Baseline middleware
+app.use(helmet()); // Security
+app.use(express.json());
+app.use(express.urlencoded());
+
 // Setup logging here
 app.use(morgan("dev"));
+
 
 // If in dev, setup hot reload of frontend
 // From https://github.com/shellscape/koa-webpack
@@ -67,10 +68,11 @@ if (process.env.NODE_ENV === "development") {
 	app.use(WebpackHotMiddleware(compiler));
 }
 
-
-
 // Server HTML
 app.use(express.static(join(__dirname, "../public")));
+
+// Setup routes
+app.use("/api/user", userRouter);
 
 app.listen(process.env.ECMS_PORT || 9090, () => {
 	logger.info("Server started.");

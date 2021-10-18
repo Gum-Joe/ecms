@@ -5,18 +5,17 @@
  * @packageDocumentation
  */
 
-import Router from "@koa/router";
+import { Router } from "express";
 
-const router = new Router({ prefix: "/user" });
+const router = Router();
 
 /**
  * Handle Google OAuth (Sign in with Google)
  */
-router.get("/login/google", async (ctx, next) => {	
-	ctx.body = {
+router.get("/login/google", async (req, res) => {	
+	res.json({
 		message: "hi",
-	};
-	return;
+	});
 });
 
 export default router;
