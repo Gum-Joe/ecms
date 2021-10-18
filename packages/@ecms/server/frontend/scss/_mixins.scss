@@ -1,0 +1,9 @@
+// Creates a blue link
+@mixin link {
+	color: $link-blue;
+
+	&:hover {
+		opacity: 0.8;
+		cursor: pointer;
+	}
+}

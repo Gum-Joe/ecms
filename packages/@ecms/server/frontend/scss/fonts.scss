@@ -1,0 +1,20 @@
+/** 
+ * Includes the fonts ECMS uses
+ */
+
+// Dosis - used for headers
+@font-face {
+	font-family: "Dosis";
+	src: url("../assets/fonts/Dosis/Dosis-VariableFont_wght.ttf");
+}
+
+// Open Sans - for the body
+@font-face {
+	font-family: "Open Sans";
+	src: url("../assets/fonts/Open_Sans/OpenSans-VariableFont_wdth\,wght.ttf");
+}
+@font-face {
+	font-family: "Open Sans";
+	src: url("../assets/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth\,wght.ttf");
+	font-style: italic;
+}
