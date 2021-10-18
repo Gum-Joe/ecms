@@ -8,11 +8,12 @@
 const path = require("path");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
 	mode: (process.env.NODE_ENV === "development" ? "development" : "production"),
 	// Helped by https://webpack.js.org/guides/getting-started/
-	entry: ["./frontend/index.tsx"],
+	entry: ["webpack-hot-middleware/client", "./frontend/index.tsx"],
 	output: { // Copied from https://webpack.js.org/guides/getting-started/
 		filename: "main.js",
 		path: path.join(__dirname, "dist"),
@@ -72,6 +73,7 @@ module.exports = {
 	},
 
 	plugins: [
+		(process.env.NODE_ENV === "development" ? new webpack.HotModuleReplacementPlugin() : null),
 		new ForkTsCheckerWebpackPlugin(),
 	],
 

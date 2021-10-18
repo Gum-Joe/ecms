@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /**
  * Entry point for ECMS - starts ECMS up
  * @packageDocumentation
@@ -15,6 +16,8 @@ import userRouter from "./routes/users";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - get weird error since package.json outside src/ (and therefore rootDir)
 import packageJSON from "../package.json";
+import express from "express";
+import morgan from "morgan";
 
 
 
@@ -37,55 +40,37 @@ const logger = ECMSLoggerFactory.createLogger("server");
 logger.info("ECMS Logger Loaded.");
 
 /** Initiale Koa */
-const app = new Koa();
-const testRouter = new Router();
+const app = express();
 
 // TEST ROUTE
-testRouter.get("/heartbeat", async (ctx, next) => {
-	ctx.body = {
+app.get("/heartbeat", (req, res, next) => {
+	res.json({
 		message: "Server alive",
-	};
+	});
 });
 
 // Setup logging here
-app.use(KoaLogger());
+app.use(morgan("dev"));
 
 // If in dev, setup hot reload of frontend
 // From https://github.com/shellscape/koa-webpack
 if (process.env.NODE_ENV === "development") {
 	logger.info("Initialising Webpack Hot Reloading...");
-	koaWebpack({
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore - types of parent module not correct
-		configPath: join(__dirname, "../webpack.config.js"),
-	})
-		.then(
-			webpackHotReload => app.use(webpackHotReload)
-		)
-		.catch((err) => {
-			logger.error("ERROR during webpack HMR init!");
-			logger.error(err);
-			process.exit(1);
-		});
+	const WebpackDevMiddleware = require("webpack-dev-middleware");
+	const WebpackHotMiddleware = require("webpack-hot-middleware");
+	const webpack = require("webpack");
+	const webpackConfig = require("../webpack.config.js");
+	const compiler = webpack(webpackConfig);
+	app.use(WebpackDevMiddleware(compiler, {
+		publicPath: webpackConfig.output.publicPath
+	}));
+	app.use(WebpackHotMiddleware(compiler));
 }
-
-
-// Combine our API routers
-const apiRouters = combineRouters(
-	userRouter,
-	testRouter
-);
-
-
-// Make use of the router so it can be used to route requests
-app
-	.use(apiRouter.routes())
-	.use(apiRouter.allowedMethods());
 
 
 
 // Server HTML
-app.use(serve(join(__dirname, "../public")));
+app.use(express.static(join(__dirname, "../public")));
 
 app.listen(process.env.ECMS_PORT || 9090, () => {
 	logger.info("Server started.");
