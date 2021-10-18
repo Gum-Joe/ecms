@@ -25,10 +25,15 @@
 
 	.google-sign-in {
 		height: 70px;
+
+		&:hover {
+			opacity: 0.8;
+		}
 	}
 
 	a {
 		display: block;
+		cursor: pointer;
 	}
 
 	.local-auth-activate {

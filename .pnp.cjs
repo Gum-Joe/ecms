@@ -174,6 +174,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["kanel", "npm:2.3.2"],
             ["knex", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.95.11"],
             ["koa", "npm:2.13.3"],
+            ["koa-combine-routers", "npm:4.0.2"],
             ["koa-logger", "npm:3.2.1"],
             ["koa-static", "npm:5.0.0"],
             ["koa-webpack", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.0.0"],
@@ -584,6 +585,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["@types/koa-compose", [
+        ["npm:3.2.2", {
+          "packageLocation": "./.yarn/cache/@types-koa-compose-npm-3.2.2-fab5694ea4-6c321dcebd.zip/node_modules/@types/koa-compose/",
+          "packageDependencies": [
+            ["@types/koa-compose", "npm:3.2.2"]
+          ],
+          "linkType": "HARD",
+        }],
         ["npm:3.2.5", {
           "packageLocation": "./.yarn/cache/@types-koa-compose-npm-3.2.5-b9ab25d904-5d1147c4b0.zip/node_modules/@types/koa-compose/",
           "packageDependencies": [
@@ -598,6 +606,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-koa-logger-npm-3.1.2-6153de62e0-8e4cfcdb24.zip/node_modules/@types/koa-logger/",
           "packageDependencies": [
             ["@types/koa-logger", "npm:3.1.2"],
+            ["@types/koa", "npm:2.13.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/koa-router", [
+        ["npm:7.4.4", {
+          "packageLocation": "./.yarn/cache/@types-koa-router-npm-7.4.4-ea72843f67-23ff5b725d.zip/node_modules/@types/koa-router/",
+          "packageDependencies": [
+            ["@types/koa-router", "npm:7.4.4"],
             ["@types/koa", "npm:2.13.4"]
           ],
           "linkType": "HARD",
@@ -5756,6 +5774,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["statuses", "npm:1.5.0"],
             ["type-is", "npm:1.6.18"],
             ["vary", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["koa-combine-routers", [
+        ["npm:4.0.2", {
+          "packageLocation": "./.yarn/cache/koa-combine-routers-npm-4.0.2-3812c17969-37128737cd.zip/node_modules/koa-combine-routers/",
+          "packageDependencies": [
+            ["koa-combine-routers", "npm:4.0.2"],
+            ["@types/koa-compose", "npm:3.2.2"],
+            ["@types/koa-router", "npm:7.4.4"],
+            ["koa-compose", "npm:4.1.0"]
           ],
           "linkType": "HARD",
         }]

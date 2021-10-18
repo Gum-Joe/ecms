@@ -1,0 +1,3 @@
+{
+	"exec": "yarn run ts-node"
+}
