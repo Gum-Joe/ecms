@@ -8,12 +8,15 @@ import KoaLogger from "koa-logger";
 import dotenv from "dotenv";
 import { LoggerFactory } from "@ecms/core";
 import koaWebpack from "koa-webpack";
+import { join } from "path";
+import serve from "koa-static";
+import combineRouters from "koa-combine-routers";
+import userRouter from "./routes/users";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore - get weird error since package.json outside src/ (and therefore rootDir)
 import packageJSON from "../package.json";
 
-import { join } from "path";
-import serve from "koa-static";
+
 
 // Preable log line
 console.log(`ECMS v${packageJSON.version}`);
@@ -35,10 +38,10 @@ logger.info("ECMS Logger Loaded.");
 
 /** Initiale Koa */
 const app = new Koa();
-const router = new Router();
+const testRouter = new Router();
 
 // TEST ROUTE
-router.get("/heartbeat", async (ctx, next) => {
+testRouter.get("/heartbeat", async (ctx, next) => {
 	ctx.body = {
 		message: "Server alive",
 	};
@@ -67,10 +70,19 @@ if (process.env.NODE_ENV === "development") {
 }
 
 
+// Combine our API routers
+const apiRouters = combineRouters(
+	userRouter,
+	testRouter
+);
+
+
 // Make use of the router so it can be used to route requests
 app
-	.use(router.routes())
-	.use(router.allowedMethods());
+	.use(apiRouter.routes())
+	.use(apiRouter.allowedMethods());
+
+
 
 // Server HTML
 app.use(serve(join(__dirname, "../public")));
