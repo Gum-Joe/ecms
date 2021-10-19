@@ -13,6 +13,7 @@ import packageJSON from "../package.json";
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
+import session from "express-session";
 
 
 
@@ -48,6 +49,17 @@ app.get("/heartbeat", (req, res, next) => {
 app.use(helmet()); // Security
 app.use(express.json());
 app.use(express.urlencoded());
+
+// Init session for login
+// TODO: Use Redis Session store
+app.use(session({
+  secret: process.env.ECMS_SESSION_SECRET,
+  cookie: {
+    // TODO: set this once HTTPS working!
+    // secure: true
+    // TODO: set an expiry time
+  }
+}))
 
 // Setup logging here
 app.use(morgan("dev"));
