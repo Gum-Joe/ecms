@@ -34,7 +34,7 @@ const logger = ECMSLoggerFactory.createLogger("server");
 
 logger.info("ECMS Logger Loaded.");
 
-/** Initiale Koa */
+/** Initiale Express */
 const app = express();
 
 // TEST ROUTE
