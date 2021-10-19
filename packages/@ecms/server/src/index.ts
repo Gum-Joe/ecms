@@ -16,8 +16,6 @@ import helmet from "helmet";
 import session from "express-session";
 import configurePassport from "./auth";
 
-
-
 // Preable log line
 console.log(`ECMS v${packageJSON.version}`);
 console.log("Starting ECMS...");
