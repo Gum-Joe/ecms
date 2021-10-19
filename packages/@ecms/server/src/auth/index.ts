@@ -12,6 +12,9 @@ import type { LoggerFactory } from "@ecms/core";
 export default function setupPassport(loggerFactory: LoggerFactory) {
   const logger = loggerFactory.createLogger("auth")
   // Setup google
+  if (!process.env.ECMS_GOOGLE_CLIENT_ID || !process.env.ECMS_GOOGLE_CLIENT_SECRET || !process.env.ECMS_GOOGLE_CALLBACK_DOMAIN) {
+    throw new Error("Error! Required environment variables not specified - please check your server config");
+  }
   // From http://www.passportjs.org/packages/passport-google-oauth20/
   passport.use(new GoogleStrategy({
       clientID: process.env.ECMS_GOOGLE_CLIENT_ID,

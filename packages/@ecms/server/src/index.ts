@@ -56,7 +56,7 @@ app.use(morgan("dev"));
 // Init session for login
 // TODO: Use Redis Session store
 app.use(session({
-  secret: process.env.ECMS_SESSION_SECRET,
+  secret: process.env.ECMS_SESSION_SECRET || "987&^%%$j*a)s;m*)aMwL&^*LKJaKH*hujhnliuHG",
   cookie: {
     // TODO: set this once HTTPS working!
     // secure: true
@@ -68,7 +68,7 @@ app.use(session({
 
 
 // Add to express
-const passport = configurePassport();
+const passport = configurePassport(ECMSLoggerFactory);
 app.use(passport.initialize());
 app.use(passport.session());
 
