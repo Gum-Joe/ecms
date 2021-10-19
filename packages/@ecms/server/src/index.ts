@@ -14,6 +14,7 @@ import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import session from "express-session";
+import configurePassport from "./auth";
 
 
 
@@ -49,6 +50,8 @@ app.get("/heartbeat", (req, res, next) => {
 app.use(helmet()); // Security
 app.use(express.json());
 app.use(express.urlencoded());
+// Setup logging here
+app.use(morgan("dev"));
 
 // Init session for login
 // TODO: Use Redis Session store
@@ -61,8 +64,14 @@ app.use(session({
   }
 }))
 
-// Setup logging here
-app.use(morgan("dev"));
+// Initialise passport & logon
+
+
+// Add to express
+const passport = configurePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 
 // If in dev, setup hot reload of frontend

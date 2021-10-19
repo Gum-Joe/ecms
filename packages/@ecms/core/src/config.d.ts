@@ -15,6 +15,8 @@ declare namespace NodeJS {
 		ECMS_GOOGLE_CLIENT_ID: string;
 		/** Google OAuth Client Secret */
 		ECMS_GOOGLE_CLIENT_SECRET: string;
+    /** Callback domain. This is the domain (e.g. https://ecms.com) the server is running at so the callback redirect works */
+    ECMS_GOOGLE_CALLBACK_DOMAIN: string;
 		/** Used to sign sessions to ensure their validity */
 		ECMS_SESSION_SECRET: string;
 		/** true or false.Determines if debug logging should occur(default false */

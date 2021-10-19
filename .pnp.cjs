@@ -180,11 +180,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/helmet", "npm:4.0.0"],
             ["@types/morgan", "npm:1.9.3"],
             ["@types/node", "npm:16.11.0"],
+            ["@types/passport", "npm:1.0.7"],
+            ["@types/passport-google-oauth20", "npm:2.0.10"],
             ["@types/pg", "npm:8.6.1"],
             ["@types/prop-types", "npm:15.7.4"],
             ["@types/react", "npm:17.0.30"],
             ["@types/react-dom", "npm:17.0.9"],
             ["@types/react-hot-loader", "npm:4.1.1"],
+            ["@types/url-join", "npm:4.0.1"],
             ["@types/webpack", "npm:5.28.0"],
             ["@types/webpack-dev-middleware", "npm:5.0.2"],
             ["@types/webpack-hot-middleware", "npm:2.25.5"],
@@ -200,6 +203,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["knex", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.95.11"],
             ["morgan", "npm:1.10.0"],
             ["nodemon", "npm:2.0.13"],
+            ["passport", "npm:0.5.0"],
+            ["passport-google-oauth20", "npm:2.0.0"],
             ["pg", "virtual:b837e71d5ba61ee72aa6719c0c6c9420b12134e1e6138f55184c382d33c39eb302b615863988a1876d08209667cce6122e004dd5d3235914de4c782272753ab0#npm:8.7.1"],
             ["pnp-webpack-plugin", "npm:1.7.0"],
             ["prop-types", "npm:15.7.2"],
@@ -212,6 +217,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["style-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:2.0.0"],
             ["ts-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:8.3.0"],
             ["ts-node", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:10.3.0"],
+            ["url-join", "npm:4.0.1"],
             ["webpack", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.46.0"],
             ["webpack-cli", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.9.0"],
             ["webpack-dev-middleware", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:5.2.1"],
@@ -574,11 +580,55 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/oauth", [
+        ["npm:0.9.1", {
+          "packageLocation": "./.yarn/cache/@types-oauth-npm-0.9.1-94ae218a9b-5c079611b4.zip/node_modules/@types/oauth/",
+          "packageDependencies": [
+            ["@types/oauth", "npm:0.9.1"],
+            ["@types/node", "npm:16.10.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/parse-json", [
         ["npm:4.0.0", {
           "packageLocation": "./.yarn/cache/@types-parse-json-npm-4.0.0-298522afa6-fd6bce2b67.zip/node_modules/@types/parse-json/",
           "packageDependencies": [
             ["@types/parse-json", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/passport", [
+        ["npm:1.0.7", {
+          "packageLocation": "./.yarn/cache/@types-passport-npm-1.0.7-a6aaee17b9-1b78fbbb58.zip/node_modules/@types/passport/",
+          "packageDependencies": [
+            ["@types/passport", "npm:1.0.7"],
+            ["@types/express", "npm:4.17.13"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/passport-google-oauth20", [
+        ["npm:2.0.10", {
+          "packageLocation": "./.yarn/cache/@types-passport-google-oauth20-npm-2.0.10-1abecf7706-ffb324773d.zip/node_modules/@types/passport-google-oauth20/",
+          "packageDependencies": [
+            ["@types/passport-google-oauth20", "npm:2.0.10"],
+            ["@types/express", "npm:4.17.13"],
+            ["@types/passport", "npm:1.0.7"],
+            ["@types/passport-oauth2", "npm:1.4.11"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/passport-oauth2", [
+        ["npm:1.4.11", {
+          "packageLocation": "./.yarn/cache/@types-passport-oauth2-npm-1.4.11-299820231e-09d047a6c0.zip/node_modules/@types/passport-oauth2/",
+          "packageDependencies": [
+            ["@types/passport-oauth2", "npm:1.4.11"],
+            ["@types/express", "npm:4.17.13"],
+            ["@types/oauth", "npm:0.9.1"],
+            ["@types/passport", "npm:1.0.7"]
           ],
           "linkType": "HARD",
         }]
@@ -708,6 +758,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/uglify-js", "npm:3.13.1"],
             ["source-map", "npm:0.6.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/url-join", [
+        ["npm:4.0.1", {
+          "packageLocation": "./.yarn/cache/@types-url-join-npm-4.0.1-996120d4f1-29444b90e1.zip/node_modules/@types/url-join/",
+          "packageDependencies": [
+            ["@types/url-join", "npm:4.0.1"]
           ],
           "linkType": "HARD",
         }]
@@ -1969,6 +2028,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/base64-js-npm-1.5.1-b2f7275641-669632eb37.zip/node_modules/base64-js/",
           "packageDependencies": [
             ["base64-js", "npm:1.5.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["base64url", [
+        ["npm:3.0.1", {
+          "packageLocation": "./.yarn/cache/base64url-npm-3.0.1-4c171c4917-a77b2a3a52.zip/node_modules/base64url/",
+          "packageDependencies": [
+            ["base64url", "npm:3.0.1"]
           ],
           "linkType": "HARD",
         }]
@@ -6964,6 +7032,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["oauth", [
+        ["npm:0.9.15", {
+          "packageLocation": "./.yarn/cache/oauth-npm-0.9.15-a6aae972bc-957c0d8d85.zip/node_modules/oauth/",
+          "packageDependencies": [
+            ["oauth", "npm:0.9.15"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["object-assign", [
         ["npm:4.1.1", {
           "packageLocation": "./.yarn/cache/object-assign-npm-4.1.1-1004ad6dec-fcc6e4ea8c.zip/node_modules/object-assign/",
@@ -7341,6 +7418,50 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["passport", [
+        ["npm:0.5.0", {
+          "packageLocation": "./.yarn/cache/passport-npm-0.5.0-e1559353ce-5a3db4b420.zip/node_modules/passport/",
+          "packageDependencies": [
+            ["passport", "npm:0.5.0"],
+            ["passport-strategy", "npm:1.0.0"],
+            ["pause", "npm:0.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["passport-google-oauth20", [
+        ["npm:2.0.0", {
+          "packageLocation": "./.yarn/cache/passport-google-oauth20-npm-2.0.0-4187da29c8-1d34f4c2da.zip/node_modules/passport-google-oauth20/",
+          "packageDependencies": [
+            ["passport-google-oauth20", "npm:2.0.0"],
+            ["passport-oauth2", "npm:1.6.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["passport-oauth2", [
+        ["npm:1.6.1", {
+          "packageLocation": "./.yarn/cache/passport-oauth2-npm-1.6.1-2799fe66c7-2a5b01a884.zip/node_modules/passport-oauth2/",
+          "packageDependencies": [
+            ["passport-oauth2", "npm:1.6.1"],
+            ["base64url", "npm:3.0.1"],
+            ["oauth", "npm:0.9.15"],
+            ["passport-strategy", "npm:1.0.0"],
+            ["uid2", "npm:0.0.4"],
+            ["utils-merge", "npm:1.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["passport-strategy", [
+        ["npm:1.0.0", {
+          "packageLocation": "./.yarn/cache/passport-strategy-npm-1.0.0-5648a82a66-5086693f25.zip/node_modules/passport-strategy/",
+          "packageDependencies": [
+            ["passport-strategy", "npm:1.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["path-browserify", [
         ["npm:0.0.1", {
           "packageLocation": "./.yarn/cache/path-browserify-npm-0.0.1-bb8b2a97b1-ae8dcd45d0.zip/node_modules/path-browserify/",
@@ -7416,6 +7537,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/path-type-npm-4.0.0-10d47fc86a-5b1e2daa24.zip/node_modules/path-type/",
           "packageDependencies": [
             ["path-type", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["pause", [
+        ["npm:0.0.1", {
+          "packageLocation": "./.yarn/cache/pause-npm-0.0.1-0c421a299d-e96ee581b6.zip/node_modules/pause/",
+          "packageDependencies": [
+            ["pause", "npm:0.0.1"]
           ],
           "linkType": "HARD",
         }]
@@ -9949,6 +10079,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["uid2", [
+        ["npm:0.0.4", {
+          "packageLocation": "./.yarn/cache/uid2-npm-0.0.4-cd02831b83-e92325ce2e.zip/node_modules/uid2/",
+          "packageDependencies": [
+            ["uid2", "npm:0.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["unbox-primitive", [
         ["npm:1.0.1", {
           "packageLocation": "./.yarn/cache/unbox-primitive-npm-1.0.1-50b9fde246-89d950e18f.zip/node_modules/unbox-primitive/",
@@ -10111,6 +10250,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["url", "npm:0.11.0"],
             ["punycode", "npm:1.3.2"],
             ["querystring", "npm:0.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["url-join", [
+        ["npm:4.0.1", {
+          "packageLocation": "./.yarn/cache/url-join-npm-4.0.1-e1f4415722-f74e868bf2.zip/node_modules/url-join/",
+          "packageDependencies": [
+            ["url-join", "npm:4.0.1"]
           ],
           "linkType": "HARD",
         }]
