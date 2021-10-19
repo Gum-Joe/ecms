@@ -1,3 +1,4 @@
 {
-	"exec": "yarn run ts-node"
+	"exec": "yarn run ts-node",
+	"signal": "SIGKILL"
 }

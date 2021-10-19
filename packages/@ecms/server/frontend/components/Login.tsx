@@ -20,7 +20,7 @@ export default class LoginPage extends React.Component {
 				<div className="flexbox">
 					<div className="login-container">
 						<h1 className="title-header">ECMS</h1>
-						<a href="/login/google"><img src={googleSignIn} className="google-sign-in" id="google-sign-in"/></a>
+						<a href="/api/user/login/google"><img src={googleSignIn} className="google-sign-in" id="google-sign-in"/></a>
 						<a className="ecms-link local-auth-activate">Use a username or password instead</a>
 					</div>
 				</div>

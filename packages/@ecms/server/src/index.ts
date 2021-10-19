@@ -4,7 +4,6 @@
  * @packageDocumentation
  */
 import dotenv from "dotenv";
-import { LoggerFactory } from "@ecms/core";
 import { join } from "path";
 import userRouter from "./routes/users";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -15,6 +14,7 @@ import morgan from "morgan";
 import helmet from "helmet";
 import session from "express-session";
 import configurePassport from "./auth";
+import createLogger from "./utils/logger";
 
 // Preable log line
 console.log(`ECMS v${packageJSON.version}`);
@@ -23,16 +23,9 @@ console.log("Starting ECMS...");
 /** Intitalise our config into environmntal variables */
 dotenv.config();
 
-/** Load logger */
-const ECMSLoggerFactory = new LoggerFactory(
-	process.env.ECMS_LOGS_LOCATION || join(process.cwd(), "logs"),
-	(process.env.NODE_ENV === "development" && process.env.ECMS_LOG_SILENT !== "true") ?
-		"debug" :
-		((process.env.NODE_ENV === "test" || process.env.ECMS_LOG_SILENT === "true") ? "none" : "info")
-);
-const logger = ECMSLoggerFactory.createLogger("server");
+const logger = createLogger("server");
 
-logger.info("ECMS Logger Loaded.");
+logger.debug("ECMS Logger Loaded.");
 
 /** Initiale Express */
 const app = express();
@@ -45,7 +38,7 @@ app.get("/heartbeat", (req, res, next) => {
 });
 
 // Baseline middleware
-app.use(helmet()); // Security
+//app.use(helmet()); // Security
 app.use(express.json());
 app.use(express.urlencoded());
 // Setup logging here
@@ -54,19 +47,16 @@ app.use(morgan("dev"));
 // Init session for login
 // TODO: Use Redis Session store
 app.use(session({
-  secret: process.env.ECMS_SESSION_SECRET || "987&^%%$j*a)s;m*)aMwL&^*LKJaKH*hujhnliuHG",
-  cookie: {
-    // TODO: set this once HTTPS working!
-    // secure: true
-    // TODO: set an expiry time
-  }
-}))
+	secret: process.env.ECMS_SESSION_SECRET || "987&^%%$j*a)s;m*)aMwL&^*LKJaKH*hujhnliuHG",
+	cookie: {
+		// TODO: set this once HTTPS working!
+		// secure: true
+		// TODO: set an expiry time
+	}
+}));
 
 // Initialise passport & logon
-
-
-// Add to express
-const passport = configurePassport(ECMSLoggerFactory);
+const passport = configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 

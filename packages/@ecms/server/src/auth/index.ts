@@ -3,28 +3,54 @@
  * Returns the passport objcts, configured with all the login strategies
  * @packageDocumentation
  */
-import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import urljoin from "url-join";
-import type { LoggerFactory } from "@ecms/core";
+import passport, { PassportStatic } from "passport";
+import connectToDB from "../utils/db";
+import createLogger from "../utils/logger";
+import { useGooglePassport } from "./useGooglePassport";
 
 // Add return type of passport
-export default function setupPassport(loggerFactory: LoggerFactory) {
-  const logger = loggerFactory.createLogger("auth")
-  // Setup google
-  if (!process.env.ECMS_GOOGLE_CLIENT_ID || !process.env.ECMS_GOOGLE_CLIENT_SECRET || !process.env.ECMS_GOOGLE_CALLBACK_DOMAIN) {
-    throw new Error("Error! Required environment variables not specified - please check your server config");
-  }
-  // From http://www.passportjs.org/packages/passport-google-oauth20/
-  passport.use(new GoogleStrategy({
-      clientID: process.env.ECMS_GOOGLE_CLIENT_ID,
-      clientSecret: process.env.ECMS_GOOGLE_CLIENT_SECRET,
-      callbackURL: urljoin(process.env.ECMS_GOOGLE_CALLBACK_DOMAIN, "/api/user/google/callback") // TODO: Check URL
-    },
-    function(accessToken, refreshToken, profile, cb) {
-      logger.info("Got Google login request. Authentication...");
-      // Here, find the user's email and check type is google (if error, fail)
-    }
-  ));
-  return passport;
+export default function setupPassport(): PassportStatic {
+	const logger = createLogger("auth");
+	const dbPool = connectToDB();
+
+	logger.info("Provisioning passport for login...");
+	logger.debug("Setting up google OAuth...");
+	// Setup google
+	if (!process.env.ECMS_GOOGLE_CLIENT_ID || !process.env.ECMS_GOOGLE_CLIENT_SECRET || !process.env.ECMS_GOOGLE_CALLBACK_DOMAIN) {
+		throw new Error("Error! Required environment variables not specified - please check your server config");
+	}
+	
+	useGooglePassport(passport, logger, dbPool);
+
+	// Use to create session info
+	// puts user ID into the session which we can use for retrival later!
+	passport.serializeUser((user: any, done) => {
+		logger.debug("Serialising user into session...");
+		done(null, user.user_id);
+	});
+	// Take session and get user
+	passport.deserializeUser((id, done) => {
+		logger.debug("Deserialising user...");
+		dbPool.connect()
+			.then(client => {
+				return client.query(
+					"SELECT (user_id, name, auth_type, email) FROM users WHERE user_id = $1",
+					[ id ]
+				);
+			})
+			.then(result => {
+				if (result.rows.length === 0) {
+					logger.error("No user foound when getting user out of session!");
+					done(null, false);
+				} else {
+					done(null, result.rows[0]);
+				}
+			})
+			.catch(err => done(err));
+	});
+
+	logger.info("Done.");
+	return passport;
 }
+
+

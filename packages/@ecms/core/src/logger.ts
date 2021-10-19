@@ -15,6 +15,9 @@ import "winston-daily-rotate-file";
 
 const { combine, colorize, printf, timestamp } = winston.format;
 
+/** The logger created by core */
+export type Logger = winston.Logger;
+
 /**
  * Used to create Loggers.
  * This is done so the server can set the log file location itself, e.g. from config
