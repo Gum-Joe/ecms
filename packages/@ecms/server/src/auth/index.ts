@@ -34,7 +34,7 @@ export default function setupPassport(): PassportStatic {
 		dbPool.connect()
 			.then(client => {
 				return client.query(
-					"SELECT (user_id, name, auth_type, email) FROM users WHERE user_id = $1",
+					"SELECT user_id, name, auth_type, email FROM users WHERE user_id = $1",
 					[ id ]
 				);
 			})

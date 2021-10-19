@@ -38,7 +38,7 @@ export function useGooglePassport(passport: PassportStatic, logger: Logger, dbPo
 					logger.debug("Extracting profile emails to check against...");
 					const emails = profile.emails.map(email => email.value);
 					const users = await client.query<Omit<users, "password">>(
-						`SELECT * FROM ${USERS_TABLE} WHERE email = ANY ($1) AND auth_type = 'oauth';`,
+						`SELECT user_id, name, auth_type, email FROM ${USERS_TABLE} WHERE email = ANY ($1) AND auth_type = 'oauth';`,
 						[emails]
 					);
 

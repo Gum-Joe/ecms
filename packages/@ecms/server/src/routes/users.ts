@@ -24,7 +24,6 @@ router.get(
 	passport.authenticate("google", { failureRedirect: "/" }),
 	function (req, res) {
 		// SUccess!
-		console.log(JSON.stringify(req.user));
 		res.send(`You are authenticated! Hello ${(req.user as any)?.name}!`);
 	}
 );
