@@ -40,6 +40,12 @@
 		margin-top: 10px;
 	}
 
+	.login-form {
+		padding: 0 55px;
+		box-sizing: border-box;
+		margin-top: 50px;
+	}
+
 	@include mobile {
 		position: relative;
 		width: 90vw;
@@ -47,11 +53,15 @@
 		margin-top: 5vh;
 		left: 0;
 		top: 0;
+
+		h1 {
+			font-size: 5em;
+		}
+
+		.login-form {
+			margin-top: 25px;
+			padding: 0 30px;
+		}
 	}
-	
-	.login-form {
-		padding: 0 55px;
-		box-sizing: border-box;
-		margin-top: 50px;
-	}
+
 }

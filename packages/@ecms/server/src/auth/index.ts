@@ -33,14 +33,15 @@ export default function setupPassport(): PassportStatic {
 	// Take session and get user
 	passport.deserializeUser((id, done) => {
 		logger.debug("Deserialising user...");
-		dbPool.connect()
+		dbPool.query(
+			"SELECT user_id, name, auth_type, email FROM users WHERE user_id = $1",
+			[id]
+		)
 			.then(client => {
-				return client.query(
-					"SELECT user_id, name, auth_type, email FROM users WHERE user_id = $1",
-					[ id ]
-				);
+				return client;
 			})
 			.then(result => {
+				logger.debug("Deserialisation done.");
 				if (result.rows.length === 0) {
 					logger.error("No user foound when getting user out of session!");
 					done(null, false);
