@@ -1,0 +1,39 @@
+/** Styles for a form */
+@import "mixins";
+
+.form-container {
+	text-align: left;
+	// Use a grid to display items
+	// This way we can separate things with a gap instead
+	display: grid;
+	grid-gap: 26px;
+	
+	label {
+		font-weight: 400;
+		font-size: 16.2px;
+	}
+
+	input {
+		/* Dark/Fill Color/Control/Default (from Figma) */
+		background: rgba(255, 255, 255, 0.0605);
+		border: 1px solid rgba(255, 255, 255, 0.36);
+		border-radius: 3px;
+		height: 40px;
+
+		color: $text-color;
+		font-size: 16px;
+		width: 100%;
+		padding: 10px;
+		box-sizing: border-box;
+		font-size: 14px;
+		margin-top: 5px;
+
+		@include use-fonts;
+
+		&:focus {
+			border-radius: 3px;
+			border-color: #60CDFF;
+		}
+	}
+
+}

@@ -1,0 +1,33 @@
+/** Styles for button */
+@import "variables";
+
+button {
+	&.primary {
+		// Color for primary button
+		background-color: $chb;
+		border: 1px solid #882B2D;
+		border-radius: 6px;
+
+		font-family: "Dosis";
+		font-style: normal;
+		font-weight: 500;
+		text-align: center;
+		font-size: 16px;
+
+		color: $text-color;
+
+		width: min-content;
+		min-width: 100px;
+
+		padding: 9px 7px;
+
+		&:hover {
+			background-color: darken($color: $chb, $amount: 5%);
+			border-color: darken(#882B2D, 5%);
+			cursor: pointer;
+			color: darken($text-color, 5%);
+		}			
+
+
+	}
+}

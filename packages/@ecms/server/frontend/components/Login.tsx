@@ -22,6 +22,22 @@ export default class LoginPage extends React.Component {
 						<h1 className="title-header">ECMS</h1>
 						<a href="/api/user/login/google"><img src={googleSignIn} className="google-sign-in" id="google-sign-in"/></a>
 						<a className="ecms-link local-auth-activate">Use a username or password instead</a>
+
+						<div className="login-form">
+							<form className="form-container">
+								<div>
+									<label htmlFor="email">Email</label>
+									<input name="email" id="login-email" type="email" placeholder="someone@example.com" />
+								</div>
+								<div>
+									<label htmlFor="password">Password</label>
+									<input name="password" id="login-password" type="password" placeholder="Password" />
+								</div>
+								<div className="flexbox">
+									<button className="primary">Login</button>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
 			</CHBBlurredBG>
