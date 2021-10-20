@@ -6,7 +6,7 @@ import urljoin from "url-join";
 import { users } from "../models";
 import { USERS_TABLE } from "../utils/constants";
 
-export function useGooglePassport(passport: PassportStatic, logger: Logger, dbPool: Pool) {
+export function useGooglePassport(passport: PassportStatic, logger: Logger, dbPool: Pool): void {
 	logger.debug("Setting up Google Strategy...");
 
 	if (!process.env.ECMS_GOOGLE_CLIENT_ID || !process.env.ECMS_GOOGLE_CLIENT_SECRET || !process.env.ECMS_GOOGLE_CALLBACK_DOMAIN) {

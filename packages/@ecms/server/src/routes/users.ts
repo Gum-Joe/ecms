@@ -23,9 +23,20 @@ router.get(
 	"/google/callback",
 	passport.authenticate("google", { failureRedirect: "/" }),
 	function (req, res) {
-		// SUccess!
+		// Success!
 		res.send(`You are authenticated! Hello ${(req.user as any)?.name}!`);
 	}
 );
 
+/** 
+ * Handle Local Authentication
+ */
+router.post(
+	"/login/local",
+	passport.authenticate("local", { failureRedirect: "/" }),
+	function (req, res) {
+		// Success!
+		res.send(`You are authenticated! Hello ${(req.user as any)?.name}!`);
+	}
+);
 export default router;

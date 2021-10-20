@@ -155,6 +155,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@ecms/server", "workspace:packages/@ecms/server"],
             ["@ecms/core", "workspace:packages/@ecms/core"],
+            ["@types/bcrypt", "npm:5.0.0"],
             ["@types/body-parser", "npm:1.19.1"],
             ["@types/cookie-parser", "npm:1.4.2"],
             ["@types/dotenv", "npm:8.2.0"],
@@ -165,6 +166,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:16.11.0"],
             ["@types/passport", "npm:1.0.7"],
             ["@types/passport-google-oauth20", "npm:2.0.10"],
+            ["@types/passport-local", "npm:1.0.34"],
             ["@types/pg", "npm:8.6.1"],
             ["@types/prop-types", "npm:15.7.4"],
             ["@types/react", "npm:17.0.30"],
@@ -174,6 +176,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/webpack", "npm:5.28.0"],
             ["@types/webpack-dev-middleware", "npm:5.0.2"],
             ["@types/webpack-hot-middleware", "npm:2.25.5"],
+            ["bcrypt", "npm:5.0.1"],
             ["cookie-parser", "npm:1.4.5"],
             ["css-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:5.2.7"],
             ["dotenv", "npm:10.0.0"],
@@ -188,6 +191,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["nodemon", "npm:2.0.13"],
             ["passport", "npm:0.5.0"],
             ["passport-google-oauth20", "npm:2.0.0"],
+            ["passport-local", "npm:1.0.0"],
             ["pg", "virtual:b837e71d5ba61ee72aa6719c0c6c9420b12134e1e6138f55184c382d33c39eb302b615863988a1876d08209667cce6122e004dd5d3235914de4c782272753ab0#npm:8.7.1"],
             ["pnp-webpack-plugin", "npm:1.7.0"],
             ["prop-types", "npm:15.7.2"],
@@ -254,6 +258,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@humanwhocodes-object-schema-npm-1.2.0-6bc0ff9fda-40b7548037.zip/node_modules/@humanwhocodes/object-schema/",
           "packageDependencies": [
             ["@humanwhocodes/object-schema", "npm:1.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@mapbox/node-pre-gyp", [
+        ["npm:1.0.5", {
+          "packageLocation": "./.yarn/cache/@mapbox-node-pre-gyp-npm-1.0.5-4e17430ec9-c1f182a707.zip/node_modules/@mapbox/node-pre-gyp/",
+          "packageDependencies": [
+            ["@mapbox/node-pre-gyp", "npm:1.0.5"],
+            ["detect-libc", "npm:1.0.3"],
+            ["https-proxy-agent", "npm:5.0.0"],
+            ["make-dir", "npm:3.1.0"],
+            ["node-fetch", "npm:2.6.5"],
+            ["nopt", "npm:5.0.0"],
+            ["npmlog", "npm:4.1.2"],
+            ["rimraf", "npm:3.0.2"],
+            ["semver", "npm:7.3.5"],
+            ["tar", "npm:6.1.11"]
           ],
           "linkType": "HARD",
         }]
@@ -371,6 +393,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@tsconfig-node16-npm-1.0.2-1f43ab567a-ca94d36397.zip/node_modules/@tsconfig/node16/",
           "packageDependencies": [
             ["@tsconfig/node16", "npm:1.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/bcrypt", [
+        ["npm:5.0.0", {
+          "packageLocation": "./.yarn/cache/@types-bcrypt-npm-5.0.0-c074c165c2-063c32c7a5.zip/node_modules/@types/bcrypt/",
+          "packageDependencies": [
+            ["@types/bcrypt", "npm:5.0.0"],
+            ["@types/node", "npm:16.10.2"]
           ],
           "linkType": "HARD",
         }]
@@ -604,6 +636,18 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/passport-local", [
+        ["npm:1.0.34", {
+          "packageLocation": "./.yarn/cache/@types-passport-local-npm-1.0.34-aa148e4b93-c8e162f571.zip/node_modules/@types/passport-local/",
+          "packageDependencies": [
+            ["@types/passport-local", "npm:1.0.34"],
+            ["@types/express", "npm:4.17.13"],
+            ["@types/passport", "npm:1.0.7"],
+            ["@types/passport-strategy", "npm:0.2.35"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/passport-oauth2", [
         ["npm:1.4.11", {
           "packageLocation": "./.yarn/cache/@types-passport-oauth2-npm-1.4.11-299820231e-09d047a6c0.zip/node_modules/@types/passport-oauth2/",
@@ -611,6 +655,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/passport-oauth2", "npm:1.4.11"],
             ["@types/express", "npm:4.17.13"],
             ["@types/oauth", "npm:0.9.1"],
+            ["@types/passport", "npm:1.0.7"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/passport-strategy", [
+        ["npm:0.2.35", {
+          "packageLocation": "./.yarn/cache/@types-passport-strategy-npm-0.2.35-b734cf403f-e5949063ad.zip/node_modules/@types/passport-strategy/",
+          "packageDependencies": [
+            ["@types/passport-strategy", "npm:0.2.35"],
+            ["@types/express", "npm:4.17.13"],
             ["@types/passport", "npm:1.0.7"]
           ],
           "linkType": "HARD",
@@ -2034,6 +2089,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["bcrypt", [
+        ["npm:5.0.1", {
+          "packageLocation": "./.yarn/unplugged/bcrypt-npm-5.0.1-6815be1cfe/node_modules/bcrypt/",
+          "packageDependencies": [
+            ["bcrypt", "npm:5.0.1"],
+            ["@mapbox/node-pre-gyp", "npm:1.0.5"],
+            ["node-addon-api", "npm:3.2.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["big.js", [
         ["npm:5.2.2", {
           "packageLocation": "./.yarn/cache/big.js-npm-5.2.2-e147c30820-b89b6e8419.zip/node_modules/big.js/",
@@ -3286,6 +3352,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/destroy-npm-1.0.4-a2203e01cb-da9ab4961d.zip/node_modules/destroy/",
           "packageDependencies": [
             ["destroy", "npm:1.0.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["detect-libc", [
+        ["npm:1.0.3", {
+          "packageLocation": "./.yarn/cache/detect-libc-npm-1.0.3-c30ac344d4-daaaed925f.zip/node_modules/detect-libc/",
+          "packageDependencies": [
+            ["detect-libc", "npm:1.0.3"]
           ],
           "linkType": "HARD",
         }]
@@ -6805,6 +6880,26 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["node-addon-api", [
+        ["npm:3.2.1", {
+          "packageLocation": "./.yarn/unplugged/node-addon-api-npm-3.2.1-a29528f81d/node_modules/node-addon-api/",
+          "packageDependencies": [
+            ["node-addon-api", "npm:3.2.1"],
+            ["node-gyp", "npm:8.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["node-fetch", [
+        ["npm:2.6.5", {
+          "packageLocation": "./.yarn/cache/node-fetch-npm-2.6.5-77aced0674-4e83db4507.zip/node_modules/node-fetch/",
+          "packageDependencies": [
+            ["node-fetch", "npm:2.6.5"],
+            ["whatwg-url", "npm:5.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["node-gyp", [
         ["npm:8.2.0", {
           "packageLocation": "./.yarn/unplugged/node-gyp-npm-8.2.0-c783adf325/node_modules/node-gyp/",
@@ -7363,6 +7458,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["passport-google-oauth20", "npm:2.0.0"],
             ["passport-oauth2", "npm:1.6.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["passport-local", [
+        ["npm:1.0.0", {
+          "packageLocation": "./.yarn/cache/passport-local-npm-1.0.0-ed89961a0c-86dc08b12f.zip/node_modules/passport-local/",
+          "packageDependencies": [
+            ["passport-local", "npm:1.0.0"],
+            ["passport-strategy", "npm:1.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -9706,6 +9811,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["tr46", [
+        ["npm:0.0.3", {
+          "packageLocation": "./.yarn/cache/tr46-npm-0.0.3-de53018915-726321c5ea.zip/node_modules/tr46/",
+          "packageDependencies": [
+            ["tr46", "npm:0.0.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["triple-beam", [
         ["npm:1.3.0", {
           "packageLocation": "./.yarn/cache/triple-beam-npm-1.3.0-eda4e2a46c-7d7b77d862.zip/node_modules/triple-beam/",
@@ -10277,6 +10391,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["webidl-conversions", [
+        ["npm:3.0.1", {
+          "packageLocation": "./.yarn/cache/webidl-conversions-npm-3.0.1-60310f6a2b-c92a0a6ab9.zip/node_modules/webidl-conversions/",
+          "packageDependencies": [
+            ["webidl-conversions", "npm:3.0.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["webpack", [
         ["npm:4.46.0", {
           "packageLocation": "./.yarn/cache/webpack-npm-4.46.0-a8158cfa7f-013fa24c00.zip/node_modules/webpack/",
@@ -10515,6 +10638,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/webpack-sources-npm-3.2.1-c2548b945d-438ee4759f.zip/node_modules/webpack-sources/",
           "packageDependencies": [
             ["webpack-sources", "npm:3.2.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["whatwg-url", [
+        ["npm:5.0.0", {
+          "packageLocation": "./.yarn/cache/whatwg-url-npm-5.0.0-374fb45e60-b8daed4ad3.zip/node_modules/whatwg-url/",
+          "packageDependencies": [
+            ["whatwg-url", "npm:5.0.0"],
+            ["tr46", "npm:0.0.3"],
+            ["webidl-conversions", "npm:3.0.1"]
           ],
           "linkType": "HARD",
         }]

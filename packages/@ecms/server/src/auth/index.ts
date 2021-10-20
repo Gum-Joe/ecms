@@ -7,6 +7,7 @@ import passport, { PassportStatic } from "passport";
 import connectToDB from "../utils/db";
 import createLogger from "../utils/logger";
 import { useGooglePassport } from "./useGooglePassport";
+import { useLocalAuth } from "./useLocalAuth";
 
 // Add return type of passport
 export default function setupPassport(): PassportStatic {
@@ -21,6 +22,7 @@ export default function setupPassport(): PassportStatic {
 	}
 	
 	useGooglePassport(passport, logger, dbPool);
+	useLocalAuth(passport, logger, dbPool);
 
 	// Use to create session info
 	// puts user ID into the session which we can use for retrival later!

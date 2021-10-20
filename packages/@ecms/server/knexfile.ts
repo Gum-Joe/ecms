@@ -7,7 +7,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // TODO: Configure the correct seeds here
-module.exports = {
+const config = {
 	
 	// Local Docker Dev Env
 	development: {
@@ -18,6 +18,9 @@ module.exports = {
 			database: process.env.ECMS_DB_DB,
 			user: process.env.ECMS_DB_USERNAME,
 			password: process.env.ECMS_DB_PASSWORD
+		},
+		seeds: {
+			directory: "./seeds/development",
 		},
 	},
 
@@ -54,3 +57,5 @@ module.exports = {
 	}
 
 };
+
+module.exports = config;
