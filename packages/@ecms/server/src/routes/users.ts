@@ -24,7 +24,7 @@ router.get(
 	passport.authenticate("google", { failureRedirect: "/" }),
 	function (req, res) {
 		// Success!
-		res.send(`You are authenticated! Hello ${(req.user as any)?.name}!`);
+		res.redirect("/login/postlogin");
 	}
 );
 
@@ -36,7 +36,7 @@ router.post(
 	passport.authenticate("local", { failureRedirect: "/" }),
 	function (req, res) {
 		// Success!
-		res.send(`You are authenticated! Hello ${(req.user as any)?.name}!`);
+		res.redirect("/login/postlogin");
 	}
 );
 export default router;

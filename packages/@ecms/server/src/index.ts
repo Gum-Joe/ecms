@@ -82,6 +82,18 @@ app.use(express.static(join(__dirname, "../public")));
 
 // Setup routes
 app.use("/api/user", userRouter);
+// Ensure API routes that are missing give a proper 404 page
+app.get("/api/*", (req, res) => {
+	res.status(404);
+	res.json({
+		message: "Not Found"
+	});
+});
+// Finally, for any route that does not match the above, send our frontend
+// Done one by one so as not to break e.g. static routing
+app.get("/login*", (req, res) => {
+	res.sendFile(join(__dirname, "../public/index.html"));
+});
 
 app.listen(process.env.ECMS_PORT || 9090, () => {
 	logger.info("Server started.");
