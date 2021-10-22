@@ -13,6 +13,7 @@ BEGIN
 		RETURN NULL;
 	ELSIF (NEW.data_tracked = 'individual') AND (NEW.unit_id IS NULL) THEN
 		RAISE NOTICE 'Foreign key violation - tried to set the event type as "individual" but failed to specify a unit in "unit_id"';
+		RETURN NULL;
 	ELSE
 		RETURN NEW;
 	END IF;

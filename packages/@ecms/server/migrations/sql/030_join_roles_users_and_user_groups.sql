@@ -15,6 +15,7 @@ BEGIN
 		END IF;
 		RETURN NEW; -- Important to ensure the row being inserted is not modified
 	END IF;
+	RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 

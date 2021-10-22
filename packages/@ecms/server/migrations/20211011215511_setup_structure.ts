@@ -80,6 +80,7 @@ export async function down(knex: Knex): Promise<void> {
 	}));
 
 	// Finally, drop types:
+	// (make sure to keep these are update!)
 	await knex.raw(`
 	DROP TYPE IF EXISTS event_or_group;
 	DROP TYPE IF EXISTS trackable_data;
@@ -89,6 +90,18 @@ export async function down(knex: Knex): Promise<void> {
 	DROP TYPE IF EXISTS filter_types;
 	DROP TYPE IF EXISTS filter_matchers;
 	DROP TYPE IF EXISTS competitor_setting_types;
+	
+	DROP FUNCTION IF EXISTS check_module_is_points_system CASCADE;
+	DROP FUNCTION IF EXISTS check_data_tracked_is_individual_if_unit CASCADE;
+	DROP FUNCTION IF EXISTS check_if_group CASCADE;
+	DROP FUNCTION IF EXISTS check_if_event CASCADE;
+	DROP FUNCTION IF EXISTS matches_event_type_check CASCADE;
+	DROP FUNCTION IF EXISTS restrictions_check_if_group CASCADE;
+	DROP FUNCTION IF EXISTS data_source_module_check CASCADE;
+	DROP FUNCTION IF EXISTS check_if_event_id_is_event CASCADE;
+	DROP FUNCTION IF EXISTS check_param_set_only CASCADE;
 	`);
+
+	//  
 }
 
