@@ -7,8 +7,13 @@
 
 import { Router } from "express";
 import passport from "passport";
+import connectToDB from "../utils/db";
+import createLogger from "../utils/logger";
 
 const router = Router();
+const logger = createLogger("api:user");
+
+const pool = connectToDB();
 
 /**
  * Handle Google OAuth (Sign in with Google)
@@ -39,4 +44,19 @@ router.post(
 		res.redirect("/login/postlogin");
 	}
 );
+
+/** Get info about the current user */
+router.get("/current", (req, res, next) => {
+	logger.info("Asked for user info");
+	if (!req.isAuthenticated) {
+		logger.error("401: asked for info on user when not logged in!");
+		res.statusCode = 401;
+		res.json({
+			message: "Expected a logged in user.”",
+		});
+	} else {
+		res.json(req.user);
+	}
+});
+
 export default router;

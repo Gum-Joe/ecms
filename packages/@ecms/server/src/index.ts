@@ -4,6 +4,9 @@
  * @packageDocumentation
  */
 import dotenv from "dotenv";
+/** Intitalise our config into environmntal variables */
+dotenv.config();
+
 import { join } from "path";
 import userRouter from "./routes/users";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -20,8 +23,7 @@ import createLogger from "./utils/logger";
 console.log(`ECMS v${packageJSON.version}`);
 console.log("Starting ECMS...");
 
-/** Intitalise our config into environmntal variables */
-dotenv.config();
+
 
 const logger = createLogger("server");
 
