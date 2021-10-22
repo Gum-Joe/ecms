@@ -3,9 +3,27 @@ import { rolesInitializer as roles} from "../src/models/roles";
 
 const roles: roles[] = [
   {
-    name: "",
-    path: "",
-    description: "",
+    name: "Superadmin",
+    description: "Grants all permissions",
+    path: "root",
+    has_parameter: false,
+  },
+  {
+    name: "Admin",
+    description: "General Admin Activites",
+    path: "root.admin",
+    has_parameter: false,
+  },
+  {
+    name: "Users",
+    description: "Management of users of ECMS",
+    path: "root.admin.users",
+    has_parameter: false,
+  },
+  {
+    name: "Add & modify users",
+    description: "allows adding or modifying users and granting roles",
+    path: "root.admin.users.modify",
     has_parameter: false,
   }
 ]
