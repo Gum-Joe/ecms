@@ -19,6 +19,11 @@ html, body, #root {
 	align-items: center;
 }
 
+/** Set 100% height */
+.fill-height {
+	height: 100%;
+}
+
 /** Useful for creating link like text */
 .ecms-link {
 	@include link;

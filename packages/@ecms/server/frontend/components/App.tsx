@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import React from "react";
-import LoginPage from "./Login";
-import PostLogin from "./PostLogin";
+import LoginPage from "./login/Login";
+import PostLogin from "./login/PostLogin";
 
 
 /**

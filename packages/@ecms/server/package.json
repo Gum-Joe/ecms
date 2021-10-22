@@ -24,6 +24,11 @@
   "homepage": "https://github.com/Gum-Joe/ecms#readme",
   "dependencies": {
     "@ecms/core": "workspace:packages/@ecms/core",
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.16",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",

@@ -27,12 +27,12 @@ export default function setupPassport(): PassportStatic {
 	// Use to create session info
 	// puts user ID into the session which we can use for retrival later!
 	passport.serializeUser((user: any, done) => {
-		logger.debug("Serialising user into session...");
+		logger.debug(`Serialising user with ID ${user.user_id} into session...`);
 		done(null, user.user_id);
 	});
 	// Take session and get user
 	passport.deserializeUser((id, done) => {
-		logger.debug("Deserialising user...");
+		logger.debug(`Deserialising user with ID ${id}...`);
 		dbPool.query(
 			"SELECT user_id, name, auth_type, email FROM users WHERE user_id = $1",
 			[id]

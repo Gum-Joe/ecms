@@ -1,8 +1,8 @@
 import React from "react";
-import googleSignIn from "../assets/google/btn_google_signin_dark_normal_web@2x.png";
-import Button from "./Button";
-import FlexBox from "./FlexBox";
-import Form from "./Form";
+import googleSignIn from "../../assets/google/btn_google_signin_dark_normal_web@2x.png";
+import Button from "../Button";
+import FlexBox from "../FlexBox";
+import Form from "../Form";
 import LoginContainer from "./LoginContainer";
 
 interface LoginPageState {
