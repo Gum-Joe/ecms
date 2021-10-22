@@ -20,7 +20,7 @@ const config = {
 			password: process.env.ECMS_DB_PASSWORD
 		},
 		seeds: {
-			directory: "./seeds/development",
+			directory: ["./seeds/development", "./seeds/common"],
 		},
 	},
 
