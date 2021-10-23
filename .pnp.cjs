@@ -201,6 +201,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["file-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.2.0"],
             ["fork-ts-checker-webpack-plugin", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.3.4"],
             ["helmet", "npm:4.6.0"],
+            ["http-status-codes", "npm:2.1.4"],
             ["kanel", "npm:2.3.2"],
             ["knex", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.95.11"],
             ["morgan", "npm:1.10.0"],
@@ -5214,6 +5215,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tootallnate/once", "npm:1.1.2"],
             ["agent-base", "npm:6.0.2"],
             ["debug", "virtual:ee1bbcab87c0701d4ea83dd18afa59b10c6343191c17b3a8e7844ecdde3ca8e8977791131460b822baae289e9261b3b228709bc45987d850e69091b4d363edfa#npm:4.3.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["http-status-codes", [
+        ["npm:2.1.4", {
+          "packageLocation": "./.yarn/cache/http-status-codes-npm-2.1.4-e5672be5a5-44fedd7b2c.zip/node_modules/http-status-codes/",
+          "packageDependencies": [
+            ["http-status-codes", "npm:2.1.4"]
           ],
           "linkType": "HARD",
         }]

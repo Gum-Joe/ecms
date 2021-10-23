@@ -7,6 +7,7 @@ import roles, { RolesNode } from "../../src/utils/roles";
  */
 export async function seed(knex: Knex): Promise<void> {
 	// Deletes ALL existing entries
+	await knex("join_roles_users").del();
 	await knex("roles").del();
 
 	console.log("Generating roles to load into server...");
