@@ -109,9 +109,10 @@ router.get("/current/checkRoles", async (req: RequestWithBody<ReqGetCurrentUser>
 				)
 				AND path @> $2::ltree[];
 				`,
-			[req.user.user_id, req.body.roles]);
+			[req.user.user_id, req.body.rolesToCheck]);
 
-			if (numberOfRoles.rows[0].count === 0) {
+
+			if (parseInt(numberOfRoles.rows[0].count) === 0) {
 				logger.error("Roles required not found.");
 				res.statusCode = StatusCodes.OK;
 				res.json({
