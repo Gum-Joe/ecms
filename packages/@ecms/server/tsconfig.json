@@ -5,6 +5,9 @@
 		"rootDir": "./src",
 		"outDir": "./lib",
 		"tsBuildInfoFile": "../../../.build-cache/server.tsbuildinfo",
+		"typeRoots": [
+			"src/@types/express.d.ts",
+		]
 	},
 	"references": [
 		{
@@ -16,5 +19,6 @@
 	],
 	"include": [
 		"src"
-	]
+	],
+	
 }
