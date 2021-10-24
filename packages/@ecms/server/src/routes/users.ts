@@ -57,9 +57,10 @@ router.get("/current", (req, res, next) => {
 		logger.error("401: asked for info on user when not logged in!");
 		res.statusCode = 401;
 		res.json({
-			message: "Expected a logged in user.”",
+			message: "Expected a logged in user.",
 		});
 	} else {
+		assertHasUser(req);
 		res.json(req.user);
 	}
 });

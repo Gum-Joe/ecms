@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import React from "react";
 import LoginPage from "./login/Login";
 import PostLogin from "./login/PostLogin";
+import LoginError from "./login/LoginError";
 
 
 /**
@@ -20,6 +21,7 @@ const App: React.FC = () =>  {
 			<Route exact path="/login/postlogin">
 				<PostLogin />
 			</Route>
+			<Route exact path="/login/error" render={(props) => <LoginError {...props} />} />
 		</Router>
 	);
 };

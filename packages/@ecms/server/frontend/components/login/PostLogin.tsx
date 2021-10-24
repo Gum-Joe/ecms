@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FlexBox from "../FlexBox";
 import LoginContainer from "./LoginContainer";
 import { faCircleNotch, faEdit, faTools } from "@fortawesome/free-solid-svg-icons";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import axios from "axios";
 import useAsyncEffect from "use-async-effect";
 import { LinkedNavigationListContainer, LinkedNavigationList } from "../LinkedNavList";
@@ -25,8 +25,16 @@ const PostLogin: React.FC = (props) => {
 			console.debug("Not logged in!");
 			history.push("/");
 			return;
+		} else if (checkLoggedIn.status >= 500) {
+			console.debug("Server encountered an error checking if logged in.");
+			checkLoggedIn.text().then(errorText => {
+				// Some other error
+				seterrorState(new Error(
+					`Server error, HTTP Status Code ${checkLoggedIn.status}: ${errorText}`
+				));
+			});
+			
 		}
-
 		// 2: Check if we can do data entry
 		const req1 = axios.get<{ hasPermission: boolean }>("/api/user/current/checkRoles", {
 			params: {
@@ -71,25 +79,35 @@ const PostLogin: React.FC = (props) => {
 		<LoginContainer>
 			<FlexBox className="fill-height" direction="column">
 				{
-					!canUseDataEntry && !canUseEventManagement ?
-						<>
-							<h2 className="sub-header">Checking details</h2>
-							<FontAwesomeIcon icon={faCircleNotch} spin={true} size={"5x"} />
-						</>
+					errorState ?
+						<Redirect to={{
+							pathname: "/login/error",
+							// @ts-expect-error: See https://stackoverflow.com/questions/52064303/reactjs-pass-props-with-redirect-component
+							error: errorState
+						}} />
 						:
-						<>
-							<h2 className="sub-header">Where would you like to go?</h2><LinkedNavigationListContainer>
-								{canUseEventManagement ? <LinkedNavigationList
-									linkTo="/"
-									icon={<FontAwesomeIcon icon={faTools} />}
-									text="Event configurator" /> : null}
-								{canUseDataEntry ? <LinkedNavigationList
-									linkTo="/entry"
-									icon={<FontAwesomeIcon icon={faEdit} />}
-									text="Data Entry" /> : null}
-							</LinkedNavigationListContainer>
-						</>
-				}	
+						(
+							!canUseDataEntry && !canUseEventManagement ?
+								<>
+									<h2 className="sub-header">Checking details</h2>
+									<FontAwesomeIcon icon={faCircleNotch} spin={true} size={"5x"} />
+								</>
+								:
+								<>
+									<h2 className="sub-header">Where would you like to go?</h2><LinkedNavigationListContainer>
+										{canUseEventManagement ? <LinkedNavigationList
+											linkTo="/"
+											icon={<FontAwesomeIcon icon={faTools} />}
+											text="Event configurator" /> : null}
+										{canUseDataEntry ? <LinkedNavigationList
+											linkTo="/entry"
+											icon={<FontAwesomeIcon icon={faEdit} />}
+											text="Data Entry" /> : null}
+									</LinkedNavigationListContainer>
+								</>
+						)
+				}
+					
 				
 			</FlexBox>
 		</LoginContainer>

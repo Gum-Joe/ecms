@@ -178,6 +178,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/express", "npm:4.17.13"],
             ["@types/express-session", "npm:1.17.4"],
             ["@types/helmet", "npm:4.0.0"],
+            ["@types/history", "npm:4.7.9"],
             ["@types/morgan", "npm:1.9.3"],
             ["@types/node", "npm:16.11.0"],
             ["@types/passport", "npm:1.0.7"],
@@ -195,7 +196,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/webpack-hot-middleware", "npm:2.25.5"],
             ["axios", "npm:0.23.0"],
             ["bcrypt", "npm:5.0.1"],
-            ["compression-webpack-plugin", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:9.0.0"],
+            ["compression-webpack-plugin", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.1.1"],
             ["cookie-parser", "npm:1.4.5"],
             ["css-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:5.2.7"],
             ["dotenv", "npm:10.0.0"],
@@ -2967,21 +2968,24 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["compression-webpack-plugin", [
-        ["npm:9.0.0", {
-          "packageLocation": "./.yarn/cache/compression-webpack-plugin-npm-9.0.0-3c74278be8-4d6c22770e.zip/node_modules/compression-webpack-plugin/",
+        ["npm:6.1.1", {
+          "packageLocation": "./.yarn/cache/compression-webpack-plugin-npm-6.1.1-3a2a65987e-0e716a457e.zip/node_modules/compression-webpack-plugin/",
           "packageDependencies": [
-            ["compression-webpack-plugin", "npm:9.0.0"]
+            ["compression-webpack-plugin", "npm:6.1.1"]
           ],
           "linkType": "SOFT",
         }],
-        ["virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:9.0.0", {
-          "packageLocation": "./.yarn/__virtual__/compression-webpack-plugin-virtual-3c8ee999cb/0/cache/compression-webpack-plugin-npm-9.0.0-3c74278be8-4d6c22770e.zip/node_modules/compression-webpack-plugin/",
+        ["virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.1.1", {
+          "packageLocation": "./.yarn/__virtual__/compression-webpack-plugin-virtual-e717613ed2/0/cache/compression-webpack-plugin-npm-6.1.1-3a2a65987e-0e716a457e.zip/node_modules/compression-webpack-plugin/",
           "packageDependencies": [
-            ["compression-webpack-plugin", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:9.0.0"],
+            ["compression-webpack-plugin", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.1.1"],
             ["@types/webpack", "npm:5.28.0"],
+            ["cacache", "npm:15.3.0"],
+            ["find-cache-dir", "npm:3.3.2"],
             ["schema-utils", "npm:3.1.1"],
-            ["serialize-javascript", "npm:6.0.0"],
-            ["webpack", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.46.0"]
+            ["serialize-javascript", "npm:5.0.1"],
+            ["webpack", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.46.0"],
+            ["webpack-sources", "npm:1.4.3"]
           ],
           "packagePeers": [
             "@types/webpack",
@@ -4570,6 +4574,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["commondir", "npm:1.0.1"],
             ["make-dir", "npm:2.1.0"],
             ["pkg-dir", "npm:3.0.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:3.3.2", {
+          "packageLocation": "./.yarn/cache/find-cache-dir-npm-3.3.2-836e68dd83-1e61c2e64f.zip/node_modules/find-cache-dir/",
+          "packageDependencies": [
+            ["find-cache-dir", "npm:3.3.2"],
+            ["commondir", "npm:1.0.1"],
+            ["make-dir", "npm:3.1.0"],
+            ["pkg-dir", "npm:4.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -9261,6 +9275,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/serialize-javascript-npm-4.0.0-b4aeff413b-3273b3394b.zip/node_modules/serialize-javascript/",
           "packageDependencies": [
             ["serialize-javascript", "npm:4.0.0"],
+            ["randombytes", "npm:2.1.0"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:5.0.1", {
+          "packageLocation": "./.yarn/cache/serialize-javascript-npm-5.0.1-8ffc173f09-bb45a42769.zip/node_modules/serialize-javascript/",
+          "packageDependencies": [
+            ["serialize-javascript", "npm:5.0.1"],
             ["randombytes", "npm:2.1.0"]
           ],
           "linkType": "HARD",

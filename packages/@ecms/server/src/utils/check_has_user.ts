@@ -10,7 +10,7 @@ type RequestWithUser = Request & { user: Omit<users, "password"> };
 export function assertHasUser(req: Request): asserts req is RequestWithUser {
 
 	if (!("user" in req)) {
-		throw new Error("Server error - user logged in but not user found in session.");
+		throw new Error("Server error - user logged in but no user found in session.");
 	}
 	
 }
