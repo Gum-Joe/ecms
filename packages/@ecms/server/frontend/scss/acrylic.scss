@@ -6,9 +6,11 @@
 	// Ideally we'd use CSS effects for this, but that doesn't work.
 	// So I just used an image instead
 	background: url("../assets/BlurredBackground.jpg");
+	background-size: cover;
+	background-position: center;
 
 	width: 100vw;
-	height: 100vh;
+	min-height: 100vh;
 	/* Dark/Shell/Background/Fill Color/Acrylic/Thin Acrylic */
 
 	//background: url("../assets/CampHillGrounds.jpg"), url("../assets/NoiseAsset_256.png"), rgba(84, 84, 84, 0.64);
@@ -21,4 +23,6 @@
 	background-size: cover;
 
 	//border-radius: 7px;
+
+	//position: fixed;
 }

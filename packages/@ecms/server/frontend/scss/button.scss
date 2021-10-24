@@ -22,7 +22,7 @@ button {
 		padding: 9px 7px;
 
 		&:hover {
-			background-color: darken($color: $chb, $amount: 5%);
+			background-color: lighten($color: $chb, $amount: 5%);
 			border-color: darken(#882B2D, 5%);
 			cursor: pointer;
 			color: darken($text-color, 5%);

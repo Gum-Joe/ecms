@@ -24,6 +24,11 @@ html, body, #root {
 	height: 100%;
 }
 
+/** Set to 100% viewport height */
+.fill-height-viewport {
+	min-height: 100vh;
+}
+
 /** Useful for creating link like text */
 .ecms-link {
 	@include link;

@@ -44,7 +44,7 @@ export function useGooglePassport(passport: PassportStatic, logger: Logger, dbPo
 
 					if (users.rows.length === 0) {
 						logger.error("No user found!");
-						cb(null, false, { message: "User not registered with ECMS. Ask your admin to register you." });
+						cb(null, undefined, { message: "User not registered with ECMS. Ask your admin to register you." });
 					} else {
 						// Unique constraints mean we can guarentee we only get one user.
 						logger.info("Auth success.");

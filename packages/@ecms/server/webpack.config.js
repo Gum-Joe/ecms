@@ -9,6 +9,7 @@ const path = require("path");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const PnpWebpackPlugin = require("pnp-webpack-plugin");
 const webpack = require("webpack");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = {
 	mode: (process.env.NODE_ENV === "development" ? "development" : "production"),
@@ -75,6 +76,7 @@ module.exports = {
 	plugins: [
 		(process.env.NODE_ENV === "development" ? new webpack.HotModuleReplacementPlugin() : null),
 		new ForkTsCheckerWebpackPlugin(),
+		new CompressionPlugin(),
 	],
 
 	resolve: {

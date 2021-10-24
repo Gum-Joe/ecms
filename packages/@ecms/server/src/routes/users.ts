@@ -86,11 +86,13 @@ router.get("/current/checkRoles", async (req: RequestWithBody<ReqGetCurrentUser>
 		});
 	} else {
 		
-		if (!req.body.rolesToCheck || !Array.isArray(req.body.rolesToCheck)) {
+		if (!req.query.rolesToCheck || !Array.isArray(req.query.rolesToCheck)) {
+			logger.error("Did not get a rolesToCheck param of the correct type. Expected an array");
 			res.statusCode = 400;
 			res.json({
-				message: "Did not get a rolesToCheck param of the correct type. Expected an array"
+				message: "Did not get a rolesToCheck param of the correct type. Expected an array."
 			});
+			return;
 		}
 		const client = await pool.connect();
 		try {
@@ -109,7 +111,7 @@ router.get("/current/checkRoles", async (req: RequestWithBody<ReqGetCurrentUser>
 				)
 				AND path @> $2::ltree[];
 				`,
-			[req.user.user_id, req.body.rolesToCheck]);
+			[req.user.user_id, req.query.rolesToCheck]);
 
 
 			if (parseInt(numberOfRoles.rows[0].count) === 0) {

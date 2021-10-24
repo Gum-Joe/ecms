@@ -12,6 +12,6 @@ type UserNew = users & Express.User;
 /** Override Express.User. From https://stackoverflow.com/questions/66614337/typescript-req-user-is-possibly-undefined-express-and-passport-js */
 declare global {
 	namespace Express {
-		interface User extends users { }
+		interface User extends Omit<users, "password"> { }
 	}
 }

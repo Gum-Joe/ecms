@@ -8,7 +8,7 @@ import FlexBox from "../FlexBox";
 const LoginContainer: React.FC = (props) => {
 	return (
 		<CHBBlurredBG>
-			<FlexBox>
+			<FlexBox className="fill-height-viewport">
 				<div className="login-container">
 					{props.children}
 				</div>

@@ -18,6 +18,9 @@
 	color: $text-color;
 	text-align: center;
 
+	padding: 20px;
+	box-sizing: border-box;
+
 	h1 {
 		font-size: 6em;
 		font-weight: 600;
@@ -26,6 +29,10 @@
 	h2 {
 		font-size: 3em;
 		font-weight: 600;
+
+		@include mobile {
+			font-size: 2.5em;
+		}
 	}
 
 	.google-sign-in {
@@ -54,8 +61,8 @@
 	@include mobile {
 		position: relative;
 		width: 90vw;
-		height: 90vh;
-		margin-top: 5vh;
+		height: 90%;
+		min-height: 90vh;
 		left: 0;
 		top: 0;
 
