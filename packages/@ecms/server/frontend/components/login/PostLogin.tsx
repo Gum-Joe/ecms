@@ -2,33 +2,11 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import FlexBox from "../FlexBox";
 import LoginContainer from "./LoginContainer";
-import { faArrowRight, faCircleNotch, faEdit, faTools } from "@fortawesome/free-solid-svg-icons";
-import { Link, useHistory } from "react-router-dom";
+import { faCircleNotch, faEdit, faTools } from "@fortawesome/free-solid-svg-icons";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
 import useAsyncEffect from "use-async-effect";
-
-interface LinkedNavListProps {
-	icon: JSX.Element;
-	linkTo: string;
-	text: string;
-}
-const LinkedNavigationList: React.FC<LinkedNavListProps> = (props) => {
-	return (
-		<Link to={props.linkTo} className="linked-nav-list">
-			{props.icon}
-			<p>{props.text}</p>
-			<FontAwesomeIcon icon={faArrowRight} id="list-end-nav" />
-		</Link>
-	);
-};
-
-const LinkedNavigationListContainer: React.FC = (props) => {
-	return (
-		<div className="linked-nav-list-container">
-			{props.children}
-		</div>
-	);
-};
+import { LinkedNavigationListContainer, LinkedNavigationList } from "../LinkedNavList";
 
 /**
  * Handles Post Login Actions, such as redirecting to the data entry or event management UI
