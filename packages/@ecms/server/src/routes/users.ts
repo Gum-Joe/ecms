@@ -50,10 +50,18 @@ router.post(
 	}
 );
 
+/**
+ * Logout
+ */
+router.get("/logout", (req, res) => {
+	req.logOut();
+	res.redirect("/");
+});
+
 /** Get info about the current user */
 router.get("/current", (req, res, next) => {
 	logger.info("Asked for user info");
-	if (!req.isAuthenticated) {
+	if (!req.isAuthenticated()) {
 		logger.error("401: asked for info on user when not logged in!");
 		res.statusCode = 401;
 		res.json({
@@ -86,7 +94,7 @@ interface ReqGetCurrentUser {
 	rolesToCheck: string[],
 }
 router.get("/current/checkRoles", async (req: RequestWithBody<ReqGetCurrentUser>, res, next) => {
-	if (!req.isAuthenticated) {
+	if (!req.isAuthenticated()) {
 		res.statusCode = 401;
 		res.json({
 			message: "Expected a logged in user"

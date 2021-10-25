@@ -1,6 +1,6 @@
 import React from "react";
-import CHBBlurredBG from "../AcrylicBackground";
-import FlexBox from "../FlexBox";
+import CHBBlurredBG from "../common/AcrylicBackground";
+import FlexBox from "../common/FlexBox";
 
 /**
  * Container for login pages - wraps the elements to display with a background and a overlaid panel for inputs

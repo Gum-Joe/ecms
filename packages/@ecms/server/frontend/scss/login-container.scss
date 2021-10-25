@@ -58,6 +58,14 @@
 		margin-top: 50px;
 	}
 
+	@include laptop {
+			position: relative;
+		height: 90%;
+		min-height: 90vh;
+		left: 0;
+		top: 0;
+	}
+
 	@include mobile {
 		position: relative;
 		width: 90vw;

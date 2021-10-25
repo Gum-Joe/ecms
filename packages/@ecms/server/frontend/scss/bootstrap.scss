@@ -1,0 +1,25 @@
+// Include Boostrap styles
+// From https://getbootstrap.com/docs/5.0/customize/sass/
+// Custom.scss
+// Option B: Include parts of Bootstrap
+
+// 1. Include functions first (so you can manipulate colors, SVGs, calc, etc)
+@import "~bootstrap/scss/functions";
+
+// 2. Include any default variable overrides here
+:root {
+	--bs-font-sans-serif: "Open Sans" !important
+}
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+// 4. Include any optional Bootstrap components as you like
+@import "~bootstrap/scss/root";
+@import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/dropdown";
+// 5. Add additional custom code here

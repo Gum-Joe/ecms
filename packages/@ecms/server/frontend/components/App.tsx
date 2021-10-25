@@ -4,6 +4,7 @@ import LoginPage from "./login/Login";
 import PostLogin from "./login/PostLogin";
 import LoginError from "./login/LoginError";
 import checkIsAuthenticated from "./util/checkIsAuth";
+import HomepageMain from "./main/Homepage";
 
 
 /**
@@ -27,7 +28,7 @@ const ProtectedHomePage: React.FC = (props) => {
 			isAuthenticated === false ?
 				<Redirect to="/login" />
 				:
-				<h1>HOME!</h1>
+				<HomepageMain />
 	);
 };
 

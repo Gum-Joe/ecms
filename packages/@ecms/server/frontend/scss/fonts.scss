@@ -11,10 +11,13 @@
 // Open Sans - for the body
 @font-face {
 	font-family: "Open Sans";
-	src: url("../assets/fonts/Open_Sans/OpenSans-VariableFont_wdth\,wght.ttf");
+	src: url("../assets/fonts/Open_Sans/OpenSans-VariableFont_wdth\,wght.ttf") format("truetype");
+	font-weight: 1 800;
 }
+
 @font-face {
 	font-family: "Open Sans";
-	src: url("../assets/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth\,wght.ttf");
+	src: url("../assets/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth\,wght.ttf") format("truetype");
 	font-style: italic;
+	font-weight: 1 800;
 }

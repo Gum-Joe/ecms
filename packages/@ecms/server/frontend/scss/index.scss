@@ -1,7 +1,9 @@
 @import "variables";
 @import "mixins";
 
+
 @import "fonts.scss";
+@import "bootstrap.scss";
 @import "base.scss";
 @import "acrylic.scss";
 
@@ -11,3 +13,4 @@
 @import "navigation.scss";
 
 @import "login-container.scss";
+@import "homepage.scss";

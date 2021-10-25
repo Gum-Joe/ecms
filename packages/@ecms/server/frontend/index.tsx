@@ -1,11 +1,14 @@
 /** Entry Point of React */
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./components/App";
-import { hot } from "react-hot-loader";
+
 
 // Import all of our SCSS
 import "./scss/index.scss";
+
+import App from "./components/App";
+import { hot } from "react-hot-loader";
+
 
 const AppHMR = hot(module)(App);
 

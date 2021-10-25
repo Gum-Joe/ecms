@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import FlexBox from "../FlexBox";
+import FlexBox from "../common/FlexBox";
 import LoginContainer from "./LoginContainer";
 import { faCircleNotch, faEdit, faTools } from "@fortawesome/free-solid-svg-icons";
 import { Redirect, useHistory } from "react-router-dom";
 import axios from "axios";
 import useAsyncEffect from "use-async-effect";
-import { LinkedNavigationListContainer, LinkedNavigationList } from "../LinkedNavList";
+import { LinkedNavigationListContainer, LinkedNavigationList } from "../common/LinkedNavList";
 
 /**
  * Handles Post Login Actions, such as redirecting to the data entry or event management UI
