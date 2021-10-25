@@ -54,8 +54,11 @@ router.post(
  * Logout
  */
 router.get("/logout", (req, res) => {
-	req.logOut();
-	res.redirect("/");
+	logger.info("Logging user out...");
+	req.logout();
+	req.session.destroy(() => {
+		res.redirect("/");
+	});
 });
 
 /** Get info about the current user */

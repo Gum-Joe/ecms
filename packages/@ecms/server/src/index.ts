@@ -54,7 +54,9 @@ app.use(session({
 		// TODO: set this once HTTPS working!
 		// secure: true
 		// TODO: set an expiry time
-	}
+	},
+	saveUninitialized: false,
+	resave: false
 }));
 
 // Initialise passport & logon
