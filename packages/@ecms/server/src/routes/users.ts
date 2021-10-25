@@ -59,6 +59,12 @@ router.get("/current", (req, res, next) => {
 		res.json({
 			message: "Expected a logged in user.",
 		});
+	} else if (!req.user) {
+		logger.error("401: User authenticated but no user found in session!");
+		res.statusCode = 401;
+		res.json({
+			message: "No user found in session - please login again.",
+		});
 	} else {
 		assertHasUser(req);
 		res.json(req.user);

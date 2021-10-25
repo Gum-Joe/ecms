@@ -1,9 +1,35 @@
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import React from "react";
+import { BrowserRouter as Router, Redirect, Route, Switch, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import LoginPage from "./login/Login";
 import PostLogin from "./login/PostLogin";
 import LoginError from "./login/LoginError";
+import checkIsAuthenticated from "./util/checkIsAuth";
 
+
+/**
+ * Only load the homepage if logged in, else rediret to login
+ */
+const ProtectedHomePage: React.FC = (props) => {
+	const history = useHistory();
+	const [isAuthenticated, setisAuthenticated] = useState<boolean | null>(null);
+	useEffect(() => {
+		checkIsAuthenticated()
+			.then(result => setisAuthenticated(result))
+			.catch(error => {
+				history.push("/login/error", {
+					error: error,
+				});
+			});
+	}, []);
+	return (
+		isAuthenticated === null ?
+			null :
+			isAuthenticated === false ?
+				<Redirect to="/login" />
+				:
+				<h1>HOME!</h1>
+	);
+};
 
 /**
  * The entry point of the ECMS SPA
@@ -16,6 +42,10 @@ const App: React.FC = () =>  {
 	return (
 		<Router>
 			<Route exact path="/">
+				<ProtectedHomePage />
+			</Route>
+
+			<Route exact path="/login">
 				<LoginPage />
 			</Route>
 			<Route exact path="/login/postlogin">
