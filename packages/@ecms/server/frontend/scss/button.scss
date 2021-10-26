@@ -16,7 +16,7 @@ button {
 
 		color: $text-color;
 
-		width: min-content;
+		//width: min-content;
 		min-width: 100px;
 
 		padding: 9px 7px;
@@ -28,10 +28,24 @@ button {
 			border-color: darken(#882B2D, 5%);
 			cursor: pointer;
 			color: darken($text-color, 5%);
-
-			
 		}			
-
-
 	}
+}
+
+.icon-button  {
+	padding-right: 20px !important; 
+	padding-left: 20px !important; 
+	.icon-container {
+		display: inline-block;
+		margin-right: 10px;
+		svg {
+			margin: 0 3px;
+		}
+	}
+}
+
+.button-row {
+	display: flex;
+	gap: 10px;
+
 }

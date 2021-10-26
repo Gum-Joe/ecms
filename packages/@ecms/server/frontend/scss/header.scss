@@ -1,4 +1,5 @@
 // Styles for headers
+@import "mixins";
 
 // Title of a page, so it uses Dosis
 .title-header {
@@ -7,4 +8,10 @@
 
 .sub-header {
 	font-family: "Dosis";
+	font-weight: 600;
+}
+
+.header-3 {
+	@include use-fonts;
+	font-weight: 600;
 }

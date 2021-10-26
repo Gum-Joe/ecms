@@ -21,3 +21,10 @@
 	font-style: italic;
 	font-weight: 1 800;
 }
+
+// Open Sans - for the body
+@font-face {
+	font-family: "Open Sans";
+	src: url("../assets/fonts/Open_Sans/static/OpenSans/OpenSans-SemiBold.ttf") format("truetype");
+	font-weight: 600;
+}

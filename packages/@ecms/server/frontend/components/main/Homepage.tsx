@@ -1,8 +1,9 @@
-import { faCog, faEdit, faHome, faTable, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faCalendar, faCalendarAlt, faCog, faEdit, faHome, faObjectGroup, faPlus, faTable, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
-import { Dropdown } from "react-bootstrap";
+import { Dropdown, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Button, { ButtonIconContainer, ButtonRow, ButtonWithIcons } from "../common/Button";
 /**
  * Homepage of Events Management UI
  */
@@ -46,12 +47,31 @@ const HomepageMain: React.FC = (props) => {
 			</nav>
 
 			<div className="sidebar">
-				<h1 className="title-header">ECMS</h1>
+				<h1 className="title-header">TODO</h1>
 
 			</div>
 			
 			<div className="homepage-content">
-				<h1>CONTENT</h1>
+				<div className="homepage-header">
+					<h1 className="sub-header">Homepage</h1>
+					<h3 className="header-3">Use the sidebar to the left to quickly jump to an event</h3>
+				</div>
+				<ButtonRow>
+					<ButtonWithIcons buttonType="primary">
+						<ButtonIconContainer>
+							<FontAwesomeIcon icon={faPlus} />
+							<FontAwesomeIcon icon={faCalendarAlt} />
+						</ButtonIconContainer>
+						Add event
+					</ButtonWithIcons>
+					<ButtonWithIcons buttonType="primary">
+						<ButtonIconContainer>
+							<FontAwesomeIcon icon={faPlus} />
+							<FontAwesomeIcon icon={faObjectGroup} />
+						</ButtonIconContainer>
+						Add group
+					</ButtonWithIcons>
+				</ButtonRow>
 			</div>
 		</div>
 	);
