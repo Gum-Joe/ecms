@@ -7,8 +7,7 @@
 	border-radius: 7px;
 
 	/* Dark/Shadow/Window */
-
-box-shadow: 0px 32px 64px rgba(0, 0, 0, 0.37), 0px 2px 21px rgba(0, 0, 0, 0.37);
+	box-shadow: 0px 32px 64px rgba(0, 0, 0, 0.37), 0px 2px 21px rgba(0, 0, 0, 0.37);
 	border-radius: 7px;
 	border: 1px solid rgba(255, 255, 255, 0.0837);
 
@@ -16,5 +15,34 @@ box-shadow: 0px 32px 64px rgba(0, 0, 0, 0.37), 0px 2px 21px rgba(0, 0, 0, 0.37);
 	text-align: center;
 
 	width: 1262px;
-height: 842px;
+	height: 842px;
+
+	max-height: 82vh;
+	max-width: calc(100vw - (100vh - 82vh));
+}
+
+// Drop up context menu for navigating away
+.setup-nav {
+	position: absolute;
+	right: 25px;
+	bottom: 14px;
+
+	@include dropdown-fixes;
+
+	// The toggle itself
+	button {
+		font-size: 30px;
+		background: none;
+		border: none;
+		color: $text-color;
+		width: 50px;
+
+		&:hover {
+			color: darken($text-color, 10%);
+			background-color: rgba(255, 255, 255, 0.18);
+			cursor: pointer;
+			border-radius: 4.44px;
+			
+		}
+	}
 }

@@ -20,3 +20,10 @@
 	// Stolen from Bootstrap
 	transition: color 0.15s ease-in-out, background-color 0.10s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
+
+// FIx an issue where Bootstrap dropdown items have widths extending beyond the dropdown itself
+@mixin dropdown-fixes {
+	.dropdown-item {
+		width: auto !important;
+	}
+}

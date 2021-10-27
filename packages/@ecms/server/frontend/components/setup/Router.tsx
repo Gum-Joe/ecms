@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Route, useRouteMatch } from "react-router-dom";
-import SetupFrame from "./Base";
+import SetupFrame from "./SetupFrame";
 
  
 const SetupRouter: FunctionComponent = () => {

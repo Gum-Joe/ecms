@@ -49,12 +49,12 @@
 				}
 			}
 
+			@include dropdown-fixes;
 			.dropdown {
 				position: absolute;
 				right: 10px;
 
 				.dropdown-item {
-					width: auto !important;
 					font-weight: 600;
 					@include use-fonts;
 				}
