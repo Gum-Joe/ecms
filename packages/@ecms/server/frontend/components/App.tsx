@@ -5,6 +5,7 @@ import PostLogin from "./login/PostLogin";
 import LoginError from "./login/LoginError";
 import checkIsAuthenticated from "./util/checkIsAuth";
 import HomepageMain from "./main/Homepage";
+import SetupRouter from "./setup/Router";
 
 
 /**
@@ -53,6 +54,8 @@ const App: React.FC = () =>  {
 				<PostLogin />
 			</Route>
 			<Route exact path="/login/error" render={(props) => <LoginError {...props} />} />
+
+			<Route exact path="/setup"><SetupRouter /></Route>
 		</Router>
 	);
 };

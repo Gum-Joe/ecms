@@ -98,6 +98,9 @@ app.get("/api/*", (req, res) => {
 app.get("/login*", (req, res) => {
 	res.sendFile(join(__dirname, "../public/index.html"));
 });
+app.get("/setup*", (req, res) => {
+	res.sendFile(join(__dirname, "../public/index.html"));
+});
 
 app.listen(process.env.ECMS_PORT || 9090, () => {
 	logger.info("Server started.");
