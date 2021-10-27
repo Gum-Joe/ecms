@@ -63,9 +63,9 @@ $mobile: 500px;
 	}
 }
 
-/// Mixin for arbitary breakpoints
+/// Mixin for arbitary breakpoints (WIDTH)
 /// @param {String} $type "min" or "max" (min-width or max-width) 
-@mixin breakpoint-at($min-max-width: string, $breakpoint-type: "min" or "max") {
+@mixin breakpoint-at-width($min-max-width: string, $breakpoint-type: "min" or "max") {
 	@if $breakpoint-type != "min" and $breakpoint-type != "max" {
 		@error "Invalid type provided!";
 	}
@@ -76,6 +76,24 @@ $mobile: 500px;
 	}
 	@if $breakpoint-type == "max" {
 		@media screen and (max-width: #{$min-max-width}) {
+			@content;
+		}
+	}
+}
+
+/// Mixin for arbitary breakpoints (HEIGHT)
+/// @param {String} $type "min" or "max" (min-width or max-width) 
+@mixin breakpoint-at-height($min-max-height: string, $breakpoint-type: "min" or "max") {
+	@if $breakpoint-type != "min" and $breakpoint-type != "max" {
+		@error "Invalid type provided!";
+	}
+	@if $breakpoint-type == "min" {
+		@media screen and (min-height: #{$min-max-height}) {
+			@content;
+		}
+	}
+	@if $breakpoint-type == "max" {
+		@media screen and (max-height: #{$min-max-height}) {
 			@content;
 		}
 	}

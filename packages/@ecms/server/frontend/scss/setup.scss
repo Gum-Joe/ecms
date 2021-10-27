@@ -12,13 +12,36 @@
 	border: 1px solid rgba(255, 255, 255, 0.0837);
 
 	color: $text-color;
-	text-align: center;
+	text-align: left;
 
 	width: 1262px;
 	height: 842px;
 
-	max-height: 82vh;
-	max-width: calc(100vw - (100vh - 82vh));
+	padding: 60px;
+	box-sizing: border-box;
+	
+	@include breakpoint-at-height(842px, "max") {
+		max-height: 82vh;
+		max-width: calc(100vw - (100vh - 82vh));
+	}
+}
+
+.setup-header {
+	h1, h3 {
+		font-family: "Dosis";
+		margin: 0;
+	}
+
+	h1 {
+		font-weight: 600;
+		font-size: 53px;
+		margin-bottom: 18px;
+	}
+
+	h3 {
+		font-weight: 400;
+		font-size: 23px;
+	}
 }
 
 // Drop up context menu for navigating away

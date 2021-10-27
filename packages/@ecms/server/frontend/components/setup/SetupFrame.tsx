@@ -24,6 +24,10 @@ const SetupFrame: FunctionComponent = (props) => {
 		<CHBBlurredBG>
 			<FlexBox className="fill-height-viewport">
 				<div className="setup-frame">
+					<div className="setup-header">
+						<h1>Event/Group Setup</h1>
+						<h3>Let’s get started - some basic details first</h3>
+					</div>
 					{props.children}
 				</div>
 
