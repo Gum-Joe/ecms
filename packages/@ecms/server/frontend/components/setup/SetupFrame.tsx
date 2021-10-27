@@ -1,12 +1,12 @@
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { FunctionComponent } from "react";
 import { Dropdown } from "react-bootstrap";
+import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CHBBlurredBG from "../common/AcrylicBackground";
 import FlexBox from "../common/FlexBox";
 
 /**
- * Custom button for context menu
+ * Custom button for context menu (ellipses to go in the bottom right of setup)
  */
 // eslint-disable-next-line react/display-name,react/prop-types
 const SetupNavToggle = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(({ onClick }, ref) => (
@@ -17,7 +17,7 @@ const SetupNavToggle = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttri
 
 /**
  * Base Setup Components
- * Creates the surface upon which the Setup Forms are placed
+ * Creates the surface upon which user interative elements for setup are placed
  */
 const SetupFrame: FunctionComponent = (props) => {
 	return ( 
