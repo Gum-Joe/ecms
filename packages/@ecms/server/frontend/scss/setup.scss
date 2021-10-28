@@ -19,6 +19,8 @@
 
 	padding: 60px;
 	box-sizing: border-box;
+
+	position: relative;
 	
 	@include breakpoint-at-height(842px, "max") {
 		max-height: 82vh;
@@ -68,4 +70,11 @@
 			
 		}
 	}
+}
+
+// Button to advance setup
+.setup-actions {
+	position:absolute;
+	bottom: 32px;
+	right: 36px;
 }

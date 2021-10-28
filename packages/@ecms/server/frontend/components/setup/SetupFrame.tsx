@@ -4,6 +4,7 @@ import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CHBBlurredBG from "../common/AcrylicBackground";
 import FlexBox from "../common/FlexBox";
+import Button, { LinkedButton } from "../common/Button";
 
 /**
  * Custom button for context menu (ellipses to go in the bottom right of setup)
@@ -16,19 +17,45 @@ const SetupNavToggle = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttri
 ));
 
 /**
+ * Header for setup - adds the top header to the setup frame.
+ * 
+ * Use as follows:
+ * @example ```tsx
+ * <SetupHeader>
+ * 	<h1>Large header</h1>
+ * 	<h3>Smaller sub-heading to describe what this stage of setup is for</h3>
+ * </SetupHeader>
+ * ```
+ */
+export const SetupHeader: React.FC = (props) => {
+	return <div className="setup-header">
+		{props.children}
+	</div>;
+};
+
+export interface SetupFrameProps {
+	/** The next setup page to navigate to (relative to the /setup route) */
+	nextPage: string;
+}
+/**
  * Base Setup Components
  * Creates the surface upon which user interative elements for setup are placed
  */
-const SetupFrame: FunctionComponent = (props) => {
+const SetupFrame: FunctionComponent<SetupFrameProps> = (props) => {
 	return ( 
 		<CHBBlurredBG>
 			<FlexBox className="fill-height-viewport">
 				<div className="setup-frame">
-					<div className="setup-header">
-						<h1>Event/Group Setup</h1>
-						<h3>Let’s get started - some basic details first</h3>
-					</div>
+					<SetupHeader>
+						<h1>E.g</h1>
+						<h2>E.g.</h2>
+					</SetupHeader>
 					{props.children}
+					<div className="setup-actions">
+						<LinkedButton className="advance-setup" to={props.nextPage}>
+							Next
+						</LinkedButton>
+					</div>
 				</div>
 
 				{/* Context Menu */}
@@ -48,3 +75,4 @@ const SetupFrame: FunctionComponent = (props) => {
 };
  
 export default SetupFrame;
+

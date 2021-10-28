@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Dropdown, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import Button, { ButtonIconContainer, ButtonRow, ButtonWithIcons } from "../common/Button";
+import Button, { ButtonIconContainer, ButtonRow, ButtonWithIcons, LinkedButton } from "../common/Button";
 /**
  * Homepage of Events Management UI
  */
@@ -57,15 +57,13 @@ const HomepageMain: React.FC = (props) => {
 					<h3 className="header-3">Use the sidebar to the left to quickly jump to an event</h3>
 				</div>
 				<ButtonRow>
-					<Link to="/setup">
-						<ButtonWithIcons buttonType="primary">
-							<ButtonIconContainer>
-								<FontAwesomeIcon icon={faPlus} />
-								<FontAwesomeIcon icon={faCalendarAlt} />
-							</ButtonIconContainer>
-							Add event
-						</ButtonWithIcons>
-					</Link>
+					<LinkedButton as={ButtonWithIcons} buttonType="primary" to="/setup">
+						<ButtonIconContainer>
+							<FontAwesomeIcon icon={faPlus} />
+							<FontAwesomeIcon icon={faCalendarAlt} />
+						</ButtonIconContainer>
+						Add event
+					</LinkedButton>
 
 					<Link to="/setup">
 						<ButtonWithIcons buttonType="primary">
