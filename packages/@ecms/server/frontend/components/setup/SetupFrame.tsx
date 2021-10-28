@@ -1,18 +1,19 @@
 import React, { FunctionComponent } from "react";
 import { Dropdown } from "react-bootstrap";
-import { faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import CHBBlurredBG from "../common/AcrylicBackground";
 import FlexBox from "../common/FlexBox";
-import Button, { LinkedButton } from "../common/Button";
+import Button from "../common/Button";
+import { Link, useHistory } from "react-router-dom";
 
 /**
- * Custom button for context menu (ellipses to go in the bottom right of setup)
+ * Custom button for out of frame buttons, usually for navigation (ellipses to go in the bottom right of setup)
  */
 // eslint-disable-next-line react/display-name,react/prop-types
-const SetupNavToggle = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(({ onClick }, ref) => (
-	<button onClick={onClick} ref={ref}>
-		<FontAwesomeIcon icon={faEllipsisH} />
+const SetupNavButton = React.forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>(({ onClick, children, className }, ref) => (
+	<button onClick={onClick} ref={ref} className={className}>
+		{children}
 	</button>
 ));
 
@@ -36,32 +37,49 @@ export const SetupHeader: React.FC = (props) => {
 export interface SetupFrameProps {
 	/** The next setup page to navigate to (relative to the /setup route) */
 	nextPage: string;
+	/** Show the back button (to go back a page) */
+	showBackButton?: boolean;
+	/** Custom classNames for the setup frame for custom CSS for different setup screen */
+	className?: string;
+	/** Custom ID for the setup frame for custom CSS for different setup screen */
+	id?: string;
 }
 /**
  * Base Setup Components
  * Creates the surface upon which user interative elements for setup are placed
  */
-const SetupFrame: FunctionComponent<SetupFrameProps> = (props) => {
+const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true, className = "", id: frameId = "", ...props }) => {
+	const history = useHistory();
 	return ( 
 		<CHBBlurredBG>
 			<FlexBox className="fill-height-viewport">
-				<div className="setup-frame">
-					<SetupHeader>
-						<h1>E.g</h1>
-						<h2>E.g.</h2>
-					</SetupHeader>
+				<div className={`setup-frame ${className}`} id={frameId}>
+
 					{props.children}
+
 					<div className="setup-actions">
-						<LinkedButton className="advance-setup" to={props.nextPage}>
-							Next
-						</LinkedButton>
+						<Link to={props.nextPage}>
+							<Button className="advance-setup">
+								Next
+							</Button>
+							{/* TODO: Add Skip button */}
+						</Link> 
 					</div>
 				</div>
 
-				{/* Context Menu */}
+				{/* Bottom, off-frame navigation for back button and context menu */}
 				<div className="setup-nav">
-					<Dropdown drop="up">
-						<Dropdown.Toggle variant="primary" id="dropdown-basic" as={SetupNavToggle} />
+					{showBackButton ?
+						<SetupNavButton className="setup-back" onClick={() => history.goBack()}>
+							<FontAwesomeIcon icon={faArrowLeft} />
+						</SetupNavButton>
+						: null
+					}
+
+					<Dropdown drop="up" className="setup-context-menu">
+						<Dropdown.Toggle variant="primary" id="dropdown-basic" as={SetupNavButton}>
+							<FontAwesomeIcon icon={faEllipsisH} />
+						</Dropdown.Toggle>
 
 						<Dropdown.Menu variant="dark">
 							<Dropdown.Item href="/">Home</Dropdown.Item>

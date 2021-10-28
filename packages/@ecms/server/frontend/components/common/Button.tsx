@@ -52,6 +52,7 @@ export type LinkedButtonProps = ButtonProps & LinkProps & {
  * Use the `as` props to provide e.g. a ButtonWithIcons
  * 
  * NB Use the linkClassName prop to change the Link component's class.
+ * @deprecated Just wrap a Button in a Link.
  */
 export const LinkedButton: React.FC<LinkedButtonProps> = (props) => {
 	if (!props.as) {

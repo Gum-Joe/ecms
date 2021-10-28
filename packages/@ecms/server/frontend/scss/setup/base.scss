@@ -1,6 +1,6 @@
 // Code for the events/groups setup UI
-@import "variables";
-@import "mixins";
+@import "../variables";
+@import "../mixins";
 
 .setup-frame {
 	background: $default-background;
@@ -26,33 +26,60 @@
 		max-height: 82vh;
 		max-width: calc(100vw - (100vh - 82vh));
 	}
-}
 
-.setup-header {
-	h1, h3 {
+	// Header styles
+
+	// Base header that sits at the top of all setup frames
+	.setup-header {
+
+		padding-bottom: 23px; // add spacing below
+
+		h1, h3 {
+			font-family: "Dosis";
+			margin: 0;
+		}
+
+		h1 {
+			font-weight: 600;
+			font-size: 53px;
+			margin-bottom: 18px;
+		}
+
+		h3 {
+			font-weight: 400;
+			font-size: 23px;
+		}
+	}
+
+	// Form sub headers
+	h2 {
 		font-family: "Dosis";
-		margin: 0;
+		font-weight: 500;
+		font-size: 34px;
 	}
 
-	h1 {
-		font-weight: 600;
-		font-size: 53px;
-		margin-bottom: 18px;
-	}
-
-	h3 {
-		font-weight: 400;
-		font-size: 23px;
-	}
 }
+
+
 
 // Drop up context menu for navigating away
 .setup-nav {
 	position: absolute;
-	right: 25px;
-	bottom: 14px;
-
+	width: 100%;
 	@include dropdown-fixes;
+	bottom: 17px;
+
+	.setup-context-menu {
+		position: absolute;
+		right: 25px;
+		bottom: 0px;
+	}
+
+	.setup-back {
+		position: absolute;
+		left: 25px;
+		bottom: 0px;
+	}
 
 	// The toggle itself
 	button {
@@ -68,6 +95,11 @@
 			cursor: pointer;
 			border-radius: 4.44px;
 			
+		}
+
+		&::after {
+			// Remove the caret.
+			display: none !important;
 		}
 	}
 }

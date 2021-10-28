@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Route, useRouteMatch } from "react-router-dom";
+import BasicDetails from "./BasicDetails";
 import SetupFrame from "./SetupFrame";
 
  
@@ -11,7 +12,7 @@ const SetupRouter: FunctionComponent = () => {
 	const { path, url } = useRouteMatch();
 	return (
 		<Route exact path={path}>
-			<SetupFrame />
+			<BasicDetails />
 		</Route>
 	);
 };
