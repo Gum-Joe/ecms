@@ -57,7 +57,7 @@ const HomepageMain: React.FC = (props) => {
 					<h3 className="header-3">Use the sidebar to the left to quickly jump to an event</h3>
 				</div>
 				<ButtonRow>
-					<Link to="/setup">
+					<Link to="/setup?type=event">
 						<ButtonWithIcons buttonType="primary">
 							<ButtonIconContainer>
 								<FontAwesomeIcon icon={faPlus} />
@@ -67,7 +67,7 @@ const HomepageMain: React.FC = (props) => {
 						</ButtonWithIcons>
 					</Link>
 
-					<Link to="/setup">
+					<Link to="/setup?type=group">
 						<ButtonWithIcons buttonType="primary">
 							<ButtonIconContainer>
 								<FontAwesomeIcon icon={faPlus} />

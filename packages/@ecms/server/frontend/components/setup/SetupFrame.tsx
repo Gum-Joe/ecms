@@ -43,12 +43,14 @@ export interface SetupFrameProps {
 	className?: string;
 	/** Custom ID for the setup frame for custom CSS for different setup screen */
 	id?: string;
+	/** Don't show the next button */
+	noNextButton?: boolean;
 }
 /**
  * Base Setup Components
  * Creates the surface upon which user interative elements for setup are placed
  */
-const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true, className = "", id: frameId = "", ...props }) => {
+const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true, className = "", id: frameId = "", noNextButton = false, ...props }) => {
 	const history = useHistory();
 	return ( 
 		<CHBBlurredBG>
@@ -58,12 +60,12 @@ const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true,
 					{props.children}
 
 					<div className="setup-actions">
-						<Link to={props.nextPage}>
+						{!noNextButton ? <Link to={props.nextPage}>
 							<Button className="advance-setup">
 								Next
 							</Button>
 							{/* TODO: Add Skip button */}
-						</Link> 
+						</Link> : null}
 					</div>
 				</div>
 

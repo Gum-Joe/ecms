@@ -1,7 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { Route, useRouteMatch } from "react-router-dom";
+import { SetupContextProvider } from "../../contexts/SetupContext";
 import BasicDetails from "./BasicDetails";
 import SetupFrame from "./SetupFrame";
+import SetupRenderer from "./SetupRender";
 
  
 const SetupRouter: FunctionComponent = () => {
@@ -11,9 +13,11 @@ const SetupRouter: FunctionComponent = () => {
 	// us build relative links."
 	const { path, url } = useRouteMatch();
 	return (
-		<Route exact path={path}>
-			<BasicDetails />
-		</Route>
+		<SetupContextProvider>
+			<Route exact path={path}>
+				<SetupRenderer />
+			</Route>
+		</SetupContextProvider>
 	);
 };
  
