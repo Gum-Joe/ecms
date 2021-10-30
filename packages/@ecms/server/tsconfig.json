@@ -14,6 +14,12 @@
 			"path": "../core"
 		},
 		{
+			"path": "../models"
+		},
+		{
+			"path": "../api"
+		},
+		{
 			"path": "./frontend",
 		}
 	],

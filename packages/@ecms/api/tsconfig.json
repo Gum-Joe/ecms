@@ -1,0 +1,19 @@
+{
+	/* From https://github.com/Gum-Joe/2Keys/blob/v1/packages/%40twokeys/core/tsconfig.json */
+	"extends": "../../../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "./",
+		"outDir": "./",
+		"tsBuildInfoFile": "../../../.build-cache/api.tsbuildinfo",
+	},
+	"references": [
+		{
+			"path": "../models"
+		}
+	],
+	"files": [
+		"user.ts",
+		"index.ts",
+		"setup.ts",
+	]
+}

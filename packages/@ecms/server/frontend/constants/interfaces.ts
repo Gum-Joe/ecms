@@ -2,9 +2,5 @@
  * All the interfaces ECMS uses
  * @packageDocumentation
  */
-// TODO: Update Setup State type
-export interface SetupState {
-	a?: string,
-	type?: string,
-}
-
+import SetupEventOrGroup from "@ecms/api/setup";
+export type SetupState = Partial<SetupEventOrGroup>;

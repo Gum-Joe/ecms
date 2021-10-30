@@ -3,7 +3,7 @@ import type { PassportStatic } from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import type { Pool, PoolClient } from "pg";
 import urljoin from "url-join";
-import { users } from "../models";
+import { users } from "@ecms/models";
 import { USERS_TABLE } from "../utils/constants";
 
 export function useGooglePassport(passport: PassportStatic, logger: Logger, dbPool: Pool): void {

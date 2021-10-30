@@ -21,7 +21,6 @@ SetupContext.displayName = "SetupContext";
 
 
 const setupReducer: Reducer<SetupState, SetupActions> = (state, action) => {
-	console.log("HI");
 	switch (action.type) {
 		//case Actions.SETUP_BASIC_DETAILS:
 		//	return {};

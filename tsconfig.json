@@ -10,6 +10,12 @@
 			"path": "./packages/@ecms/core"
 		},
 		{
+			"path": "./packages/@ecms/models"
+		},
+		{
+			"path": "./packages/@ecms/api"
+		},
+		{
 			"path": "./packages/@ecms/server"
 		},
 		/*{

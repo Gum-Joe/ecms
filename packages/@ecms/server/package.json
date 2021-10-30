@@ -23,7 +23,9 @@
   },
   "homepage": "https://github.com/Gum-Joe/ecms#readme",
   "dependencies": {
+    "@ecms/api": "workspace:packages/@ecms/api",
     "@ecms/core": "workspace:packages/@ecms/core",
+    "@ecms/models": "workspace:packages/@ecms/models",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",

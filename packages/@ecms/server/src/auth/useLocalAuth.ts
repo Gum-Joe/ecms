@@ -4,7 +4,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { Pool } from "pg";
 import bcrypt from "bcrypt";
 import { USERS_TABLE } from "../utils/constants";
-import { users } from "../models";
+import { users } from "@ecms/models";
 
 /**
  * Hash a password

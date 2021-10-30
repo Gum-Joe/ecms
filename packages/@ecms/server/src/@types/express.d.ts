@@ -5,7 +5,7 @@
  */
 /** Grab type definitons of environment config variables (so they appear in IDE autocomplete) */
 import "@ecms/core/src/config";
-import { users } from "../models";
+import { users } from "@ecms/models";
 
 type UserNew = users & Express.User;
 

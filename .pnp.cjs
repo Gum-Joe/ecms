@@ -23,8 +23,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         "reference": "workspace:."
       },
       {
+        "name": "@ecms/api",
+        "reference": "workspace:packages/@ecms/api"
+      },
+      {
         "name": "@ecms/core",
         "reference": "workspace:packages/@ecms/core"
+      },
+      {
+        "name": "@ecms/models",
+        "reference": "workspace:packages/@ecms/models"
       },
       {
         "name": "@ecms/server",
@@ -34,7 +42,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
     "enableTopLevelFallback": true,
     "ignorePatternData": "(^(?:\\.yarn\\/sdks(?:\\/(?!\\.{1,2}(?:\\/|$))(?:(?:(?!(?:^|\\/)\\.{1,2}(?:\\/|$)).)*?)|$))$)",
     "fallbackExclusionList": [
+      ["@ecms/api", ["workspace:packages/@ecms/api"]],
       ["@ecms/core", ["workspace:packages/@ecms/core"]],
+      ["@ecms/models", ["workspace:packages/@ecms/models"]],
       ["@ecms/server", ["workspace:packages/@ecms/server"]],
       ["ecms", ["workspace:."]]
     ],
@@ -145,6 +155,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@ecms/api", [
+        ["workspace:packages/@ecms/api", {
+          "packageLocation": "./packages/@ecms/api/",
+          "packageDependencies": [
+            ["@ecms/api", "workspace:packages/@ecms/api"],
+            ["@ecms/models", "workspace:packages/@ecms/models"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
       ["@ecms/core", [
         ["workspace:packages/@ecms/core", {
           "packageLocation": "./packages/@ecms/core/",
@@ -160,12 +180,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "SOFT",
         }]
       ]],
+      ["@ecms/models", [
+        ["workspace:packages/@ecms/models", {
+          "packageLocation": "./packages/@ecms/models/",
+          "packageDependencies": [
+            ["@ecms/models", "workspace:packages/@ecms/models"]
+          ],
+          "linkType": "SOFT",
+        }]
+      ]],
       ["@ecms/server", [
         ["workspace:packages/@ecms/server", {
           "packageLocation": "./packages/@ecms/server/",
           "packageDependencies": [
             ["@ecms/server", "workspace:packages/@ecms/server"],
+            ["@ecms/api", "workspace:packages/@ecms/api"],
             ["@ecms/core", "workspace:packages/@ecms/core"],
+            ["@ecms/models", "workspace:packages/@ecms/models"],
             ["@fortawesome/fontawesome-svg-core", "npm:1.2.36"],
             ["@fortawesome/free-brands-svg-icons", "npm:5.15.4"],
             ["@fortawesome/free-regular-svg-icons", "npm:5.15.4"],

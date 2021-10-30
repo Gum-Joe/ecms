@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { rolesInitializer } from "../../src/models/roles";
+import { rolesInitializer } from "@ecms/models";
 import roles, { RolesNode } from "../../src/utils/roles";
 
 /**

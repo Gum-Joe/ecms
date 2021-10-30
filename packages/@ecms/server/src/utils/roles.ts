@@ -2,7 +2,7 @@
  * Contains the RBAC roles users can have in ECMS
  * @packageDocumentation
  */
-import { rolesInitializer } from "../models/roles";
+import { rolesInitializer } from "@ecms/models";
 
 export type RolesNode = Omit<rolesInitializer, "path"> & {
 	subroles?: Record<string, RolesNode>;

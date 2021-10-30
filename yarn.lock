@@ -84,6 +84,14 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@ecms/api@workspace:packages/@ecms/api":
+  version: 0.0.0-use.local
+  resolution: "@ecms/api@workspace:packages/@ecms/api"
+  dependencies:
+    "@ecms/models": "workspace:packages/@ecms/models"
+  languageName: unknown
+  linkType: soft
+
 "@ecms/core@workspace:packages/@ecms/core":
   version: 0.0.0-use.local
   resolution: "@ecms/core@workspace:packages/@ecms/core"
@@ -97,11 +105,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@ecms/models@workspace:packages/@ecms/models":
+  version: 0.0.0-use.local
+  resolution: "@ecms/models@workspace:packages/@ecms/models"
+  languageName: unknown
+  linkType: soft
+
 "@ecms/server@workspace:packages/@ecms/server":
   version: 0.0.0-use.local
   resolution: "@ecms/server@workspace:packages/@ecms/server"
   dependencies:
+    "@ecms/api": "workspace:packages/@ecms/api"
     "@ecms/core": "workspace:packages/@ecms/core"
+    "@ecms/models": "workspace:packages/@ecms/models"
     "@fortawesome/fontawesome-svg-core": ^1.2.36
     "@fortawesome/free-brands-svg-icons": ^5.15.4
     "@fortawesome/free-regular-svg-icons": ^5.15.4

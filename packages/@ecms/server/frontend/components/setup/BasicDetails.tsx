@@ -2,6 +2,9 @@ import React, { FunctionComponent, useContext } from "react";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
 import Form from "../common/Form";
 import SetupContext from "../../contexts/SetupContext";
+import { SetupState } from "../../constants/interfaces";
+import SetupEventOrGroup from "@ecms/api/setup";
+import { assertHasTypeField } from "./asserters";
 
 /**
  * The first page of setup: basic details about it
@@ -13,6 +16,8 @@ interface BasicDetailsProps {
 const BasicDetails: FunctionComponent<BasicDetailsProps> = () => {
 	// Grab our Setup Context
 	const { state: setup, dispatch } = useContext(SetupContext);
+
+	assertHasTypeField(setup);
 	
 	return ( 
 		<SetupFrame nextPage="/teams" id="setup-basic-details">
@@ -36,4 +41,6 @@ const BasicDetails: FunctionComponent<BasicDetailsProps> = () => {
 	);
 };
  
-export default BasicDetails;
+export default BasicDetails; 
+
+

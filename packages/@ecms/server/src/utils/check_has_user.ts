@@ -1,4 +1,4 @@
-import { users } from "../models";
+import { users } from "@ecms/models";
 import { Request } from "express";
 
 

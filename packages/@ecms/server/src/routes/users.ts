@@ -10,8 +10,10 @@ import { StatusCodes } from "http-status-codes";
 import passport from "passport";
 import { assertHasUser } from "../utils/check_has_user";
 import connectToDB from "../utils/db";
-import { RequestWithBody } from "../utils/interfaces";
+import { ECMSResponse, RequestWithBody } from "../utils/interfaces";
 import createLogger from "../utils/logger";
+import type { ReqCheckRoles, ResCheckRoles } from "@ecms/api/user";
+import type { APIMessage } from "@ecms/api";
 
 
 
@@ -93,10 +95,7 @@ router.get("/current", (req, res, next) => {
  * Returns:
  * 1. hasPermission: boolean - whether the user has the roles requested or their parents
  */
-interface ReqGetCurrentUser {
-	rolesToCheck: string[],
-}
-router.get("/current/checkRoles", async (req: RequestWithBody<ReqGetCurrentUser>, res, next) => {
+router.get("/current/checkRoles", async (req: RequestWithBody<ReqCheckRoles>, res: ECMSResponse<ResCheckRoles>, next) => {
 	if (!req.isAuthenticated()) {
 		res.statusCode = 401;
 		res.json({
