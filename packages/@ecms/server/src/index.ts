@@ -3,27 +3,26 @@
  * Entry point for ECMS - starts ECMS up
  * @packageDocumentation
  */
-import dotenv from "dotenv";
+
+// Preable log line
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore - get weird error since package.json outside src/ (and therefore rootDir)
+import packageJSON from "../package.json";
+console.log(`ECMS v${packageJSON.version}`);
+console.log("Starting ECMS...");
+
 /** Intitalise our config into environmntal variables */
+import dotenv from "dotenv";
 dotenv.config();
 
 import { join } from "path";
 import userRouter from "./routes/users";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore - get weird error since package.json outside src/ (and therefore rootDir)
-import packageJSON from "../package.json";
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
 import session from "express-session";
 import configurePassport from "./auth";
 import createLogger from "./utils/logger";
-
-// Preable log line
-console.log(`ECMS v${packageJSON.version}`);
-console.log("Starting ECMS...");
-
-
 
 const logger = createLogger("server");
 
