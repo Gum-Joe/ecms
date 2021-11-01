@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import LoginPage from "./login/Login";
 import PostLogin from "./login/PostLogin";
 import LoginError from "./login/LoginError";
-import checkIsAuthenticated from "./util/checkIsAuth";
+import checkIsAuthenticated from "../util/checkIsAuth";
 import HomepageMain from "./main/Homepage";
 import SetupRouter from "./setup/Router";
 

@@ -1,10 +1,7 @@
 import React, { FunctionComponent, useContext } from "react";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
 import Form from "../common/Form";
-import SetupContext from "../../contexts/SetupContext";
-import { SetupState } from "../../constants/interfaces";
-import SetupEventOrGroup from "@ecms/api/setup";
-import { assertHasTypeField } from "./asserters";
+import { useAppSelector } from "../../util/hooks";
 
 /**
  * The first page of setup: basic details about it
@@ -15,14 +12,12 @@ interface BasicDetailsProps {
  
 const BasicDetails: FunctionComponent<BasicDetailsProps> = () => {
 	// Grab our Setup Context
-	const { state: setup, dispatch } = useContext(SetupContext);
-
-	assertHasTypeField(setup);
+	const setupType = useAppSelector(state => state.setup.type);
 	
 	return ( 
 		<SetupFrame nextPage="/teams" id="setup-basic-details">
 			<SetupHeader>
-				<h1>{`${setup.type[0]?.toUpperCase()}${setup.type?.slice(1)}`} Setup</h1>
+				<h1>{`${(setupType || "UNKNOWN")[0]?.toUpperCase()}${setupType?.slice(1)}`} Setup</h1>
 				<h3>Let’s get started - some basic details first</h3>
 			</SetupHeader>
 

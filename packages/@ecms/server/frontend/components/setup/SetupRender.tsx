@@ -1,9 +1,9 @@
 // A custom hook that builds on useLocation to parse
 // the query string for you.
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { setupAction, SetupActionsList } from "../../actions/setup";
-import SetupContext from "../../contexts/SetupContext";
+import { useAppDispatch } from "../../util/hooks";
 import BasicDetails from "./BasicDetails";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
 
@@ -22,7 +22,7 @@ const SetupRenderer: React.FC = (props) => {
 	const [hasLoaded, sethasLoaded] = useState(false);
 
 	// Grab our Setup Context
-	const { state: setup, dispatch } = useContext(SetupContext);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		const typeToSetup: "event" | "group" = query.get("type") as any;
@@ -31,8 +31,11 @@ const SetupRenderer: React.FC = (props) => {
 				new Error("No type provided!")
 			);
 		} else {
-			const a = setupAction(SetupActionsList.START_SETUP, { type: typeToSetup });
 			dispatch(setupAction(SetupActionsList.START_SETUP, { type: typeToSetup }));
+
+			// Next, ping the server
+
+
 			sethasLoaded(true);
 		}
 	}, []); // We don't want this to run on every render
