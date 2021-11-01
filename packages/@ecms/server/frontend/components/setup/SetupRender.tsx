@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import { setupAction, SetupActionsList } from "../../actions/setup";
-import { useAppDispatch } from "../../util/hooks";
+import updateSetup, { startSetup } from "../../actions/setup/updateSetup";
+import { useAppDispatch, useAppSelector } from "../../util/hooks";
 import BasicDetails from "./BasicDetails";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
 
@@ -23,6 +24,8 @@ const SetupRenderer: React.FC = (props) => {
 
 	// Grab our Setup Context
 	const dispatch = useAppDispatch();
+	const isError = useAppSelector(state => state.setup.error);
+	const setupState = useAppSelector(state => state.setup.state);
 
 	useEffect(() => {
 		const typeToSetup: "event" | "group" = query.get("type") as any;
@@ -31,16 +34,20 @@ const SetupRenderer: React.FC = (props) => {
 				new Error("No type provided!")
 			);
 		} else {
-			dispatch(setupAction(SetupActionsList.START_SETUP, { type: typeToSetup }));
-
-			// Next, ping the server
-
-
-			sethasLoaded(true);
+			dispatch(startSetup(typeToSetup));
 		}
 	}, []); // We don't want this to run on every render
 	
-	if (!hasLoaded) {
+	if (isError) {
+		return (
+			<SetupFrame nextPage="/" id="setup-renderer">
+				<SetupHeader>
+					<h1>An error was encountered</h1>
+					<h3>{isError.message}</h3>
+				</SetupHeader>
+			</SetupFrame>
+		);
+	} else if (setupState === "pending") {
 		return (
 			<SetupFrame nextPage="" noNextButton id="setup-renderer">
 				<SetupHeader>

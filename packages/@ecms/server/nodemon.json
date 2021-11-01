@@ -1,4 +1,5 @@
 {
 	"exec": "yarn run ts-node",
-	"signal": "SIGKILL"
+	"signal": "SIGKILL",
+	"ignore": "frontend/"
 }

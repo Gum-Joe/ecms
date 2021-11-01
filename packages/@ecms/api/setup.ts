@@ -95,6 +95,8 @@ export default interface SetupEventOrGroup extends
 	Omit<events_and_groupsInitializer, "event_group_id" | `${string}_settings_id` | "public_dashboard_id" | "complete" | "archived">
 {
 
+	setupID: number;
+
 	/**
 	 * Event ONLY settings
 	 */
@@ -149,4 +151,13 @@ export default interface SetupEventOrGroup extends
 		users: Omit<join_roles_usersInitializer, "param">[];
 	}
 
+}
+
+// Other requests
+
+/**
+ * Creates a new setup on the server in the Redis DB to track it.
+ */
+export interface ResStartSetup {
+	setupID: SetupEventOrGroup["setupID"];
 }

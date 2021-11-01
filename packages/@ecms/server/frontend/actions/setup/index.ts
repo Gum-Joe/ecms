@@ -5,8 +5,9 @@
  * Many types from https://medium.com/hackernoon/finally-the-typescript-redux-hooks-events-blog-you-were-looking-for-c4663d823b01
  * @packageDocumentation
  */
-import { SetupState } from "../constants/interfaces";
-import { createGeneralAction } from "./createGeneralAction";
+import { ResStartSetup } from "@ecms/api/setup";
+import { SetupState } from "../../constants/interfaces";
+import { createGeneralAction } from "../createGeneralAction";
 
 /**
  * Enum of actions
@@ -15,6 +16,8 @@ import { createGeneralAction } from "./createGeneralAction";
 export enum SetupActionsList {
 	SETUP_BASIC_DETAILS = "SETUP_BASIC_DETAILS",
 	START_SETUP = "SETUP_START",
+	UPDATE_SETUP = "UPDATE_SETUP",
+	SETUP_FAILED = "SETUP_FAILED",
 }
 
 /**
@@ -25,6 +28,8 @@ export enum SetupActionsList {
 export interface StartSetup {
 	/** Are we setting up an event or group? */
 	type: "event" | "group",
+	/** Id for the setup from server */
+	setupID: ResStartSetup["setupID"],
 }
 
 /**
@@ -32,7 +37,9 @@ export interface StartSetup {
  * Used for type checking
  */
 export type SetupActionPayloads = {
-	[SetupActionsList.START_SETUP]: StartSetup,
+	[SetupActionsList.START_SETUP]: StartSetup
+	[SetupActionsList.UPDATE_SETUP]: SetupState,
+	[SetupActionsList.SETUP_FAILED]: Error,
 	//[SetupActionsList.SETUP_BASIC_DETAILS]: any;
 }
 

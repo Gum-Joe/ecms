@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupReducer } from "./setup";
+import thunkMiddleware from "redux-thunk";
 
 export const store = configureStore({
 	reducer: {
 		/// @ts-expect-error: Redux stuff
 		setup: setupReducer,
-	}
+	},
+	middleware: [thunkMiddleware]
 });
 
 // From: https://redux-toolkit.js.org/tutorials/typescript#define-typed-hooks
