@@ -7,5 +7,12 @@
 		"tsBuildInfoFile": "../../../../.build-cache/frontend.tsbuildinfo",
 		"jsx": "react",
 	},
-	"references": [],
+	"references": [
+		{
+			"path": "../../models"
+		},
+		{
+			"path": "../../api"
+		},
+	],
 }

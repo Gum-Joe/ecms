@@ -215,6 +215,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/bcrypt", "npm:5.0.0"],
             ["@types/body-parser", "npm:1.19.1"],
             ["@types/compression-webpack-plugin", "npm:9.0.0"],
+            ["@types/connect-redis", "npm:0.0.17"],
             ["@types/cookie-parser", "npm:1.4.2"],
             ["@types/dotenv", "npm:8.2.0"],
             ["@types/express", "npm:4.17.13"],
@@ -234,6 +235,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-hot-loader", "npm:4.1.1"],
             ["@types/react-redux", "npm:7.1.20"],
             ["@types/react-router-dom", "npm:5.3.1"],
+            ["@types/redis", "npm:2.8.32"],
             ["@types/redux", "npm:3.6.31"],
             ["@types/redux-thunk", "npm:2.1.32"],
             ["@types/url-join", "npm:4.0.1"],
@@ -245,11 +247,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bcrypt", "npm:5.0.1"],
             ["bootstrap", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:5.1.3"],
             ["compression-webpack-plugin", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.1.1"],
+            ["connect-redis", "npm:6.0.0"],
             ["cookie-parser", "npm:1.4.5"],
             ["css-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:5.2.7"],
             ["dotenv", "npm:10.0.0"],
             ["express", "npm:4.17.1"],
             ["express-session", "npm:1.17.2"],
+            ["fast-safe-stringify", "npm:2.1.1"],
             ["file-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.2.0"],
             ["flex-gap-polyfill", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.1.0"],
             ["fork-ts-checker-webpack-plugin", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:6.3.4"],
@@ -274,6 +278,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react-hot-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.13.0"],
             ["react-redux", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:7.2.6"],
             ["react-router-dom", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:5.3.0"],
+            ["redis", "npm:4.0.0-rc.3"],
             ["redux-thunk", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:2.4.0"],
             ["sass", "npm:1.43.2"],
             ["sass-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:10.2.0"],
@@ -766,6 +771,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/connect-redis", [
+        ["npm:0.0.17", {
+          "packageLocation": "./.yarn/cache/@types-connect-redis-npm-0.0.17-7b3d28ca28-ad8d02d497.zip/node_modules/@types/connect-redis/",
+          "packageDependencies": [
+            ["@types/connect-redis", "npm:0.0.17"],
+            ["@types/express", "npm:4.17.13"],
+            ["@types/express-session", "npm:1.17.4"],
+            ["@types/ioredis", "npm:4.27.8"],
+            ["@types/redis", "npm:2.8.32"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/cookie-parser", [
         ["npm:1.4.2", {
           "packageLocation": "./.yarn/cache/@types-cookie-parser-npm-1.4.2-e1bc89ec98-d5b3c0e193.zip/node_modules/@types/cookie-parser/",
@@ -887,6 +905,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-invariant-npm-2.2.35-4dde8d7c77-af1b624057.zip/node_modules/@types/invariant/",
           "packageDependencies": [
             ["@types/invariant", "npm:2.2.35"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/ioredis", [
+        ["npm:4.27.8", {
+          "packageLocation": "./.yarn/cache/@types-ioredis-npm-4.27.8-73227263de-c718933d6e.zip/node_modules/@types/ioredis/",
+          "packageDependencies": [
+            ["@types/ioredis", "npm:4.27.8"],
+            ["@types/node", "npm:16.10.2"]
           ],
           "linkType": "HARD",
         }]
@@ -1151,6 +1179,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/react-transition-group", "npm:4.4.4"],
             ["@types/react", "npm:17.0.30"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/redis", [
+        ["npm:2.8.32", {
+          "packageLocation": "./.yarn/cache/@types-redis-npm-2.8.32-a5b861da6a-2b12103e05.zip/node_modules/@types/redis/",
+          "packageDependencies": [
+            ["@types/redis", "npm:2.8.32"],
+            ["@types/node", "npm:16.10.2"]
           ],
           "linkType": "HARD",
         }]
@@ -3198,6 +3236,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["cluster-key-slot", [
+        ["npm:1.1.0", {
+          "packageLocation": "./.yarn/cache/cluster-key-slot-npm-1.1.0-c895b3234e-fc953c7520.zip/node_modules/cluster-key-slot/",
+          "packageDependencies": [
+            ["cluster-key-slot", "npm:1.1.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["code-point-at", [
         ["npm:1.1.0", {
           "packageLocation": "./.yarn/cache/code-point-at-npm-1.1.0-37de5fe566-17d5666611.zip/node_modules/code-point-at/",
@@ -3404,6 +3451,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["unique-string", "npm:2.0.0"],
             ["write-file-atomic", "npm:3.0.3"],
             ["xdg-basedir", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["connect-redis", [
+        ["npm:6.0.0", {
+          "packageLocation": "./.yarn/cache/connect-redis-npm-6.0.0-b9bd4513cb-3ee0994327.zip/node_modules/connect-redis/",
+          "packageDependencies": [
+            ["connect-redis", "npm:6.0.0"]
           ],
           "linkType": "HARD",
         }]
@@ -5337,6 +5393,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["string-width", "npm:1.0.2"],
             ["strip-ansi", "npm:3.0.1"],
             ["wide-align", "npm:1.1.5"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["generic-pool", [
+        ["npm:3.8.2", {
+          "packageLocation": "./.yarn/cache/generic-pool-npm-3.8.2-e08966e1f1-f549077d90.zip/node_modules/generic-pool/",
+          "packageDependencies": [
+            ["generic-pool", "npm:3.8.2"]
           ],
           "linkType": "HARD",
         }]
@@ -9548,6 +9613,38 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["rechoir", "npm:0.7.1"],
             ["resolve", "patch:resolve@npm%3A1.20.0#~builtin<compat/resolve>::version=1.20.0&hash=00b1ff"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["redis", [
+        ["npm:4.0.0-rc.3", {
+          "packageLocation": "./.yarn/cache/redis-npm-4.0.0-rc.3-2e0183d29c-963d79bf24.zip/node_modules/redis/",
+          "packageDependencies": [
+            ["redis", "npm:4.0.0-rc.3"],
+            ["cluster-key-slot", "npm:1.1.0"],
+            ["generic-pool", "npm:3.8.2"],
+            ["redis-parser", "npm:3.0.0"],
+            ["yallist", "npm:4.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["redis-errors", [
+        ["npm:1.2.0", {
+          "packageLocation": "./.yarn/cache/redis-errors-npm-1.2.0-a81fd9b0f1-f28ac26921.zip/node_modules/redis-errors/",
+          "packageDependencies": [
+            ["redis-errors", "npm:1.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["redis-parser", [
+        ["npm:3.0.0", {
+          "packageLocation": "./.yarn/cache/redis-parser-npm-3.0.0-7ebe40abcb-89290ae530.zip/node_modules/redis-parser/",
+          "packageDependencies": [
+            ["redis-parser", "npm:3.0.0"],
+            ["redis-errors", "npm:1.2.0"]
           ],
           "linkType": "HARD",
         }]

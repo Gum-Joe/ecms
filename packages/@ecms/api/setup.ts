@@ -95,7 +95,7 @@ export default interface SetupEventOrGroup extends
 	Omit<events_and_groupsInitializer, "event_group_id" | `${string}_settings_id` | "public_dashboard_id" | "complete" | "archived">
 {
 
-	setupID: number;
+	setupID: string;
 
 	/**
 	 * Event ONLY settings

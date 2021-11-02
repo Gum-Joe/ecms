@@ -6,10 +6,11 @@
  */
 
 import SetupEventOrGroup from "@ecms/api/setup";
+import { event_or_group } from "@ecms/models";
 import { SetupState } from "../../constants/interfaces";
 
 /** Asserts the type field is set */
-export function assertHasTypeField(setup: SetupState): asserts setup is Pick<SetupEventOrGroup, "type"> {
+export function assertHasTypeField(setup: Omit<SetupState, "state">): asserts setup is { type: event_or_group | undefined } {
 	if (typeof setup.type === undefined) {
 		throw new Error("Setup type is not set!");
 	}
