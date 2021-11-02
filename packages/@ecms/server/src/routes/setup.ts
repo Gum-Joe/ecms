@@ -36,6 +36,8 @@ router.get("/start", async (req, res: ECMSResponse<ResStartSetup>, next) => {
 			setupID,
 		});
 		res.end();
+
+		logger.info("Setup started.");
 	} catch (err) {
 		logger.error("Error creating new setup!");
 		logger.error(err);
