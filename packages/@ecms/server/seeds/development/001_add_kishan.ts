@@ -1,5 +1,5 @@
 import { Knex } from "knex";
-import { users } from "../../src/models";
+import { users } from "@ecms/models";
 import { hashPassword } from "../../src/auth/useLocalAuth";
 
 export async function seed(knex: Knex): Promise<void> {
