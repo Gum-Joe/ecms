@@ -132,6 +132,10 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": ^5.15.4
     "@fortawesome/free-solid-svg-icons": ^5.15.4
     "@fortawesome/react-fontawesome": ^0.1.16
+    "@microsoft/fast-components": ^2.15.0
+    "@microsoft/fast-element": ^1.6.2
+    "@microsoft/fast-foundation": ^2.25.0
+    "@microsoft/fast-react-wrapper": ^0.1.11
     "@popperjs/core": ^2.10.2
     "@reduxjs/toolkit": ^1.6.2
     "@types/bcrypt": ^5.0.0
@@ -332,6 +336,87 @@ __metadata:
   bin:
     node-pre-gyp: bin/node-pre-gyp
   checksum: c1f182a707f5782e47b77a76e9d6a073fb043999cf9ad965bc86732e88db27ad00926d1602918edb7105f05cde67871b84a178ee9844eb742319ade419636675
+  languageName: node
+  linkType: hard
+
+"@microsoft/fast-colors@npm:^5.1.4":
+  version: 5.1.4
+  resolution: "@microsoft/fast-colors@npm:5.1.4"
+  checksum: 9b5923a12c83a60cdc4a1caa8958cbf7c6ccd5a87bd3bc7993983da3bfe7365e37331e14727aeb69f717af3ac2e0a80dde7379acd27d0be434ac117bf3e2d744
+  languageName: node
+  linkType: hard
+
+"@microsoft/fast-components@npm:^2.15.0":
+  version: 2.15.0
+  resolution: "@microsoft/fast-components@npm:2.15.0"
+  dependencies:
+    "@microsoft/fast-colors": ^5.1.4
+    "@microsoft/fast-element": ^1.6.2
+    "@microsoft/fast-foundation": ^2.25.0
+    "@microsoft/fast-web-utilities": ^5.0.2
+    tslib: ^1.13.0
+    vscode-html-languageservice: ^4.0.3
+  checksum: 1ece1ba91c26892e69cec87748a0524f1fbb694d30471b72937108a28e0d8814f5e358234ae5e0492d47b57d8085cd47c9cc3e6f65c76a56dd7d7cfa75e22269
+  languageName: node
+  linkType: hard
+
+"@microsoft/fast-element@npm:^1.6.2":
+  version: 1.6.2
+  resolution: "@microsoft/fast-element@npm:1.6.2"
+  checksum: 5baab39ca091845322a1da705ced5d41267f8daf8c08de195d0e6cc9abb58699318320c1844cce773eb281b052e64ed73d98b2a9a0457804b7a58837296b9c76
+  languageName: node
+  linkType: hard
+
+"@microsoft/fast-foundation@npm:^2.25.0":
+  version: 2.25.0
+  resolution: "@microsoft/fast-foundation@npm:2.25.0"
+  dependencies:
+    "@microsoft/fast-element": ^1.6.2
+    "@microsoft/fast-web-utilities": ^5.0.2
+    "@microsoft/tsdoc-config": ^0.13.4
+    tabbable: ^5.2.0
+    tslib: ^1.13.0
+  checksum: 9f99393f18a9c6514490026134fb62c610c1f1c423ed7012ea1f9288bffc78c58c5e7a1391222714685bbc5d45d05136d1c1789714e8f22189b9ca20cff1c2c2
+  languageName: node
+  linkType: hard
+
+"@microsoft/fast-react-wrapper@npm:^0.1.11":
+  version: 0.1.11
+  resolution: "@microsoft/fast-react-wrapper@npm:0.1.11"
+  dependencies:
+    "@microsoft/fast-element": ^1.6.2
+    "@microsoft/fast-foundation": ^2.25.0
+  peerDependencies:
+    react: ^16.9.0
+  checksum: 2ffb3d75aea50dc806181bbec9eedc66026acb7feaecb16f345818e0c0d16a5e40ad0015291fce637cdc50f1efe189215c70c4ec439f4b4944ef57296ffcf094
+  languageName: node
+  linkType: hard
+
+"@microsoft/fast-web-utilities@npm:^5.0.2":
+  version: 5.0.2
+  resolution: "@microsoft/fast-web-utilities@npm:5.0.2"
+  dependencies:
+    exenv-es6: ^1.0.0
+  checksum: ca88e02a79c339f6c32dbaebb2efee2eede81337a86ac5c6088c9ef4b0bdd1fbc4de2bda08531c772ac8670ed8a1ab17b4daa5c249759fd94b369a3e55e99473
+  languageName: node
+  linkType: hard
+
+"@microsoft/tsdoc-config@npm:^0.13.4":
+  version: 0.13.9
+  resolution: "@microsoft/tsdoc-config@npm:0.13.9"
+  dependencies:
+    "@microsoft/tsdoc": 0.12.24
+    ajv: ~6.12.6
+    jju: ~1.4.0
+    resolve: ~1.19.0
+  checksum: 41987535405559a1f9cc10ea5f34443316395ba015e092b887ab7e240b5d813c3aca10b0a64b338dc72ffee4b3a26c165676a7493a6eb92669ac1b984a71b2ec
+  languageName: node
+  linkType: hard
+
+"@microsoft/tsdoc@npm:0.12.24":
+  version: 0.12.24
+  resolution: "@microsoft/tsdoc@npm:0.12.24"
+  checksum: 16f66f3fa2e3beb7fc063b2a81a22421d9090857d87cebc3597ef8389c323e44eacfcb0e646f2b4bf87eed5bf1e58fc7658ff83995ed14413fc4f22ed6236cda
   languageName: node
   linkType: hard
 
@@ -1718,7 +1803,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^6.1.0, ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.2, ajv@npm:^6.12.4, ajv@npm:^6.12.5":
+"ajv@npm:^6.1.0, ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.2, ajv@npm:^6.12.4, ajv@npm:^6.12.5, ajv@npm:~6.12.6":
   version: 6.12.6
   resolution: "ajv@npm:6.12.6"
   dependencies:
@@ -3947,6 +4032,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"exenv-es6@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "exenv-es6@npm:1.0.0"
+  checksum: 6f36d69a83bdc84a5dedacaaa2d746e0439426e0038ed0b4ee6db1cbc153bf72ed4e1fa2d322f63170914f5e892425604044c0af64057bfcc88a3dde0fa65eab
+  languageName: node
+  linkType: hard
+
 "expand-brackets@npm:^2.1.4":
   version: 2.1.4
   resolution: "expand-brackets@npm:2.1.4"
@@ -5257,6 +5349,15 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"is-core-module@npm:^2.1.0":
+  version: 2.8.0
+  resolution: "is-core-module@npm:2.8.0"
+  dependencies:
+    has: ^1.0.3
+  checksum: f8b52714891e1a6c6577fcb8d5e057bab064a7a30954aab6beb5092e311473eb8da57afd334de4981dc32409ffca998412efc3a2edceb9e397cef6098d21dd91
+  languageName: node
+  linkType: hard
+
 "is-core-module@npm:^2.2.0":
   version: 2.7.0
   resolution: "is-core-module@npm:2.7.0"
@@ -5573,6 +5674,13 @@ fsevents@~2.3.2:
     merge-stream: ^2.0.0
     supports-color: ^8.0.0
   checksum: 1fd375f22a2a70606b69ec828381aac5f9d751b697a72e4922d2898b5bf52700dc3b6b618a1b850ea44ddb7adf785e0d20df1c917f477b58a789c193dec5515b
+  languageName: node
+  linkType: hard
+
+"jju@npm:~1.4.0":
+  version: 1.4.0
+  resolution: "jju@npm:1.4.0"
+  checksum: 3790481bd2b7827dd6336e6e3dc2dcc6d425679ba7ebde7b679f61dceb4457ea0cda330972494de608571f4973c6dfb5f70fab6f3c5037dbab19ac449a60424f
   languageName: node
   linkType: hard
 
@@ -8278,6 +8386,26 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"resolve@patch:resolve@~1.19.0#~builtin<compat/resolve>":
+  version: 1.19.0
+  resolution: "resolve@patch:resolve@npm%3A1.19.0#~builtin<compat/resolve>::version=1.19.0&hash=00b1ff"
+  dependencies:
+    is-core-module: ^2.1.0
+    path-parse: ^1.0.6
+  checksum: 4714fbea90c3a4b9c14af343f255193ab16bce50782309318e01c3e4113e89df69a2a9fb1f1d9f7791c9c5a52a56f10568ce82df92dbbe184557d309a96808e5
+  languageName: node
+  linkType: hard
+
+resolve@~1.19.0:
+  version: 1.19.0
+  resolution: "resolve@npm:1.19.0"
+  dependencies:
+    is-core-module: ^2.1.0
+    path-parse: ^1.0.6
+  checksum: a05b356e47b85ad3613d9e2a39a824f3c27f4fcad9c9ff6c7cc71a2e314c5904a90ab37481ad0069d03cab9eaaac6eb68aca1bc3355fdb05f1045cd50e2aacea
+  languageName: node
+  linkType: hard
+
 "responselike@npm:^1.0.2":
   version: 1.0.2
   resolution: "responselike@npm:1.0.2"
@@ -9122,6 +9250,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"tabbable@npm:^5.2.0":
+  version: 5.2.1
+  resolution: "tabbable@npm:5.2.1"
+  checksum: d26e9eeb880c4c78b59244bac2c931ad46f6c64a01e5c15ba6da348dc86442222912733846a9e63373342a81fa15d4afb31267606b38431510d10b0fb9ec9bba
+  languageName: node
+  linkType: hard
+
 "table@npm:^6.0.9":
   version: 6.7.2
   resolution: "table@npm:6.7.2"
@@ -9441,7 +9576,7 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.8.1":
+"tslib@npm:^1.13.0, tslib@npm:^1.8.1":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
@@ -9846,6 +9981,46 @@ typescript@^4.4.3:
   version: 1.1.2
   resolution: "vm-browserify@npm:1.1.2"
   checksum: 10a1c50aab54ff8b4c9042c15fc64aefccce8d2fb90c0640403242db0ee7fb269f9b102bdb69cfb435d7ef3180d61fd4fb004a043a12709abaf9056cfd7e039d
+  languageName: node
+  linkType: hard
+
+"vscode-html-languageservice@npm:^4.0.3":
+  version: 4.1.1
+  resolution: "vscode-html-languageservice@npm:4.1.1"
+  dependencies:
+    vscode-languageserver-textdocument: ^1.0.1
+    vscode-languageserver-types: ^3.16.0
+    vscode-nls: ^5.0.0
+    vscode-uri: ^3.0.2
+  checksum: 8584568857414cd106025ed4c6fd76c7ea24fb630a9544e5df833862aa9e86ba5ee6c729ed3252710938c8cba8950cf79f381f4f391c3e8441e05b2e2e76724d
+  languageName: node
+  linkType: hard
+
+"vscode-languageserver-textdocument@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "vscode-languageserver-textdocument@npm:1.0.2"
+  checksum: 2e29fdc819ed911a60d6ead59dfe385a335b7b4f512257e774cde482c2ac7880378650d85533e549743d04162aac6b9d9f1569282308e87d8390e238277ee6da
+  languageName: node
+  linkType: hard
+
+"vscode-languageserver-types@npm:^3.16.0":
+  version: 3.16.0
+  resolution: "vscode-languageserver-types@npm:3.16.0"
+  checksum: 7a44fb10b9fbeb9529f832337b7f0430fc6275d62945b86851d425a950e22da3917ef5f6c552688191769dd1eae047c6ee9ec3d9f2280498353007c2dfe0725c
+  languageName: node
+  linkType: hard
+
+"vscode-nls@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "vscode-nls@npm:5.0.0"
+  checksum: 8b12d1a3b0f783b91a98747fce76d2c26299db0c288089703bc3de53cc503f3ededa9833c21c3cb3b4857bd1c4e5d93663da38d4ddbf7b970dc63b6892d4639a
+  languageName: node
+  linkType: hard
+
+"vscode-uri@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "vscode-uri@npm:3.0.2"
+  checksum: 5ed2c95a483a43398df40c31d23e44f138e9c8bed384fa4edf0fd97396ce18ae8dae173c5d55e69b47205e2108e165cb165b12843a74e8b35c066d9f3810fb6c
   languageName: node
   linkType: hard
 

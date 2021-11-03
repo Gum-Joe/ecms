@@ -56,9 +56,10 @@ const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true,
 		<CHBBlurredBG>
 			<FlexBox className="fill-height-viewport">
 				<div className={`setup-frame ${className}`} id={frameId}>
-
-					{props.children}
-
+					<div className="setup-frame-children">
+						{props.children}
+					</div>
+					
 					<div className="setup-actions">
 						{!noNextButton ? <Link to={props.nextPage}>
 							<Button className="advance-setup">

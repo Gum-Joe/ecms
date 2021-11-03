@@ -21,7 +21,7 @@
 	box-sizing: border-box;
 
 	position: relative;
-	
+
 	@include breakpoint-at-height(842px, "max") {
 		max-height: 82vh;
 		max-width: calc(100vw - (100vh - 82vh));
@@ -72,6 +72,23 @@
 		font-size: 34px;
 
 		margin-bottom: 20px;
+	}
+
+	// Children of setip where setupo header, forms live
+	// Handles scrolling
+	.setup-frame-children {
+		height: 100%;
+		display: flex;
+		flex-flow: column;
+		.setup-header {
+			flex: 0 1 auto;
+		}
+
+		.setup-form-container {
+			flex: 1 1 auto;
+			overflow-y: scroll;
+		}
+
 	}
 
 }

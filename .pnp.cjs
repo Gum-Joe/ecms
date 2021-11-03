@@ -210,6 +210,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@fortawesome/free-regular-svg-icons", "npm:5.15.4"],
             ["@fortawesome/free-solid-svg-icons", "npm:5.15.4"],
             ["@fortawesome/react-fontawesome", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.1.16"],
+            ["@microsoft/fast-components", "npm:2.15.0"],
+            ["@microsoft/fast-element", "npm:1.6.2"],
+            ["@microsoft/fast-foundation", "npm:2.25.0"],
+            ["@microsoft/fast-react-wrapper", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.1.11"],
             ["@popperjs/core", "npm:2.10.2"],
             ["@reduxjs/toolkit", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:1.6.2"],
             ["@types/bcrypt", "npm:5.0.0"],
@@ -436,6 +440,109 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["rimraf", "npm:3.0.2"],
             ["semver", "npm:7.3.5"],
             ["tar", "npm:6.1.11"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@microsoft/fast-colors", [
+        ["npm:5.1.4", {
+          "packageLocation": "./.yarn/cache/@microsoft-fast-colors-npm-5.1.4-822fca01d4-9b5923a12c.zip/node_modules/@microsoft/fast-colors/",
+          "packageDependencies": [
+            ["@microsoft/fast-colors", "npm:5.1.4"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@microsoft/fast-components", [
+        ["npm:2.15.0", {
+          "packageLocation": "./.yarn/cache/@microsoft-fast-components-npm-2.15.0-16120c55b8-1ece1ba91c.zip/node_modules/@microsoft/fast-components/",
+          "packageDependencies": [
+            ["@microsoft/fast-components", "npm:2.15.0"],
+            ["@microsoft/fast-colors", "npm:5.1.4"],
+            ["@microsoft/fast-element", "npm:1.6.2"],
+            ["@microsoft/fast-foundation", "npm:2.25.0"],
+            ["@microsoft/fast-web-utilities", "npm:5.0.2"],
+            ["tslib", "npm:1.14.1"],
+            ["vscode-html-languageservice", "npm:4.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@microsoft/fast-element", [
+        ["npm:1.6.2", {
+          "packageLocation": "./.yarn/cache/@microsoft-fast-element-npm-1.6.2-5eba8f5e6a-5baab39ca0.zip/node_modules/@microsoft/fast-element/",
+          "packageDependencies": [
+            ["@microsoft/fast-element", "npm:1.6.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@microsoft/fast-foundation", [
+        ["npm:2.25.0", {
+          "packageLocation": "./.yarn/cache/@microsoft-fast-foundation-npm-2.25.0-996d26c608-9f99393f18.zip/node_modules/@microsoft/fast-foundation/",
+          "packageDependencies": [
+            ["@microsoft/fast-foundation", "npm:2.25.0"],
+            ["@microsoft/fast-element", "npm:1.6.2"],
+            ["@microsoft/fast-web-utilities", "npm:5.0.2"],
+            ["@microsoft/tsdoc-config", "npm:0.13.9"],
+            ["tabbable", "npm:5.2.1"],
+            ["tslib", "npm:1.14.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@microsoft/fast-react-wrapper", [
+        ["npm:0.1.11", {
+          "packageLocation": "./.yarn/cache/@microsoft-fast-react-wrapper-npm-0.1.11-4f6032a1c0-2ffb3d75ae.zip/node_modules/@microsoft/fast-react-wrapper/",
+          "packageDependencies": [
+            ["@microsoft/fast-react-wrapper", "npm:0.1.11"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.1.11", {
+          "packageLocation": "./.yarn/__virtual__/@microsoft-fast-react-wrapper-virtual-192866fba3/0/cache/@microsoft-fast-react-wrapper-npm-0.1.11-4f6032a1c0-2ffb3d75ae.zip/node_modules/@microsoft/fast-react-wrapper/",
+          "packageDependencies": [
+            ["@microsoft/fast-react-wrapper", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.1.11"],
+            ["@microsoft/fast-element", "npm:1.6.2"],
+            ["@microsoft/fast-foundation", "npm:2.25.0"],
+            ["@types/react", "npm:17.0.30"],
+            ["react", "npm:17.0.2"]
+          ],
+          "packagePeers": [
+            "@types/react",
+            "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@microsoft/fast-web-utilities", [
+        ["npm:5.0.2", {
+          "packageLocation": "./.yarn/cache/@microsoft-fast-web-utilities-npm-5.0.2-a0fe49b7a9-ca88e02a79.zip/node_modules/@microsoft/fast-web-utilities/",
+          "packageDependencies": [
+            ["@microsoft/fast-web-utilities", "npm:5.0.2"],
+            ["exenv-es6", "npm:1.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@microsoft/tsdoc", [
+        ["npm:0.12.24", {
+          "packageLocation": "./.yarn/cache/@microsoft-tsdoc-npm-0.12.24-509766bae7-16f66f3fa2.zip/node_modules/@microsoft/tsdoc/",
+          "packageDependencies": [
+            ["@microsoft/tsdoc", "npm:0.12.24"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@microsoft/tsdoc-config", [
+        ["npm:0.13.9", {
+          "packageLocation": "./.yarn/cache/@microsoft-tsdoc-config-npm-0.13.9-32c54a1ea3-4198753540.zip/node_modules/@microsoft/tsdoc-config/",
+          "packageDependencies": [
+            ["@microsoft/tsdoc-config", "npm:0.13.9"],
+            ["@microsoft/tsdoc", "npm:0.12.24"],
+            ["ajv", "npm:6.12.6"],
+            ["jju", "npm:1.4.0"],
+            ["resolve", "patch:resolve@npm%3A1.19.0#~builtin<compat/resolve>::version=1.19.0&hash=00b1ff"]
           ],
           "linkType": "HARD",
         }]
@@ -4763,6 +4870,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["exenv-es6", [
+        ["npm:1.0.0", {
+          "packageLocation": "./.yarn/cache/exenv-es6-npm-1.0.0-75758405f9-6f36d69a83.zip/node_modules/exenv-es6/",
+          "packageDependencies": [
+            ["exenv-es6", "npm:1.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["expand-brackets", [
         ["npm:2.1.4", {
           "packageLocation": "./.yarn/cache/expand-brackets-npm-2.1.4-392c703c48-1781d422e7.zip/node_modules/expand-brackets/",
@@ -6275,6 +6391,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["has", "npm:1.0.3"]
           ],
           "linkType": "HARD",
+        }],
+        ["npm:2.8.0", {
+          "packageLocation": "./.yarn/cache/is-core-module-npm-2.8.0-acc8c42f1b-f8b5271489.zip/node_modules/is-core-module/",
+          "packageDependencies": [
+            ["is-core-module", "npm:2.8.0"],
+            ["has", "npm:1.0.3"]
+          ],
+          "linkType": "HARD",
         }]
       ]],
       ["is-data-descriptor", [
@@ -6625,6 +6749,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:16.10.2"],
             ["merge-stream", "npm:2.0.0"],
             ["supports-color", "npm:8.1.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["jju", [
+        ["npm:1.4.0", {
+          "packageLocation": "./.yarn/cache/jju-npm-1.4.0-670678eaa3-3790481bd2.zip/node_modules/jju/",
+          "packageDependencies": [
+            ["jju", "npm:1.4.0"]
           ],
           "linkType": "HARD",
         }]
@@ -9822,6 +9955,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]
       ]],
       ["resolve", [
+        ["patch:resolve@npm%3A1.19.0#~builtin<compat/resolve>::version=1.19.0&hash=00b1ff", {
+          "packageLocation": "./.yarn/cache/resolve-patch-63bf250dd8-4714fbea90.zip/node_modules/resolve/",
+          "packageDependencies": [
+            ["resolve", "patch:resolve@npm%3A1.19.0#~builtin<compat/resolve>::version=1.19.0&hash=00b1ff"],
+            ["is-core-module", "npm:2.8.0"],
+            ["path-parse", "npm:1.0.7"]
+          ],
+          "linkType": "HARD",
+        }],
         ["patch:resolve@npm%3A1.20.0#~builtin<compat/resolve>::version=1.20.0&hash=00b1ff", {
           "packageLocation": "./.yarn/cache/resolve-patch-da1bf0dd3c-bed00be983.zip/node_modules/resolve/",
           "packageDependencies": [
@@ -10823,6 +10965,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["tabbable", [
+        ["npm:5.2.1", {
+          "packageLocation": "./.yarn/cache/tabbable-npm-5.2.1-6c5c4b34fa-d26e9eeb88.zip/node_modules/tabbable/",
+          "packageDependencies": [
+            ["tabbable", "npm:5.2.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["table", [
         ["npm:6.7.2", {
           "packageLocation": "./.yarn/cache/table-npm-6.7.2-af27a1ebed-d61f91d64b.zip/node_modules/table/",
@@ -11740,6 +11891,55 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/vm-browserify-npm-1.1.2-f96404b36f-10a1c50aab.zip/node_modules/vm-browserify/",
           "packageDependencies": [
             ["vm-browserify", "npm:1.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["vscode-html-languageservice", [
+        ["npm:4.1.1", {
+          "packageLocation": "./.yarn/cache/vscode-html-languageservice-npm-4.1.1-9120e6c9a7-8584568857.zip/node_modules/vscode-html-languageservice/",
+          "packageDependencies": [
+            ["vscode-html-languageservice", "npm:4.1.1"],
+            ["vscode-languageserver-textdocument", "npm:1.0.2"],
+            ["vscode-languageserver-types", "npm:3.16.0"],
+            ["vscode-nls", "npm:5.0.0"],
+            ["vscode-uri", "npm:3.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["vscode-languageserver-textdocument", [
+        ["npm:1.0.2", {
+          "packageLocation": "./.yarn/cache/vscode-languageserver-textdocument-npm-1.0.2-62db47224e-2e29fdc819.zip/node_modules/vscode-languageserver-textdocument/",
+          "packageDependencies": [
+            ["vscode-languageserver-textdocument", "npm:1.0.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["vscode-languageserver-types", [
+        ["npm:3.16.0", {
+          "packageLocation": "./.yarn/cache/vscode-languageserver-types-npm-3.16.0-bd03fd2d40-7a44fb10b9.zip/node_modules/vscode-languageserver-types/",
+          "packageDependencies": [
+            ["vscode-languageserver-types", "npm:3.16.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["vscode-nls", [
+        ["npm:5.0.0", {
+          "packageLocation": "./.yarn/cache/vscode-nls-npm-5.0.0-934475e215-8b12d1a3b0.zip/node_modules/vscode-nls/",
+          "packageDependencies": [
+            ["vscode-nls", "npm:5.0.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["vscode-uri", [
+        ["npm:3.0.2", {
+          "packageLocation": "./.yarn/cache/vscode-uri-npm-3.0.2-04c5161925-5ed2c95a48.zip/node_modules/vscode-uri/",
+          "packageDependencies": [
+            ["vscode-uri", "npm:3.0.2"]
           ],
           "linkType": "HARD",
         }]

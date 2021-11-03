@@ -20,18 +20,27 @@ const BasicDetails: FunctionComponent<BasicDetailsProps> = () => {
 				<h1>{`${(setupType || "UNKNOWN")[0]?.toUpperCase()}${setupType?.slice(1)}`} Setup</h1>
 				<h3>Let’s get started - some basic details first</h3>
 			</SetupHeader>
+			<div className="setup-form-container">
+				<h2>Basic Details</h2>
+				<Form>
+					<div>
+						<label htmlFor="name">Name</label>
+						<input autoComplete="off" required={true} name="name" id="basic-name" type="text" placeholder="" />
+					</div>
+					<div>
+						<label htmlFor="name">Description</label>
+						<input autoComplete="off" required={true} name="name" id="basic-name" type="text" placeholder="" />
+					</div>
+				</Form>
 
-			<h2>Basic Details</h2>
-			<Form>
-				<div>
-					<label htmlFor="name">Name</label>
-					<input autoComplete="off" required={true} name="name" id="basic-name" type="text" placeholder="" />
-				</div>
-				<div>
-					<label htmlFor="name">Description</label>
-					<input autoComplete="off" required={true} name="name" id="basic-name" type="text" placeholder="" />
-				</div>
-			</Form>
+				<h2>Data Settings</h2>
+				<Form>
+					<div>
+						<label htmlFor="name">Name</label>
+						<input autoComplete="off" required={true} name="name" id="basic-name" type="text" placeholder="" />
+					</div>
+				</Form>
+			</div>
 		</SetupFrame>
 	);
 };
