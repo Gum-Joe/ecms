@@ -46,7 +46,7 @@
 	// Base header that sits at the top of all setup frames
 	.setup-header {
 
-		padding-bottom: 23px; // add spacing below
+		padding-bottom: 13px; // add spacing below
 
 		h1, h3 {
 			font-family: "Dosis";
@@ -55,13 +55,13 @@
 
 		h1 {
 			font-weight: 600;
-			font-size: 53px;
-			margin-bottom: 18px;
+			font-size: 3.3em;
+			margin-bottom: 13px;
 		}
 
 		h3 {
 			font-weight: 400;
-			font-size: 23px;
+			font-size: 1.4em;
 		}
 	}
 
@@ -70,6 +70,8 @@
 		font-family: "Dosis";
 		font-weight: 500;
 		font-size: 34px;
+
+		margin-bottom: 20px;
 	}
 
 }

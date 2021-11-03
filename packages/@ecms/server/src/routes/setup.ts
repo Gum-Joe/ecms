@@ -4,7 +4,7 @@
  */
 
 import { Router } from "express";
-import { randomUUID } from "crypto";
+import { v4 as uuidv4 } from "uuid";
 import safeStringify from "fast-safe-stringify";
 import { ResStartSetup } from "@ecms/api/setup";
 import connectToDB from "../utils/db";
@@ -21,7 +21,7 @@ const redis = connectToRedis();
 router.get("/start", async (req, res: ECMSResponse<ResStartSetup>, next) => {
 	logger.info("Starting a new setup...");
 
-	const setupID = randomUUID();
+	const setupID = uuidv4();
 
 	try {
 		// TODO: Check Roles
