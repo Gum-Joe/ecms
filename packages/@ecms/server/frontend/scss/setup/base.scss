@@ -86,9 +86,26 @@
 
 		.setup-form-container {
 			flex: 1 1 auto;
-			overflow-y: scroll;
+			overflow-y: auto;
 		}
 
+	}
+
+
+	// Secondat tesxt on input labels
+	.secondary-input {
+		display: inline;
+		color: rgba(255, 255, 255, 0.46);
+	}
+
+	// Inputs
+	.ui-dropdown__container {
+		/* Dark/Fill Color/Control/Default */
+		background: rgba(255, 255, 255, 0.0605);
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.0837);
+		}
 	}
 
 }

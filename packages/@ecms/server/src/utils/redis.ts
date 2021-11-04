@@ -9,6 +9,9 @@ import RedisClient, { RedisClientType } from "redis/dist/lib/client";
 /** Store the connection itself to distribute out when requested */
 let theClient: RedisClientType<any, any>;
 
+/** Attempts to connect */
+let attemptsToConnect = 0;
+
 /**
  * Creates a connection to the DB based on the ECMS config.
  * 
@@ -29,10 +32,27 @@ export default function connectToRedis(): RedisClientType<any, any> {
 		url: process.env.ECMS_REDIS_URL,
 	});
 
-	theClient.on("error", (err) => logger.error("Redis Client Error", err));
-	theClient.on("connect", () => logger.info("Redis Client Connected - event fired!"));
+	theClient.on("error", (err) => {
+		logger.error("Redis Client Error", err);
+		attemptsToConnect++;
+		if (err.code === "ECONNREFUSED" && attemptsToConnect > 3) {
+			logger.error("Could not connect to Redis!");
+			logger.error("Exiting...");
+			process.exit(-1);
+		}
+	});
+	theClient.on("connect", () => {
+		logger.info("Redis Client Connected - event fired!");
+		attemptsToConnect = 0;
+	});
 	theClient.connect()
-		.catch((err) => logger.error("Redis Client connection error", err));
+		.catch((err) => {
+			logger.error("Redis Client connection error", err);
+			if (err.code === "ECONNREFUSED" && attemptsToConnect > 3) {
+				logger.error("Could not connect to Redis!");
+				process.exit(-1);
+			}
+		});
 
 	return theClient;
 }

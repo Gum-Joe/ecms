@@ -26,7 +26,7 @@ router.get("/start", async (req, res: ECMSResponse<ResStartSetup>, next) => {
 	try {
 		// TODO: Check Roles
 		await redis.HSET(`transactions:create_event_group:${setupID}`, {
-			stautus: "pending",
+			status: "pending",
 			data: safeStringify({}),
 		});
 
