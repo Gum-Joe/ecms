@@ -20,8 +20,8 @@ export const startSetup: ActionCreator<ThunkAction<Promise<SetupActions>, RootSt
 
 	// Now send
 	try {
-		const setupID = await (await axios.get<ResStartSetup>("/api/setup/start")).data;
-		console.debug("SetupID: ", setupID);
+		const setupID = await (await axios.post<ResStartSetup>("/api/setup/start")).data;
+		console.debug("SetupID: ", setupID.setupID);
 		return dispatch(setupAction(SetupActionsList.START_SETUP, { type: type, setupID: setupID.setupID }));
 	} catch (err) {
 		console.error("Error updating setup on the server: ", err);
@@ -37,7 +37,7 @@ export const startSetup: ActionCreator<ThunkAction<Promise<SetupActions>, RootSt
  * 
  * Types from updateSetup
  */
-const updateSetup: ActionCreator<ThunkAction<Promise<SetupActions>, RootState, void, SetupActions>> = (updatedSetup: SetupState) => async (dispatch, getState) => {
+const updateSetup: (updatedSetup: Omit<SetupState, "state">) => ThunkAction<Promise<SetupActions>, RootState, void, SetupActions>  = (updatedSetup) => async (dispatch, getState) => {
 	console.debug("Updating setup in the server...");
 	const fullUpdatedSetup = {
 		...getState().setup,
@@ -46,7 +46,7 @@ const updateSetup: ActionCreator<ThunkAction<Promise<SetupActions>, RootState, v
 
 	// Now send
 	try {
-		await axios.post("/api/setup/partial", fullUpdatedSetup);
+		await axios.put("/api/setup/partial", fullUpdatedSetup);
 	} catch (err) {
 		console.error("Error updating setup on the server:", err);
 	}

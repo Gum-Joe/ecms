@@ -204,6 +204,7 @@ __metadata:
     react: ^17.0.2
     react-bootstrap: ^2.0.0
     react-dom: ^17.0.2
+    react-hook-form: ^7.19.0
     react-hot-loader: ^4.13.0
     react-redux: ^7.2.6
     react-router-dom: ^5.3.0
@@ -8447,6 +8448,15 @@ fsevents@~2.3.2:
   peerDependencies:
     react: ^16.3.0
   checksum: 71358f6c97fc8fc6de0465c4ea281034d45a2afcd990ca8c40cc3afc46cdd5c0c278a548527e3186b60ba5f6602e8415c532af781247bcbdf7f034bdfe4edd59
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.19.0":
+  version: 7.19.0
+  resolution: "react-hook-form@npm:7.19.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17
+  checksum: e9d36685991ce744215efc4f278da281b4b852dcb078d09183e7997c882f944c1aed8f3ac6c84a25e5957a03c260b41daf3d6e9c63a6152f61059d9e43037eae
   languageName: node
   linkType: hard
 

@@ -161,3 +161,16 @@ export default interface SetupEventOrGroup extends
 export interface ResStartSetup {
 	setupID: SetupEventOrGroup["setupID"];
 }
+
+/**
+ * Setup state
+ */
+export interface SetupStates {
+	/** Setup state  - pending means not yet started */
+	state: "pending" | "in progress" | "done",
+}
+
+/**
+ * Updates a setup on the server in the Redis DB
+ */
+export type ReqPartialSetup = SetupEventOrGroup & SetupStates;

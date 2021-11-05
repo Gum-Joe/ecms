@@ -2,13 +2,12 @@
  * All the interfaces ECMS uses
  * @packageDocumentation
  */
-import SetupEventOrGroup from "@ecms/api/setup";
-export type SetupState = Partial<SetupEventOrGroup> & {
+import SetupEventOrGroup, { SetupStates } from "@ecms/api/setup";
+export type SetupState = Partial<SetupEventOrGroup> & SetupStates & {
 	error?: {
 		message: string;
 		name: string;
 		stack?: any;
 	},
-	/** Setup state  - pending means not yet started */
-	state: "pending" | "in progress" | "done",
+	
 };

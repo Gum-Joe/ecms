@@ -38,7 +38,7 @@ export interface StartSetup {
  */
 export type SetupActionPayloads = {
 	[SetupActionsList.START_SETUP]: StartSetup
-	[SetupActionsList.UPDATE_SETUP]: SetupState,
+	[SetupActionsList.UPDATE_SETUP]: Omit<SetupState, "state">,
 	[SetupActionsList.SETUP_FAILED]: Error,
 	//[SetupActionsList.SETUP_BASIC_DETAILS]: any;
 }

@@ -3,10 +3,6 @@
 
 .form-container {
 	text-align: left;
-	// Use a grid to display items
-	// This way we can separate things with a gap instead
-	display: grid;
-	grid-gap: 26px;
 	
 	label {
 		font-weight: 400;
@@ -36,4 +32,15 @@
 		}
 	}
 
+	/** Form split into multiple parts (like in setup) with headers for each, or a non split form
+			Done like this so both can use the same wrapper class
+	*/
+	&.multi-part-form section, &.standard-form {
+		// Use a grid to display items
+		// This way we can separate things with a gap instead
+		display: grid;
+		grid-gap: 26px;
+	}
+
 }
+

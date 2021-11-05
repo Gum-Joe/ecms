@@ -45,6 +45,10 @@ export interface SetupFrameProps {
 	id?: string;
 	/** Don't show the next button */
 	noNextButton?: boolean;
+	/**
+	 * ID of a form being used, so the Next button submits it
+	 */
+	formID?: string;
 }
 /**
  * Base Setup Components
@@ -61,12 +65,11 @@ const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true,
 					</div>
 					
 					<div className="setup-actions">
-						{!noNextButton ? <Link to={props.nextPage}>
-							<Button className="advance-setup">
+						{!noNextButton ?
+							(<Button className="advance-setup" form={props.formID} type="submit">
 								Next
-							</Button>
-							{/* TODO: Add Skip button */}
-						</Link> : null}
+							</Button>)
+						/* TODO: Add Skip button */ : null}
 					</div>
 				</div>
 
