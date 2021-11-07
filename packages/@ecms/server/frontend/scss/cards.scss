@@ -1,0 +1,13 @@
+/**
+ * SCSS for Cards - useful for displaying lots of data for related items in a group
+ */
+.ecms-card {
+	/* Dark/Background/Fill Color/Card Background/Default */
+	background: rgba(255, 255, 255, 0.0512);
+	border-radius: 7px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	/* Dark/Shadow/Card Rest */
+	box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.13);
+	padding: 20px;
+	width: 100%;
+}

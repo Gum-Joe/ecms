@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
-import { Route, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 import SetupRenderer from "./SetupRender";
+import Teams from "./Teams";
 
  
 const SetupRouter: FunctionComponent = () => {
@@ -10,9 +11,15 @@ const SetupRouter: FunctionComponent = () => {
 	// us build relative links."
 	const { path, url } = useRouteMatch();
 	return (
-		<Route exact path={path}>
-			<SetupRenderer />
-		</Route>
+		<Switch>
+			<Route exact path={path}>
+				<SetupRenderer />
+			</Route>
+			<Route exact path={`${path}/teams`}>
+				<Teams />
+			</Route>
+		</Switch>
+		
 	);
 };
  

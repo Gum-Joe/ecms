@@ -1,31 +1,28 @@
 import React, { FunctionComponent } from "react";
 import { Dropdown } from "@fluentui/react-northstar";
+import { trackable_data } from "@ecms/models";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
 import { useAppDispatch, useAppSelector } from "../../util/hooks";
 import { FluentCheckbox } from "../fluent";
 import SetupForm from "./SetupForm";
 import updateSetup from "../../actions/setup/updateSetup";
-import { useSetupRedirector } from "./util";
+import { useSetupRedirector, getDataFromDropDown } from "./util";
 
-/**
- * The first page of setup: basic details about it
- */
-interface BasicDetailsProps {
-	a?: string;
-}
 
 /**
  * Options for data to track
  */
-const dataToTrack = [
-	"Matches between teams",
-	"Individual performance (including within teams)",
-	"Points teams get",
-	"None (e.g. charity event)"
-];
+const dataToTrack: Map<string, trackable_data> = new Map([
+	["Matches between teams", "matches"],
+	["Individual performance (including within teams)", "individual"],
+	["Points teams get", "points"], // TODO: Map
+	["None (e.g. charity event)", "none"],
+]);
 
 const SETUP_BASIC_DETAILS_FORM = "setup-basic-details-form";
-const BasicDetails: FunctionComponent<BasicDetailsProps> = () => {
+const SETUP_EVENT_DATA_PLACEHOLDER = "Select data to track";
+
+const BasicDetails: FunctionComponent = () => {
 	// Grab our Setup Context
 	const setupType = useAppSelector(state => state.setup.type);
 	const parent_id = useAppSelector(state => state.setup.parent_id);
@@ -38,16 +35,29 @@ const BasicDetails: FunctionComponent<BasicDetailsProps> = () => {
 
 		const data = new FormData(event.target as HTMLFormElement);
 		const formObject: Record<string, string> = Object.fromEntries(data.entries()) as Record<string, string>;
-		console.log(formObject);
+		if (getDataFromDropDown("data-settings-dropdown") === SETUP_EVENT_DATA_PLACEHOLDER) {
+			// TODO: Use a banner
+			return alert("Please select data to track");
+		}
 		dispatch(updateSetup({
 			name: formObject.name,
 			description: formObject.description,
 			enable_teams: formObject.enableTeams === "on" ? true : false,
 			enable_charity: formObject.enableCharity === "on" ? true : false,
 			inheritance: formObject.enableInherit === "on" ? true : false,
+			event_settings: {
+				data_tracked: dataToTrack.get(
+					getDataFromDropDown("data-settings-dropdown") || "none",
+				) as trackable_data,
+			},
 		}));
 		
-		setupPage("/teams");
+		// Decide redirect
+		if (formObject.enableTeams === "on") {
+			setupPage("/teams");
+		}
+		
+		// Check competitors
 		
 	};
 	
@@ -81,10 +91,11 @@ const BasicDetails: FunctionComponent<BasicDetailsProps> = () => {
 						<div>
 							<label htmlFor="dataToTrack">Data to track</label>
 							<Dropdown
-								items={dataToTrack}
-								placeholder="Select data to track"
+								items={[...dataToTrack.keys()]}
+								placeholder={SETUP_EVENT_DATA_PLACEHOLDER}
 								name="dataToTrack"
 								required={true}
+								id="data-settings-dropdown"
 							/>
 						</div>
 					</section>
@@ -95,5 +106,8 @@ const BasicDetails: FunctionComponent<BasicDetailsProps> = () => {
 };
  
 export default BasicDetails; 
+
+
+
 
 

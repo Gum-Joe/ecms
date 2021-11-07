@@ -27,7 +27,8 @@ COMMENT ON TYPE trackable_data IS 'The data an event can track, crucial in deter
 
 "matches": allow matches to be tracked. REQUIRES enable_teams to be true in event_settings_id
 "individual": Individual performance of competitor information is tracked.
-"none": no data is tracked.';
+"none": no data is tracked.
+"points": points awarded to teams in the event (and no other data) is tracked (added by migration)';
 
 -- Module types
 -- This ENUM governs the types of extensions there can be

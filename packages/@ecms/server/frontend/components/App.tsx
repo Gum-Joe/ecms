@@ -55,7 +55,7 @@ const App: React.FC = () =>  {
 			</Route>
 			<Route exact path="/login/error" render={(props) => <LoginError {...props} />} />
 
-			<Route exact path="/setup"><SetupRouter /></Route>
+			<Route path="/setup"><SetupRouter /></Route>
 		</Router>
 	);
 };

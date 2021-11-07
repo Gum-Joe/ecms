@@ -8,3 +8,10 @@ export function useSetupRedirector() {
 	const history = useHistory();
 	return (setupPage: string) => history.push(`${url}${setupPage}`);
 }
+
+/**
+ * Gets data from a dropdown created using FAST
+ */
+export function getDataFromDropDown(dropdownId: string): string | null | undefined {
+	return document.getElementById(dropdownId)?.getElementsByClassName("ui-button__content")[0]?.textContent;
+}

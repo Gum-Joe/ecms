@@ -1,0 +1,40 @@
+#setup-teams {
+	.teams-setup-container {
+		display: flex;
+		gap: 32px;
+		flex-direction: column;
+
+		> button {
+			width: max-content;
+		}
+
+		.ecms-card {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			gap: 35px;
+
+			.colour-container {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+				.colour-square {
+					width: 70px;
+					height: 70px;
+					border: 1px solid #FFFFFF;
+					box-sizing: border-box;
+					border-radius: 8px;
+				}
+				p {
+					font-size: 16px;
+					margin-top: 0;
+				}
+			}
+			.form-container {
+				flex: 1 1 auto;
+			}
+		}
+	}
+	
+}

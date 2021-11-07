@@ -282,7 +282,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],
             ["react-bootstrap", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:2.0.0"],
             ["react-dom", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:17.0.2"],
-            ["react-hook-form", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:7.19.0"],
             ["react-hot-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.13.0"],
             ["react-redux", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:7.2.6"],
             ["react-router-dom", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:5.3.0"],
@@ -10180,28 +10179,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/fela",
             "@types/react",
             "fela",
-            "react"
-          ],
-          "linkType": "HARD",
-        }]
-      ]],
-      ["react-hook-form", [
-        ["npm:7.19.0", {
-          "packageLocation": "./.yarn/cache/react-hook-form-npm-7.19.0-abba8fe69f-e9d3668599.zip/node_modules/react-hook-form/",
-          "packageDependencies": [
-            ["react-hook-form", "npm:7.19.0"]
-          ],
-          "linkType": "SOFT",
-        }],
-        ["virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:7.19.0", {
-          "packageLocation": "./.yarn/__virtual__/react-hook-form-virtual-d0f64bb1d3/0/cache/react-hook-form-npm-7.19.0-abba8fe69f-e9d3668599.zip/node_modules/react-hook-form/",
-          "packageDependencies": [
-            ["react-hook-form", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:7.19.0"],
-            ["@types/react", "npm:17.0.30"],
-            ["react", "npm:17.0.2"]
-          ],
-          "packagePeers": [
-            "@types/react",
             "react"
           ],
           "linkType": "HARD",
