@@ -49,12 +49,16 @@ export interface SetupFrameProps {
 	 * ID of a form being used, so the Next button submits it
 	 */
 	formID?: string;
+	/** 
+	 * Function to handle Next being clicked - use this or formID and onSubmit
+	*/
+	onNext?: React.MouseEventHandler<HTMLButtonElement>;
 }
 /**
  * Base Setup Components
  * Creates the surface upon which user interative elements for setup are placed
  */
-const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true, className = "", id: frameId = "", noNextButton = false, ...props }) => {
+const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true, className = "", id: frameId = "", noNextButton = false, onNext, ...props }) => {
 	const history = useHistory();
 	return ( 
 		<CHBBlurredBG>
@@ -66,7 +70,7 @@ const SetupFrame: FunctionComponent<SetupFrameProps> = ({ showBackButton = true,
 					
 					<div className="setup-actions">
 						{!noNextButton ?
-							(<Button className="advance-setup" form={props.formID} type="submit">
+							(<Button className="advance-setup" onClick={onNext} form={props.formID} type="submit">
 								Next
 							</Button>)
 						/* TODO: Add Skip button */ : null}

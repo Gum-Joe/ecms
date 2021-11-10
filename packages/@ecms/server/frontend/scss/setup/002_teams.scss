@@ -9,6 +9,12 @@
 		}
 
 		.ecms-card {
+			> button {
+				margin-top: 26px;
+			}
+		}
+
+		.ecms-card {
 			display: flex;
 			flex-direction: row;
 			align-items: center;
@@ -29,6 +35,23 @@
 				p {
 					font-size: 16px;
 					margin-top: 0;
+				}
+				
+				.colour-square:hover {
+					opacity: 0.8;
+					cursor: pointer;
+				}
+
+				.ms-ColorPicker-colorSquare {
+					border-radius: 3px;
+				}
+
+				.ms-TextField-fieldGroup {
+					@include input-like;
+					input {
+						color: $text-color;
+					}
+					
 				}
 			}
 			.form-container {

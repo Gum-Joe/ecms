@@ -11,9 +11,7 @@
 
 	input {
 		/* Dark/Fill Color/Control/Default (from Figma) */
-		background: rgba(255, 255, 255, 0.0605);
-		border: 1px solid rgba(255, 255, 255, 0.36);
-		border-radius: 3px;
+		@include input-like;
 		height: 40px;
 
 		color: $text-color;

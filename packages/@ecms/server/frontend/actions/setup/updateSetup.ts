@@ -37,7 +37,7 @@ export const startSetup: ActionCreator<ThunkAction<Promise<SetupActions>, RootSt
  * 
  * Types from updateSetup
  */
-const updateSetup: (updatedSetup: Omit<SetupState, "state">) => ThunkAction<Promise<SetupActions>, RootState, void, SetupActions>  = (updatedSetup) => async (dispatch, getState) => {
+const updateSetup: (updatedSetup: Omit<SetupState, "state">) => ThunkAction<Promise<SetupActions>, RootState, void, SetupActions> = (updatedSetup) => async (dispatch, getState) => {
 	console.debug("Updating setup in the server...");
 	const fullUpdatedSetup = {
 		...getState().setup,

@@ -38,6 +38,11 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 				...state,
 				...action.payload,
 			};
+		case Actions.SET_TEAMS:
+			return {
+				...state,
+				teams: action.payload,
+			};
 		default:
 			console.warn("INVALID ACTION RECEIVED TO SETUP CONTEXT.");
 			return state;

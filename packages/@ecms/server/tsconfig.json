@@ -7,7 +7,12 @@
 		"tsBuildInfoFile": "../../../.build-cache/server.tsbuildinfo",
 		"typeRoots": [
 			"src/@types/express.d.ts",
-		]
+		],
+		"paths": {
+			"@ecms/*": [
+				"packages/@ecms/*/src"
+			]
+		}
 	},
 	"references": [
 		{

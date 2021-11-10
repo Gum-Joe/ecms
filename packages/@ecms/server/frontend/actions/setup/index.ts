@@ -6,6 +6,7 @@
  * @packageDocumentation
  */
 import { ResStartSetup } from "@ecms/api/setup";
+import { StagingTeam } from "../../components/setup/util";
 import { SetupState } from "../../constants/interfaces";
 import { createGeneralAction } from "../createGeneralAction";
 
@@ -18,6 +19,7 @@ export enum SetupActionsList {
 	START_SETUP = "SETUP_START",
 	UPDATE_SETUP = "UPDATE_SETUP",
 	SETUP_FAILED = "SETUP_FAILED",
+	SET_TEAMS = "SET_TEAMS"
 }
 
 /**
@@ -40,6 +42,7 @@ export type SetupActionPayloads = {
 	[SetupActionsList.START_SETUP]: StartSetup
 	[SetupActionsList.UPDATE_SETUP]: Omit<SetupState, "state">,
 	[SetupActionsList.SETUP_FAILED]: Error,
+	[SetupActionsList.SET_TEAMS]: StagingTeam[]
 	//[SetupActionsList.SETUP_BASIC_DETAILS]: any;
 }
 
@@ -67,6 +70,8 @@ export type ActionMap<M extends Record<string, any>> = {
  * And finally, map our setup actions - use this for a function that can accept any setup action
  */
 export type SetupActions = ActionMap<SetupActionPayloads>[keyof ActionMap<SetupActionPayloads>];
+
+export default SetupActionsList;
 
 
 
