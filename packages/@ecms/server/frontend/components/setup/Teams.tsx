@@ -12,9 +12,9 @@ import Card from "../common/Card";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
 import { ColorPicker } from "@fluentui/react/lib/ColorPicker";
 import type { IColor } from "@fluentui/react";
-import { useAppDispatch } from "../../util/hooks";
+import { useAppDispatch, useAppSelector } from "../../util/hooks";
 import { setupAction } from "../../actions/setup";
-import { StagingTeam } from "./util";
+import { StagingTeam, useSetupRedirector } from "./util";
 import Actions from "../../actions/setup";
 import updateSetup from "../../actions/setup/updateSetup";
 
@@ -25,11 +25,8 @@ const SETUP_TEAMS_FORM = "setup-teams-form";
 const Teams: React.FC = () => {
 
 	// Temporary store for teams
-	const [teams, setteams] = useState<StagingTeam[]>([{
-		name: "Tudor",
-		colour: HOUSE_TUDOR,
-		showPicker: false,
-	}]);
+	const teamsFromState = useAppSelector(state => state.setup.teams);
+	const [teams, setteams] = useState<StagingTeam[]>(teamsFromState as StagingTeam[]);
 
 	const handleColSqaureClick = useCallback((index: number) => () => {
 		setteams((currentTeams) => {
@@ -77,6 +74,7 @@ const Teams: React.FC = () => {
 	}, []);
 
 	const dispatch = useAppDispatch();
+	const setupPage = useSetupRedirector();
 
 	const advanceSetup = useCallback((event) => {
 		event.preventDefault();
@@ -102,6 +100,8 @@ const Teams: React.FC = () => {
 		dispatch(updateSetup({
 			teams: teamsToSend,
 		}));
+
+		setupPage("/matches");
 	} , [dispatch, teams]);
 
 	return (
@@ -147,7 +147,7 @@ const Teams: React.FC = () => {
 							</div>
 							<div className="form-container">
 								<label htmlFor="team-1">Name</label>
-								<input type="text" name={`team-${index}`} placeholder="Team Name" required />
+								<input type="text" name={`team-${index}`} placeholder="Team Name" required value={team.name} />
 							</div>
 
 							<Button buttonType="primary" onClick={removeTeam(index)}>
