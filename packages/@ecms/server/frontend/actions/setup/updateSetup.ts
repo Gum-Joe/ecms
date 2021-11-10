@@ -49,6 +49,7 @@ const updateSetup: (updatedSetup: Omit<SetupState, "state">) => ThunkAction<Prom
 		await axios.put("/api/setup/partial", fullUpdatedSetup);
 	} catch (err) {
 		console.error("Error updating setup on the server:", err);
+		return dispatch(setupAction(SetupActionsList.SETUP_FAILED, new Error(`Error: Could not udate setup on the server! Got error "${(err as AxiosError).message}"`)));
 	}
 
 	return dispatch(setupAction(SetupActionsList.UPDATE_SETUP, updatedSetup));
