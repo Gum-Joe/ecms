@@ -36,7 +36,7 @@ export const SetupHeader: React.FC = (props) => {
 
 export interface SetupFrameProps {
 	/** The next setup page to navigate to (relative to the /setup route) */
-	nextPage: string;
+	nextPage?: string;
 	/** Show the back button (to go back a page) */
 	showBackButton?: boolean;
 	/** Custom classNames for the setup frame for custom CSS for different setup screen */

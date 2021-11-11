@@ -7,6 +7,7 @@ import { FluentCheckbox } from "../fluent";
 import SetupForm from "./SetupForm";
 import updateSetup from "../../actions/setup/updateSetup";
 import { useSetupRedirector, getDataFromDropDown } from "./util";
+import SetupContainer from "./SetupContainer";
 
 
 /**
@@ -67,7 +68,7 @@ const BasicDetails: FunctionComponent = () => {
 				<h1>{`${(setupType || "UNKNOWN")[0]?.toUpperCase()}${setupType?.slice(1)}`} Setup</h1>
 				<h3>Let’s get started - some basic details first</h3>
 			</SetupHeader>
-			<div className="setup-form-container">
+			<SetupContainer>
 				<SetupForm onSubmit={onSubmit} id={SETUP_BASIC_DETAILS_FORM}>
 					<h2>Basic Details</h2>
 					<section>
@@ -100,7 +101,7 @@ const BasicDetails: FunctionComponent = () => {
 						</div>
 					</section>
 				</SetupForm>
-			</div>
+			</SetupContainer>
 		</SetupFrame>
 	);
 };

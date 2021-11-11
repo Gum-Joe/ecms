@@ -1,13 +1,15 @@
 import { teamsInitializer } from "@ecms/models";
 import { useRouteMatch, useHistory } from "react-router-dom";
 
+export const SETUP_BASE_ROUTE = "/setup";
+
 /**
  * Hook to redirect to a different setup
  */
 export function useSetupRedirector() {
 	const { path, url } = useRouteMatch();
 	const history = useHistory();
-	return (setupPage: string) => history.push(`${url}${setupPage}`);
+	return (setupPage: string) => history.push(`${SETUP_BASE_ROUTE}${setupPage}`);
 }
 
 /**

@@ -34,3 +34,15 @@
 	border: 1px solid rgba(255, 255, 255, 0.36);
 	border-radius: 3px;
 }
+
+// Apply spacing between items using flex for setup section
+@mixin setup-spacing($spacing) {
+	display: flex;
+	gap: $spacing;
+	flex-direction: column;
+
+	// Fix strange issue where button uses the entire width
+	> button {
+		width: max-content;
+	}
+}

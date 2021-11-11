@@ -26,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({ buttonType = "primary", className = "",
 export class ButtonWithIcons extends React.Component<ButtonProps> {
 
 	render() {
-		return <button className={this.props.buttonType + " icon-button " + this.props.className} {...this.props}>{this.props.children}</button>;
+		return <button className={(this.props.buttonType || "primary") + " icon-button " + this.props.className} {...this.props}>{this.props.children}</button>;
 	}
 
 }

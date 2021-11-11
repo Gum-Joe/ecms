@@ -17,6 +17,7 @@ import { setupAction } from "../../actions/setup";
 import { StagingTeam, useSetupRedirector } from "./util";
 import Actions from "../../actions/setup";
 import updateSetup from "../../actions/setup/updateSetup";
+import SetupContainer from "./SetupContainer";
 
 const SETUP_TEAMS_FORM = "setup-teams-form";
 
@@ -26,7 +27,7 @@ const Teams: React.FC = () => {
 
 	// Temporary store for teams
 	const teamsFromState = useAppSelector(state => state.setup.teams);
-	const [teams, setteams] = useState<StagingTeam[]>(teamsFromState as StagingTeam[]);
+	const [teams, setteams] = useState<StagingTeam[]>(teamsFromState as StagingTeam[] || []);
 
 	const handleColSqaureClick = useCallback((index: number) => () => {
 		setteams((currentTeams) => {
@@ -105,13 +106,13 @@ const Teams: React.FC = () => {
 	} , [dispatch, teams]);
 
 	return (
-		<SetupFrame nextPage="/matches" id="setup-teams" formID={SETUP_TEAMS_FORM}>
+		<SetupFrame id="setup-teams" formID={SETUP_TEAMS_FORM}>
 			<SetupHeader>
 				<h1>Set Teams</h1>
 				<h3>Setup your teams here</h3>
 			</SetupHeader>
 
-			<form id={SETUP_TEAMS_FORM} onSubmit={advanceSetup} className="teams-setup-container setup-form-container">
+			<SetupContainer as={"form"} id={SETUP_TEAMS_FORM} onSubmit={advanceSetup} className="teams-setup-container">
 				{
 					teams.map((team, index) =>
 						<Card key={index}>
@@ -147,7 +148,7 @@ const Teams: React.FC = () => {
 							</div>
 							<div className="form-container">
 								<label htmlFor="team-1">Name</label>
-								<input type="text" name={`team-${index}`} placeholder="Team Name" required value={team.name} />
+								<input type="text" name={`team-${index}`} placeholder="Team Name" required value={team.name || undefined} />
 							</div>
 
 							<Button buttonType="primary" onClick={removeTeam(index)}>
@@ -165,7 +166,7 @@ const Teams: React.FC = () => {
 
 							Add Team
 				</ButtonWithIcons>
-			</form>
+			</SetupContainer>
 		</SetupFrame>
 	);
 };

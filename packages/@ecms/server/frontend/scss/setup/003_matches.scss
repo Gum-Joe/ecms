@@ -1,0 +1,51 @@
+/** SCSS for Matches setup */
+@import "../mixins";
+
+.setup-matches-container {
+	
+	@include setup-spacing(24px);
+
+	.match-container {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: 19px;
+
+		.matches-vs {
+			flex: none;
+			order: 1;
+			flex-grow: 0;
+			//margin: 0px 19px;
+		}
+
+		.setup-match-0 {
+			flex: none;
+			order: 0;
+			flex-grow: 1;
+			//margin: 0px 19px;
+		}
+
+		.setup-match-1 {
+			flex: none;
+			order: 2;
+			flex-grow: 1;
+			//margin: 0px 19px;
+		}
+
+		.delete-match {
+			flex: none;
+			order: 3;
+			flex-grow: 0;
+			//margin: 0px 19px;
+
+			&:hover {
+				cursor: pointer;
+				opacity: 0.8;
+			}
+		}
+
+		.ui-dropdown__container {
+			width: 100%;
+		}
+	}
+}

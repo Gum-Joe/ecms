@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { Route, Switch, useRouteMatch } from "react-router-dom";
+import Matches from "./Matches";
 import SetupRenderer from "./SetupRender";
 import Teams from "./Teams";
 
@@ -17,6 +18,9 @@ const SetupRouter: FunctionComponent = () => {
 			</Route>
 			<Route exact path={`${path}/teams`}>
 				<Teams />
+			</Route>
+			<Route exact path={`${path}/matches`}>
+				<Matches />
 			</Route>
 		</Switch>
 		

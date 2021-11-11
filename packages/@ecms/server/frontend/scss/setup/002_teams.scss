@@ -1,12 +1,7 @@
+@import "../mixins";
 #setup-teams {
 	.teams-setup-container {
-		display: flex;
-		gap: 32px;
-		flex-direction: column;
-
-		> button {
-			width: max-content;
-		}
+		@include setup-spacing(32px);
 
 		.ecms-card {
 			> button {

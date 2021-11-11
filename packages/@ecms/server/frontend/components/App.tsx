@@ -6,6 +6,7 @@ import LoginError from "./login/LoginError";
 import checkIsAuthenticated from "../util/checkIsAuth";
 import HomepageMain from "./main/Homepage";
 import SetupRouter from "./setup/Router";
+import { SETUP_BASE_ROUTE } from "./setup/util";
 
 
 /**
@@ -55,7 +56,7 @@ const App: React.FC = () =>  {
 			</Route>
 			<Route exact path="/login/error" render={(props) => <LoginError {...props} />} />
 
-			<Route path="/setup"><SetupRouter /></Route>
+			<Route path={`${SETUP_BASE_ROUTE}`}><SetupRouter /></Route>
 		</Router>
 	);
 };
