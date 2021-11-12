@@ -19,7 +19,11 @@ export enum SetupActionsList {
 	START_SETUP = "SETUP_START",
 	UPDATE_SETUP = "UPDATE_SETUP",
 	SETUP_FAILED = "SETUP_FAILED",
-	SET_TEAMS = "SET_TEAMS"
+	SET_TEAMS = "SET_TEAMS",
+	/** Adds a match */
+	ADD_MATCH = "ADD_MATCH",
+	/** Updates a Match */
+	UPDATE_MATCH = "UPDATE_MATCH",
 }
 
 /**
@@ -35,6 +39,18 @@ export interface StartSetup {
 }
 
 /**
+ * Use this when updating a match
+ */
+export interface UpdateMatch {
+	/** Index of match in {@link SetupState.matches} array being updated */
+	id: number;
+	/** Are we setting the first part or second part of a match? */
+	setMatchPart: number;
+	/** Index of team in the {@link SetupState.teams} that that part of the match is set to */
+	team: number;
+}
+
+/**
  * Type for mapping Action payloads
  * Used for type checking
  */
@@ -43,6 +59,8 @@ export type SetupActionPayloads = {
 	[SetupActionsList.UPDATE_SETUP]: Omit<SetupState, "state">,
 	[SetupActionsList.SETUP_FAILED]: Error,
 	[SetupActionsList.SET_TEAMS]: StagingTeam[]
+	[SetupActionsList.ADD_MATCH]: null;
+	[SetupActionsList.UPDATE_MATCH]: UpdateMatch;
 	//[SetupActionsList.SETUP_BASIC_DETAILS]: any;
 }
 

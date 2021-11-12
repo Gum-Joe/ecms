@@ -116,11 +116,11 @@ export default interface SetupEventOrGroup extends
 	 * Matches to create between teams IF enable_teams is true AND event_settings.data_tracked is "matches".
 	 */
 	matches?: {
-		/** value of this propertry here is the index in the teams array */
+		/** value of this propertry here is the index in the teams array. `-1` means unset. */
 		team_1: number;
-		/** value of this propertry here is the index in the teams array */
+		/** value of this propertry here is the index in the teams array. `-1` means unset. */
 		team_2: number;
-	};
+	}[];
 
 	/** Define the point system for this event/group */
 	points?: Omit<points_settingsInitializer, "points_settings_id">;

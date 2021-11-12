@@ -43,6 +43,34 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 				...state,
 				teams: action.payload,
 			};
+		case Actions.ADD_MATCH:
+			return {
+				...state,
+				matches: (state.matches || []).concat([
+					{
+						team_1: -1,
+						team_2: -1,
+					},
+				]),
+			};
+		case Actions.UPDATE_MATCH:
+			const newMatches = [...(state.matches || [])];
+			if (action.payload.setMatchPart === 0) {
+				newMatches[action.payload.id] = {
+					team_1: action.payload.team,
+					team_2: newMatches[action.payload.id].team_2
+				};
+			} else if (action.payload.setMatchPart === 1) {
+				newMatches[action.payload.id] = {
+					team_2: action.payload.team,
+					team_1: newMatches[action.payload.id].team_1
+				};
+			}
+			
+			return {
+				...state,
+				matches: newMatches
+			};
 		default:
 			console.warn("INVALID ACTION RECEIVED TO SETUP CONTEXT.");
 			return state;
