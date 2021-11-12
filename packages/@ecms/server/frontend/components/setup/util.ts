@@ -4,7 +4,7 @@ import { useRouteMatch, useHistory } from "react-router-dom";
 export const SETUP_BASE_ROUTE = "/setup";
 
 /**
- * Hook to redirect to a different setup
+ * Hook to redirect to a different setup page
  */
 export function useSetupRedirector() {
 	const { path, url } = useRouteMatch();

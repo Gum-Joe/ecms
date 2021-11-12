@@ -27,6 +27,7 @@ const Teams: React.FC = () => {
 
 	// Temporary store for teams
 	const teamsFromState = useAppSelector(state => state.setup.teams);
+	// (you need to attach the names manually as this is done onSubmit)
 	const [teams, setteams] = useState<StagingTeam[]>(teamsFromState as StagingTeam[] || []);
 
 	const handleColSqaureClick = useCallback((index: number) => () => {
@@ -61,6 +62,7 @@ const Teams: React.FC = () => {
 				({
 					name: "",
 					// From https://css-tricks.com/snippets/javascript/random-hex-color/
+					// Randomly generate a colour
 					colour: "#" + Math.floor(Math.random() * 16777215).toString(16),
 				} as StagingTeam)
 			];
@@ -77,14 +79,16 @@ const Teams: React.FC = () => {
 	const dispatch = useAppDispatch();
 	const setupPage = useSetupRedirector();
 
+	/** Copy teams to the store on clicking "Next" */
 	const advanceSetup = useCallback((event) => {
 		event.preventDefault();
 		const teamsToSend = [...teams];
-		
+
+		// Grab Team imputs from the inputs boxes for each.
 		const data = new FormData(event.target as HTMLFormElement);
 		const formObject: Record<string, string> = Object.fromEntries(data.entries()) as Record<string, string>;
 
-		// Set correspondiong tags
+		// Set correspondiong tags - use the `name` attribute of the inputs to find the correct team name and insert them into the `teamsToSend` array
 		for (const teamInput in formObject) {
 			if (Object.prototype.hasOwnProperty.call(formObject, teamInput)) {
 				if (teamInput.startsWith("team-")) {
@@ -98,12 +102,15 @@ const Teams: React.FC = () => {
 				
 			}
 		}
+
+		// Update global store
 		dispatch(updateSetup({
 			teams: teamsToSend,
 		}));
 
+		// Redirect to next page
 		setupPage("/matches");
-	} , [dispatch, teams]);
+	} , [dispatch, teams, setupPage]);
 
 	return (
 		<SetupFrame id="setup-teams" formID={SETUP_TEAMS_FORM}>
