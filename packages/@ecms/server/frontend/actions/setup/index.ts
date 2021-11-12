@@ -24,6 +24,8 @@ export enum SetupActionsList {
 	ADD_MATCH = "ADD_MATCH",
 	/** Updates a Match */
 	UPDATE_MATCH = "UPDATE_MATCH",
+	/** Deletes a match */
+	DELETE_MATCH = "DELETE_MATCH",
 }
 
 /**
@@ -62,6 +64,7 @@ export type SetupActionPayloads = {
 	[SetupActionsList.ADD_MATCH]: null;
 	[SetupActionsList.UPDATE_MATCH]: UpdateMatch;
 	//[SetupActionsList.SETUP_BASIC_DETAILS]: any;
+	[SetupActionsList.DELETE_MATCH]: number;
 }
 
 /**

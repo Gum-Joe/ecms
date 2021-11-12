@@ -54,22 +54,29 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 				]),
 			};
 		case Actions.UPDATE_MATCH:
+			// eslint-disable-next-line no-case-declarations
 			const newMatches = [...(state.matches || [])];
 			if (action.payload.setMatchPart === 0) {
 				newMatches[action.payload.id] = {
 					team_1: action.payload.team,
-					team_2: newMatches[action.payload.id].team_2
+					team_2: newMatches[action.payload.id].team_2,
 				};
 			} else if (action.payload.setMatchPart === 1) {
 				newMatches[action.payload.id] = {
+					team_1: newMatches[action.payload.id].team_1,
 					team_2: action.payload.team,
-					team_1: newMatches[action.payload.id].team_1
 				};
 			}
 			
 			return {
 				...state,
 				matches: newMatches
+			};
+		case Actions.DELETE_MATCH:
+			// eslint-disable-next-line no-case-declarations
+			return {
+				...state,
+				matches: ((state.matches || []).filter((_, i) => i !== action.payload)), // Filter from GitHub CoPilot
 			};
 		default:
 			console.warn("INVALID ACTION RECEIVED TO SETUP CONTEXT.");

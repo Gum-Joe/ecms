@@ -21,25 +21,30 @@ const Matches: React.FC = (props) => {
 	const matches = useAppSelector(state => state.setup.matches) || [];
 	const teams = useAppSelector(state => state.setup.teams) || [];
 
-	// Map teams to indicies
-	const teamsMap = new Map(teams.map((team, index) => [team.name, index]));
+	
 
 	const dispatch = useAppDispatch();
 
 	const addMatch = useCallback(() => {
-		dispatch(setupAction(Actions.ADD_MATCH, {}));
+		dispatch(setupAction(Actions.ADD_MATCH, null));
 	}, [dispatch]);
 
-	const handleMatchSelection = useCallback((matchIndex, matchPart) => (item: string) => {
+	const handleMatchSelection = (matchIndex, matchPart) => (item: string) => {
+		// Map teams to indicies
+		const teamsMap = new Map(teams.map((team, index) => [team.name, index]));
 		// Find team selected
-		const teamIndex = teamsMap.get(item);
+		const teamIndex = teamsMap.get(item) as number;
 		dispatch(setupAction(Actions.UPDATE_MATCH, {
 			id: matchIndex,
 			setMatchPart: matchPart,
 			team: teamIndex,
 		}));
 		
-	}, []);
+	};
+
+	const deleteMatch = useCallback((matchIndex) => () => {
+		dispatch(setupAction(Actions.DELETE_MATCH, matchIndex));
+	}, [dispatch]);
 
 	return (
 		<SetupFrame nextPage="/">
@@ -54,27 +59,27 @@ const Matches: React.FC = (props) => {
 							<div className="match-container">
 								<Dropdown
 									items={teams.map((team) => team.name)}
-									placeholder={"Select a Team"}
-									name={match.team_2 === -1 ? "Select a Team" : (teams[match.team_2].name || "NO TEAM NAME FOUND")}
+									placeholder={match.team_1 === -1 ? "Select a Team" : (teams[match.team_1]?.name || "NO TEAM NAME FOUND")}
 									required={true}
 									className="setup-match-0"
 									getA11ySelectionMessage={{
 										onAdd: handleMatchSelection(index, 0)
 									}}
+									fluid
 									
 								/>
 								<p className="matches-vs">vs</p>
 								<Dropdown
 									items={teams.map((team) => team.name)}
-									placeholder={match.team_2 === -1 ? "Select a Team" : (teams[match.team_2].name || "NO TEAM NAME FOUND")}
-									name={`match-${index}-1`}
+									placeholder={match.team_2 === -1 ? "Select a Team" : (teams[match.team_2]?.name || "NO TEAM NAME FOUND")}
 									required={true}
 									className="setup-match-1"
 									getA11ySelectionMessage={{
 										onAdd: handleMatchSelection(index, 1)
 									}}
+									fluid
 								/>
-								<p className="delete-match"><FontAwesomeIcon icon={faTrash} /></p>
+								<p className="delete-match"><FontAwesomeIcon icon={faTrash} onClick={deleteMatch(index)} /></p>
 							</div>
 						</Card>
 					)
