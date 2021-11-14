@@ -207,6 +207,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@ecms/models", "workspace:packages/@ecms/models"],
             ["@fluentui/react", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:8.41.4"],
             ["@fluentui/react-northstar", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:0.59.0"],
+            ["@fluentui/web-components", "npm:2.0.2"],
             ["@fortawesome/fontawesome-svg-core", "npm:1.2.36"],
             ["@fortawesome/free-brands-svg-icons", "npm:5.15.4"],
             ["@fortawesome/free-regular-svg-icons", "npm:5.15.4"],
@@ -239,6 +240,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react-bootstrap", "npm:0.32.28"],
             ["@types/react-color", "npm:3.0.6"],
             ["@types/react-dom", "npm:17.0.9"],
+            ["@types/react-dropzone", "npm:5.1.0"],
             ["@types/react-hot-loader", "npm:4.1.1"],
             ["@types/react-redux", "npm:7.1.20"],
             ["@types/react-router-dom", "npm:5.3.1"],
@@ -284,6 +286,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["react", "npm:17.0.2"],
             ["react-bootstrap", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:2.0.0"],
             ["react-dom", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:17.0.2"],
+            ["react-dropzone", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:11.4.2"],
             ["react-hot-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.13.0"],
             ["react-redux", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:7.2.6"],
             ["react-router-dom", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:5.3.0"],
@@ -946,6 +949,20 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@fluentui/web-components", [
+        ["npm:2.0.2", {
+          "packageLocation": "./.yarn/cache/@fluentui-web-components-npm-2.0.2-5b07b48f64-4dfcc96478.zip/node_modules/@fluentui/web-components/",
+          "packageDependencies": [
+            ["@fluentui/web-components", "npm:2.0.2"],
+            ["@microsoft/fast-colors", "npm:5.1.4"],
+            ["@microsoft/fast-element", "npm:1.6.2"],
+            ["@microsoft/fast-foundation", "npm:2.26.2"],
+            ["@microsoft/fast-web-utilities", "npm:5.0.2"],
+            ["tslib", "npm:1.14.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@fortawesome/fontawesome-common-types", [
         ["npm:0.2.36", {
           "packageLocation": "./.yarn/unplugged/@fortawesome-fontawesome-common-types-npm-0.2.36-4ead73741a/node_modules/@fortawesome/fontawesome-common-types/",
@@ -1111,6 +1128,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@microsoft/fast-element", "npm:1.6.2"],
             ["@microsoft/fast-web-utilities", "npm:5.0.2"],
             ["@microsoft/tsdoc-config", "npm:0.13.9"],
+            ["tabbable", "npm:5.2.1"],
+            ["tslib", "npm:1.14.1"]
+          ],
+          "linkType": "HARD",
+        }],
+        ["npm:2.26.2", {
+          "packageLocation": "./.yarn/cache/@microsoft-fast-foundation-npm-2.26.2-b6eac9372e-63ebc8882b.zip/node_modules/@microsoft/fast-foundation/",
+          "packageDependencies": [
+            ["@microsoft/fast-foundation", "npm:2.26.2"],
+            ["@microsoft/fast-element", "npm:1.6.2"],
+            ["@microsoft/fast-web-utilities", "npm:5.0.2"],
             ["tabbable", "npm:5.2.1"],
             ["tslib", "npm:1.14.1"]
           ],
@@ -1885,6 +1913,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [
             ["@types/react-dom", "npm:17.0.9"],
             ["@types/react", "npm:17.0.30"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["@types/react-dropzone", [
+        ["npm:5.1.0", {
+          "packageLocation": "./.yarn/cache/@types-react-dropzone-npm-5.1.0-0af089081a-2b68fcf015.zip/node_modules/@types/react-dropzone/",
+          "packageDependencies": [
+            ["@types/react-dropzone", "npm:5.1.0"],
+            ["react-dropzone", "virtual:0af089081a89dc45ec41e6a9ffcade37783ceba88d6f71acfb3bd7986da2b5e4b83b0217d937b271e6460bd5acd597a59b1086a5f9030463f235118938306d5e#npm:11.4.2"]
           ],
           "linkType": "HARD",
         }]
@@ -3344,6 +3382,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/atob-npm-2.1.2-bcb583261e-dfeeeb7009.zip/node_modules/atob/",
           "packageDependencies": [
             ["atob", "npm:2.1.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["attr-accept", [
+        ["npm:2.2.2", {
+          "packageLocation": "./.yarn/cache/attr-accept-npm-2.2.2-b9cd0d8eac-496f724935.zip/node_modules/attr-accept/",
+          "packageDependencies": [
+            ["attr-accept", "npm:2.2.2"]
           ],
           "linkType": "HARD",
         }]
@@ -6097,6 +6144,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [
             "@types/webpack",
             "webpack"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["file-selector", [
+        ["npm:0.2.4", {
+          "packageLocation": "./.yarn/cache/file-selector-npm-0.2.4-ba143a8c28-83341e7416.zip/node_modules/file-selector/",
+          "packageDependencies": [
+            ["file-selector", "npm:0.2.4"],
+            ["tslib", "npm:2.3.1"]
           ],
           "linkType": "HARD",
         }]
@@ -10479,6 +10536,47 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["object-assign", "npm:4.1.1"],
             ["react", "npm:17.0.2"],
             ["scheduler", "npm:0.20.2"]
+          ],
+          "packagePeers": [
+            "@types/react",
+            "react"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["react-dropzone", [
+        ["npm:11.4.2", {
+          "packageLocation": "./.yarn/cache/react-dropzone-npm-11.4.2-28cc148b27-f8dc6af691.zip/node_modules/react-dropzone/",
+          "packageDependencies": [
+            ["react-dropzone", "npm:11.4.2"]
+          ],
+          "linkType": "SOFT",
+        }],
+        ["virtual:0af089081a89dc45ec41e6a9ffcade37783ceba88d6f71acfb3bd7986da2b5e4b83b0217d937b271e6460bd5acd597a59b1086a5f9030463f235118938306d5e#npm:11.4.2", {
+          "packageLocation": "./.yarn/__virtual__/react-dropzone-virtual-0905d56add/0/cache/react-dropzone-npm-11.4.2-28cc148b27-f8dc6af691.zip/node_modules/react-dropzone/",
+          "packageDependencies": [
+            ["react-dropzone", "virtual:0af089081a89dc45ec41e6a9ffcade37783ceba88d6f71acfb3bd7986da2b5e4b83b0217d937b271e6460bd5acd597a59b1086a5f9030463f235118938306d5e#npm:11.4.2"],
+            ["@types/react", null],
+            ["attr-accept", "npm:2.2.2"],
+            ["file-selector", "npm:0.2.4"],
+            ["prop-types", "npm:15.7.2"],
+            ["react", null]
+          ],
+          "packagePeers": [
+            "@types/react",
+            "react"
+          ],
+          "linkType": "HARD",
+        }],
+        ["virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:11.4.2", {
+          "packageLocation": "./.yarn/__virtual__/react-dropzone-virtual-83b819976c/0/cache/react-dropzone-npm-11.4.2-28cc148b27-f8dc6af691.zip/node_modules/react-dropzone/",
+          "packageDependencies": [
+            ["react-dropzone", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:11.4.2"],
+            ["@types/react", "npm:17.0.30"],
+            ["attr-accept", "npm:2.2.2"],
+            ["file-selector", "npm:0.2.4"],
+            ["prop-types", "npm:15.7.2"],
+            ["react", "npm:17.0.2"]
           ],
           "packagePeers": [
             "@types/react",

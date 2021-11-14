@@ -129,6 +129,7 @@ __metadata:
     "@ecms/models": "workspace:packages/@ecms/models"
     "@fluentui/react": ^8.41.4
     "@fluentui/react-northstar": ^0.59.0
+    "@fluentui/web-components": ^2.0.2
     "@fortawesome/fontawesome-svg-core": ^1.2.36
     "@fortawesome/free-brands-svg-icons": ^5.15.4
     "@fortawesome/free-regular-svg-icons": ^5.15.4
@@ -161,6 +162,7 @@ __metadata:
     "@types/react-bootstrap": ^0.32.28
     "@types/react-color": ^3.0.6
     "@types/react-dom": ^17.0.9
+    "@types/react-dropzone": ^5.1.0
     "@types/react-hot-loader": ^4.1.1
     "@types/react-redux": ^7.1.20
     "@types/react-router-dom": ^5.3.1
@@ -206,6 +208,7 @@ __metadata:
     react: ^17.0.2
     react-bootstrap: ^2.0.0
     react-dom: ^17.0.2
+    react-dropzone: ^11.4.2
     react-hot-loader: ^4.13.0
     react-redux: ^7.2.6
     react-router-dom: ^5.3.0
@@ -634,6 +637,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fluentui/web-components@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "@fluentui/web-components@npm:2.0.2"
+  dependencies:
+    "@microsoft/fast-colors": ^5.1.0
+    "@microsoft/fast-element": ^1.6.0
+    "@microsoft/fast-foundation": ^2.24.0
+    "@microsoft/fast-web-utilities": ^5.0.0
+    tslib: ^1.13.0
+  checksum: 4dfcc964781194089762fb820bea43ea7e7bdd6682275156747bf2ee82232dfd2e2d41e328666dd1efd7566be0d659c283310ed7912c86f11d6632f15bb0a9c0
+  languageName: node
+  linkType: hard
+
 "@fortawesome/fontawesome-common-types@npm:^0.2.36":
   version: 0.2.36
   resolution: "@fortawesome/fontawesome-common-types@npm:0.2.36"
@@ -733,7 +749,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/fast-colors@npm:^5.1.4":
+"@microsoft/fast-colors@npm:^5.1.0, @microsoft/fast-colors@npm:^5.1.4":
   version: 5.1.4
   resolution: "@microsoft/fast-colors@npm:5.1.4"
   checksum: 9b5923a12c83a60cdc4a1caa8958cbf7c6ccd5a87bd3bc7993983da3bfe7365e37331e14727aeb69f717af3ac2e0a80dde7379acd27d0be434ac117bf3e2d744
@@ -754,10 +770,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/fast-element@npm:^1.6.2":
+"@microsoft/fast-element@npm:^1.6.0, @microsoft/fast-element@npm:^1.6.2":
   version: 1.6.2
   resolution: "@microsoft/fast-element@npm:1.6.2"
   checksum: 5baab39ca091845322a1da705ced5d41267f8daf8c08de195d0e6cc9abb58699318320c1844cce773eb281b052e64ed73d98b2a9a0457804b7a58837296b9c76
+  languageName: node
+  linkType: hard
+
+"@microsoft/fast-foundation@npm:^2.24.0":
+  version: 2.26.2
+  resolution: "@microsoft/fast-foundation@npm:2.26.2"
+  dependencies:
+    "@microsoft/fast-element": ^1.6.2
+    "@microsoft/fast-web-utilities": ^5.0.2
+    tabbable: ^5.2.0
+    tslib: ^1.13.0
+  checksum: 63ebc8882bebfa53853d787ad11cf58fbc829d4f9c32913a53add92afdad3f458a043fed29f0fd9f167d37ee28e16be21ad6598eab7424472471536300bfabbb
   languageName: node
   linkType: hard
 
@@ -786,7 +814,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@microsoft/fast-web-utilities@npm:^5.0.2":
+"@microsoft/fast-web-utilities@npm:^5.0.0, @microsoft/fast-web-utilities@npm:^5.0.2":
   version: 5.0.2
   resolution: "@microsoft/fast-web-utilities@npm:5.0.2"
   dependencies:
@@ -1372,6 +1400,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: b7e898e1a22643a371f58e801a3d1d8cf13a82d77063c24be73e840ef8d877ca1d04adc5db168d0dac3167dc050a26b1d70efc5fe8566a7f46a3c488a8322989
+  languageName: node
+  linkType: hard
+
+"@types/react-dropzone@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@types/react-dropzone@npm:5.1.0"
+  dependencies:
+    react-dropzone: "*"
+  checksum: 2b68fcf0153fb00e17088907490b823b6d81a29a02e615f820e347df2546f9318c5f025eeb33d575c648d01a14e55a19e528c32907608b5a7f727ff0e96b3923
   languageName: node
   linkType: hard
 
@@ -2569,6 +2606,13 @@ __metadata:
   bin:
     atob: bin/atob.js
   checksum: dfeeeb70090c5ebea7be4b9f787f866686c645d9f39a0d184c817252d0cf08455ed25267d79c03254d3be1f03ac399992a792edcd5ffb9c91e097ab5ef42833a
+  languageName: node
+  linkType: hard
+
+"attr-accept@npm:^2.2.1":
+  version: 2.2.2
+  resolution: "attr-accept@npm:2.2.2"
+  checksum: 496f7249354ab53e522510c1dc8f67a1887382187adde4dc205507d2f014836a247073b05e9d9ea51e2e9c7f71b0d2aa21730af80efa9af2d68303e5f0565c4d
   languageName: node
   linkType: hard
 
@@ -4913,6 +4957,15 @@ __metadata:
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
   checksum: faf43eecf233f4897b0150aaa874eeeac214e4f9de49738a9e0ef734a30b5260059e85b7edadf852b98e415f875bd5f12587768a93fd52aaf2e479ecf95fab20
+  languageName: node
+  linkType: hard
+
+"file-selector@npm:^0.2.2":
+  version: 0.2.4
+  resolution: "file-selector@npm:0.2.4"
+  dependencies:
+    tslib: ^2.0.3
+  checksum: 83341e7416352c7de0caf433b33c8d007d3c298c17d6ba0e70168af82bb045d905ddd6f4bc3ca764a2035c6f18eae7f52223dc6a784056f61b8391c351f88323
   languageName: node
   linkType: hard
 
@@ -8655,6 +8708,19 @@ fsevents@~2.3.2:
   languageName: node
   linkType: hard
 
+"react-dropzone@npm:*, react-dropzone@npm:^11.4.2":
+  version: 11.4.2
+  resolution: "react-dropzone@npm:11.4.2"
+  dependencies:
+    attr-accept: ^2.2.1
+    file-selector: ^0.2.2
+    prop-types: ^15.7.2
+  peerDependencies:
+    react: ">= 16.8"
+  checksum: f8dc6af69193133efe30ed11dd8c2212a180abd3833e91d03dab4bdc9546d47dcad311d7f72b4968b7d016871884555b9e16f7a490913b78dbfec8ce8f569193
+  languageName: node
+  linkType: hard
+
 "react-fela@npm:^10.6.1":
   version: 10.8.2
   resolution: "react-fela@npm:10.8.2"
@@ -10301,7 +10367,7 @@ resolve@~1.19.0:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0":
+"tslib@npm:^2.0.3, tslib@npm:^2.1.0":
   version: 2.3.1
   resolution: "tslib@npm:2.3.1"
   checksum: de17a98d4614481f7fcb5cd53ffc1aaf8654313be0291e1bfaee4b4bb31a20494b7d218ff2e15017883e8ea9626599b3b0e0229c18383ba9dce89da2adf15cb9

@@ -67,7 +67,7 @@ const Matches: React.FC = (props) => {
 		dispatch(updateSetup({}));
 
 		// Redirect to next page
-		setupPage("/");
+		setupPage("/competitors");
 	};
 
 	return (

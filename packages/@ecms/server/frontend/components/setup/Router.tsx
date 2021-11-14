@@ -3,6 +3,7 @@ import { Route, Switch, useRouteMatch } from "react-router-dom";
 import Matches from "./Matches";
 import SetupRenderer from "./SetupRender";
 import Teams from "./Teams";
+import Competitors from "./competitors";
 
  
 const SetupRouter: FunctionComponent = () => {
@@ -21,6 +22,9 @@ const SetupRouter: FunctionComponent = () => {
 			</Route>
 			<Route exact path={`${path}/matches`}>
 				<Matches />
+			</Route>
+			<Route exact path={`${path}/competitors`}>
+				<Competitors />
 			</Route>
 		</Switch>
 		
