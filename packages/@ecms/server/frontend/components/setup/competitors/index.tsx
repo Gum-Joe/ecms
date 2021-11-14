@@ -10,7 +10,9 @@ import { useDropzone } from "react-dropzone";
  */
 const Competitors: React.FC = () => {
 	useEffect(() => baseLayerLuminance.setValueFor(document.getElementById("setup-competitors") as HTMLElement, StandardLuminance.DarkMode), []);
+
 	// From https://react-dropzone.js.org/#section-basic-example
+	// Handles parsing the CSV
 	const onDrop = useCallback((acceptedFiles) => {
 		acceptedFiles.forEach((file: File) => {
 			const reader = new FileReader();
@@ -18,7 +20,7 @@ const Competitors: React.FC = () => {
 			reader.onabort = () => console.log("file reading was aborted");
 			reader.onerror = () => console.log("file reading has failed");
 			reader.onload = () => {
-				// Do whatever you want with the file contents
+				// Do whatever you want with the file contents - currently just read
 				const binaryStr = reader.result;
 				console.log(binaryStr);
 			};
@@ -38,8 +40,6 @@ const Competitors: React.FC = () => {
 		onDrop
 	});
 
-	
-	
 	return (
 		<SetupFrame nextPage="/">
 			<SetupHeader>
