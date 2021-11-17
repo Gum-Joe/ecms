@@ -32,3 +32,25 @@ fluent-tab-panel {
 		}
 	}
 }
+
+#csvImportedTable {
+	h4 {
+		// Asks to pick each column
+		font-size: 20px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	thead th:hover {
+		background-color: #313131;
+		cursor: pointer;
+	}
+
+	thead th[disabled=""] {
+		background-color: #141414;
+		color: darken($color: $text-color, $amount: 20%);
+		&:hover {
+			cursor: not-allowed;
+		}
+	}
+}

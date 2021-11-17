@@ -7,6 +7,7 @@ import checkIsAuthenticated from "../util/checkIsAuth";
 import HomepageMain from "./main/Homepage";
 import SetupRouter from "./setup/Router";
 import { SETUP_BASE_ROUTE } from "./setup/util";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 
 /**
@@ -34,6 +35,12 @@ const ProtectedHomePage: React.FC = (props) => {
 	);
 };
 
+const darkTheme = createTheme({
+	palette: {
+		mode: 'dark',
+	},
+});
+
 /**
  * The entry point of the ECMS SPA
  * 
@@ -43,21 +50,23 @@ const ProtectedHomePage: React.FC = (props) => {
  */
 const App: React.FC = () =>  {
 	return (
-		<Router>
-			<Route exact path="/">
-				<ProtectedHomePage />
-			</Route>
+		<ThemeProvider theme={darkTheme}>
+			<Router>
+				<Route exact path="/">
+					<ProtectedHomePage />
+				</Route>
 
-			<Route exact path="/login">
-				<LoginPage />
-			</Route>
-			<Route exact path="/login/postlogin">
-				<PostLogin />
-			</Route>
-			<Route exact path="/login/error" render={(props) => <LoginError {...props} />} />
+				<Route exact path="/login">
+					<LoginPage />
+				</Route>
+				<Route exact path="/login/postlogin">
+					<PostLogin />
+				</Route>
+				<Route exact path="/login/error" render={(props) => <LoginError {...props} />} />
 
-			<Route path={`${SETUP_BASE_ROUTE}`}><SetupRouter /></Route>
-		</Router>
+				<Route path={`${SETUP_BASE_ROUTE}`}><SetupRouter /></Route>
+			</Router>
+		</ThemeProvider>
 	);
 };
 
