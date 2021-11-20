@@ -11,11 +11,10 @@ import SetupContainer from "../SetupContainer";
 import SetupFrame, { SetupHeader } from "../SetupFrame";
 import { useDropzone } from "react-dropzone";
 import Button from "../../common/Button";
+import ServerUpload from "./upload";
+import { CSVResult, ColumnsToGet, ColumnsToGetRecord } from "./util";
 
-interface CSVResult {
-	headers: string[];
-	data: string[][];
-}
+
 
 const parseCSV = (csvResult: string): CSVResult => {
 	const csvLines = csvResult.includes("\r\n") ? csvResult.split("\r\n") : csvResult.split("\r\n");
@@ -26,7 +25,7 @@ const parseCSV = (csvResult: string): CSVResult => {
 	};
 };
 
-type ColumnsToGet = "nameIndex" | "teamIndex" | "yearGroupIndex";
+
 /** Maps columns to get to their state values */
 const colunmnsToGet = new Map<ColumnsToGet | "error", string>([
 	/** Index of the CSV column for names */
@@ -45,7 +44,7 @@ const Competitors: React.FC = () => {
 	useEffect(() => baseLayerLuminance.setValueFor(document.getElementById("setup-competitors") as HTMLElement, StandardLuminance.DarkMode), []);
 
 	const [csvData, setcsvData] = useState<CSVResult>();
-	const [csvMetaData, setcsvMetaData] = useState<Record<ColumnsToGet, number>>({
+	const [csvMetaData, setcsvMetaData] = useState<ColumnsToGetRecord>({
 		/** Index of the CSV column for names */
 		nameIndex: -1,
 		/** Index of the CSV column for teams */
@@ -165,7 +164,8 @@ const Competitors: React.FC = () => {
 											</TableContainer>
 										</>
 										:
-										<h1>Done</h1>
+										// Upload to server!
+										<ServerUpload csvMetaData={csvMetaData} csvData={csvData} />
 								}
 								
 							</fluent-tab-panel>
