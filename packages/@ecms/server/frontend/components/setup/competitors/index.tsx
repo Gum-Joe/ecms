@@ -10,6 +10,7 @@ import React, { useEffect, useCallback, useState } from "react";
 import SetupContainer from "../SetupContainer";
 import SetupFrame, { SetupHeader } from "../SetupFrame";
 import { useDropzone } from "react-dropzone";
+import Button from "../../common/Button";
 
 interface CSVResult {
 	headers: string[];
@@ -25,7 +26,7 @@ const parseCSV = (csvResult: string): CSVResult => {
 	};
 };
 
-type ColumnsToGet = "nameIndex" | "teamIndex" | "yearGroupIndex" | "error";
+type ColumnsToGet = "nameIndex" | "teamIndex" | "yearGroupIndex";
 /** Maps columns to get to their state values */
 const colunmnsToGet = new Map<ColumnsToGet | "error", string>([
 	/** Index of the CSV column for names */
@@ -53,6 +54,8 @@ const Competitors: React.FC = () => {
 		yearGroupIndex: -1,
 	});
 
+	// Used to store key last set so we can undo it
+	const [lastSetColumn, setlastSetColumn] = useState<ColumnsToGet | "error">("error");
 	// From https://react-dropzone.js.org/#section-basic-example
 	// Handles parsing the CSV
 	const onDrop = useCallback((acceptedFiles) => {
@@ -109,7 +112,18 @@ const Competitors: React.FC = () => {
 									Object.values(csvMetaData).includes(-1) ?
 										// At least one still to set
 										<>
-											<h4>Please select the column header with the <u>{colunmnsToGet.get((Object.entries(csvMetaData).find(item => item[1] === -1) || ("error" as ColumnsToGet))[0] as ColumnsToGet)}</u> in</h4>
+											<h4>
+												Please select the column header with the <u>{colunmnsToGet.get((Object.entries(csvMetaData).find(item => item[1] === -1) || ("error" as ColumnsToGet))[0] as ColumnsToGet)}</u> in
+												{lastSetColumn !== "error" && <Button
+													onClick={() => {
+														const newCSVMetaData = { ...csvMetaData };
+														newCSVMetaData[lastSetColumn] = -1;
+														setcsvMetaData(newCSVMetaData);
+
+													}}
+													buttonType="primary"
+													className="competitor-undo">Undo</Button>}
+											</h4>
 											<TableContainer component={Paper}>
 												<Table sx={{ minWidth: 1000 }} size="small" aria-label="table of imported competitors">
 													<TableHead>
@@ -118,10 +132,15 @@ const Competitors: React.FC = () => {
 																key={dataIndex}
 																align="left"
 																onClick={() => {
+																	// If we  find the index of this column has not been set in the csvMetadata..
 																	if (!Object.entries(csvMetaData).find(item => item[1] === dataIndex)) {
-																		const newMetadata = { ...csvMetaData };
-																		newMetadata[(Object.entries(csvMetaData).find(item => item[1] === -1) || ["error"])[0] as ColumnsToGet] = dataIndex;
+																		const newMetadata = { ...csvMetaData }; // Duplicate metatdata
+																		// Find the first column that has not been set (it's value is -1).
+																		// Return "error" key if all column set (i.e. none has value -1)
+																		const keyToSet = (Object.entries(csvMetaData).find(item => item[1] === -1) || ["error"])[0] as ColumnsToGet;
+																		newMetadata[keyToSet] = dataIndex;
 																		setcsvMetaData(newMetadata);
+																		setlastSetColumn(keyToSet);
 																	}
 
 																} }
