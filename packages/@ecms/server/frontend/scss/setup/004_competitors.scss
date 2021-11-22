@@ -68,7 +68,7 @@ fluent-tab-panel {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		height: 300px;
+		min-height: 300px;
 
 		> * {
 			margin-bottom: 15px;
@@ -79,5 +79,21 @@ fluent-tab-panel {
 		}
 
 
+	}
+
+	.csv-team-mapper {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		.ecms-card {
+			display: flex;
+			flex-direction: row;
+			gap: 10px;
+			align-items: center;
+			justify-content: center;
+		}
+		p {
+			font-size: 16px;
+		}
 	}
 }

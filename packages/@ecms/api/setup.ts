@@ -61,12 +61,21 @@ interface FilterCompetitors extends BaseSetupCompetitor {
 	filters: OmitIDKeys<competitor_filtersInitializer>[];
 }
 
+/** ECMS required columns for CSV metatdata for competitors */
+export type CompetitorCSVMetadataColumns = "nameIndex" | "teamIndex" | "yearGroupIndex";
+/** How columns are stored when collecting which column indices correspond to each {@link ColumnsToGet}. Use `-1` for not set. */
+export type CompetitorCSVMetatdata = Record<CompetitorCSVMetadataColumns, number>;
+
 /**
  * Competitors defined by import
  */
 interface ImportCompetitors extends BaseSetupCompetitor {
 	type: "discrete";
 	competitor_import_id: string;
+	csvMetadata: CompetitorCSVMetatdata;
+	/** Map teams in the CSV's teams column to the index of teams in {@link SetupEventOrGroup.teams} */
+	teamsMap: Record<string, number>;
+
 }
 
 /**

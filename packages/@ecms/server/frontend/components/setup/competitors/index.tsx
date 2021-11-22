@@ -15,9 +15,13 @@ import ServerUpload from "./upload";
 import { CSVResult, ColumnsToGet, ColumnsToGetRecord } from "./util";
 
 
-
+/**
+ * Parses a CSV
+ * @param csvResult raw input of the CSV file to parse
+ * @returns parsed CSV headers & data in the form of a 2D array[row][column]
+ */
 const parseCSV = (csvResult: string): CSVResult => {
-	const csvLines = csvResult.includes("\r\n") ? csvResult.split("\r\n") : csvResult.split("\r\n");
+	const csvLines = csvResult.includes("\r\n") ? csvResult.split("\r\n") : csvResult.split("\n");
 	const mappedCSV = csvLines.map(line => line.split(","));
 	return {
 		headers: mappedCSV[0],
@@ -65,8 +69,8 @@ const Competitors: React.FC = () => {
 			reader.onerror = () => console.log("file reading has failed");
 			reader.onload = () => {
 				// Do whatever you want with the file contents - currently just read
-				setcsvData(parseCSV(reader.result as string));
 				// Insert into state
+				setcsvData(parseCSV(reader.result as string));
 
 			};
 			reader.readAsText(file);

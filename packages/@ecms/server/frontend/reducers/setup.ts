@@ -78,6 +78,20 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 				...state,
 				matches: ((state.matches || []).filter((_, i) => i !== action.payload)), // Filter from GitHub CoPilot
 			};
+		case Actions.CSV_MAP_TEAM:
+			const newTeamMap = {};
+			newTeamMap[action.payload[0]] = action.payload[1];
+			return {
+				...state,
+				competitor_settings: {
+					...state.competitor_settings,
+					teamsMap: {
+						...(state?.competitor_settings?.teamsMap || {}),
+						...newTeamMap,
+					}
+
+				}
+			};
 		default:
 			console.warn("INVALID ACTION RECEIVED TO SETUP CONTEXT.");
 			return state;

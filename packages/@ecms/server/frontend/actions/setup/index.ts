@@ -26,6 +26,8 @@ export enum SetupActionsList {
 	UPDATE_MATCH = "UPDATE_MATCH",
 	/** Deletes a match */
 	DELETE_MATCH = "DELETE_MATCH",
+	/** Maps a team in the CSV to a team in {@link SetupState.teams} */
+	CSV_MAP_TEAM = "CSV_MAP_TEAM",
 }
 
 /**
@@ -65,6 +67,9 @@ export type SetupActionPayloads = {
 	[SetupActionsList.UPDATE_MATCH]: UpdateMatch;
 	//[SetupActionsList.SETUP_BASIC_DETAILS]: any;
 	[SetupActionsList.DELETE_MATCH]: number;
+	/** First param is name of team in the CSV, second is index of team in {@link SetupState.teams} to map to */
+	[SetupActionsList.CSV_MAP_TEAM]: [string, number];
+
 }
 
 /**

@@ -3,6 +3,8 @@
  * @packageDocumentation
  */
 
+import { CompetitorCSVMetadataColumns, CompetitorCSVMetatdata } from "@ecms/api/setup";
+
 /**
  * What a parsed CSV should look like
  */
@@ -13,6 +15,6 @@ export interface CSVResult {
 	data: string[][];
 }
 /** ECMS required columns */
-export type ColumnsToGet = "nameIndex" | "teamIndex" | "yearGroupIndex";
+export type ColumnsToGet = CompetitorCSVMetadataColumns;
 /** How columns are stored when collecting which column indices correspond to each {@link ColumnsToGet}. Use `-1` for not set. */
-export type ColumnsToGetRecord = Record<ColumnsToGet, number>;
+export type ColumnsToGetRecord = CompetitorCSVMetatdata;
