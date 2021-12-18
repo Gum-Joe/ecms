@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../../util/hooks";
 import Card from "../../common/Card";
 import { ColumnsToGetRecord, CSVResult } from "./util";
 import SetupActions, { setupAction } from "../../../actions/setup";
+import axios from "axios";
 
 interface UploadProps {
 	/** Metadata about columns in the CSV and how they correspond to required ECMS values */
@@ -23,6 +24,7 @@ interface UploadProps {
 	forceUpload?: boolean;
 }
 
+/** Used to map teams in the CSV to those created in setup */
 const TeamMapper: React.FC<{ mapTeams: string[] }> = ({ mapTeams }) => {
 
 	const teams = useAppSelector((state) => state.setup.teams);
@@ -57,6 +59,7 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 
 	// Can the redux dispatch action
 	const teams = useAppSelector((state) => state.setup.teams);
+	const setupID = useAppSelector((state) => state.setup.setupID);
 	const [teamsToMap, setTeamsToMap] = useState<string[]>([]);
 	// Used to tell the renderer to procoeed to upload once scanned through
 	const [canProceed, setcanProceed] = useState(false);
@@ -83,6 +86,26 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 		if (teamsToMap.length === 0) { setcanProceed(true); }
 	}, [props.csvData.data, props.csvMetaData.teamIndex, teams, dispatch]);
 
+	const uploadHandler = useEffect(() => {
+		// Use to halt the request - from https://medium.datadriveninvestor.com/aborting-cancelling-requests-with-fetch-or-axios-db2e93825a36
+		if (canProceed || props.forceUpload) {
+			const cancelToken = axios.CancelToken;
+			const source = cancelToken.source();
+			const request = axios.post("/api/setup/partial/uploadCSV", {
+				csvMetaData: props.csvMetaData,
+				csvData: props.csvData,
+				setupId: setupID,
+			}, { cancelToken: source.token }).then((response) => {
+				console.log(`Uploaded CSV with ${response.status}!`);
+			}).catch((error) => {
+				console.error(error);
+			});
+
+			return () => {
+				source.cancel("Cancelled.");
+			};
+		}
+	}, [setupID, canProceed, props.forceUpload, props.csvMetaData, props.csvData]);
 	return (
 		<div className="competitor-csv-upload">
 			{
