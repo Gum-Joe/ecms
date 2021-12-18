@@ -12,6 +12,7 @@ import SetupFrame, { SetupHeader } from "../SetupFrame";
 import { useDropzone } from "react-dropzone";
 import Button from "../../common/Button";
 import ServerUpload from "./upload";
+import { useAppSelector } from "../../../util/hooks";
 import { CSVResult, ColumnsToGet, ColumnsToGetRecord } from "./util";
 
 
@@ -56,6 +57,7 @@ const Competitors: React.FC = () => {
 		/** Index of the CSV Column for year group */
 		yearGroupIndex: -1,
 	});
+	const teamsToMap = useAppSelector(state => state.setup.competitor_settings?.teamsMap || {});
 
 	// Used to store key last set so we can undo it
 	const [lastSetColumn, setlastSetColumn] = useState<ColumnsToGet | "error">("error");
@@ -78,6 +80,17 @@ const Competitors: React.FC = () => {
 
 	}, []);
 
+	// Handle next button correctly - if teams still to map, DON'T move on
+	const [canGoNext, setcanGoNext] = useState(false);
+	const onNextHandler = useCallback(() => {
+		if (!Object.values(teamsToMap as Record<any, any>).includes(-1)) {
+			// All set!
+			setcanGoNext(true);
+		} else {
+			alert("Please map all teams before continuing");
+		}
+	}, [teamsToMap]);
+
 	const {
 		acceptedFiles,
 		fileRejections,
@@ -90,7 +103,7 @@ const Competitors: React.FC = () => {
 	});
 
 	return (
-		<SetupFrame nextPage="/">
+		<SetupFrame nextPage="/" onNext={onNextHandler}>
 			<SetupHeader>
 				<h1>Set Competitors</h1>
 				<h3>Set competitors for this event here</h3>
@@ -169,7 +182,7 @@ const Competitors: React.FC = () => {
 										</>
 										:
 										// Upload to server!
-										<ServerUpload csvMetaData={csvMetaData} csvData={csvData} />
+										<ServerUpload csvMetaData={csvMetaData} csvData={csvData} forceUpload={canGoNext} />
 								}
 								
 							</fluent-tab-panel>

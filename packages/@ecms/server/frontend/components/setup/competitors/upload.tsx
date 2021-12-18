@@ -15,6 +15,12 @@ interface UploadProps {
 	csvMetaData: ColumnsToGetRecord;
 	/** Data to upload */
 	csvData: CSVResult;
+	/**
+	 * Skip CSV Mapping, just upload.
+	 * 
+	 * Parent uses this to trigger an upload once all teams are mapped and the "Next" button is clicked.
+	 */
+	forceUpload?: boolean;
 }
 
 const TeamMapper: React.FC<{ mapTeams: string[] }> = ({ mapTeams }) => {
@@ -54,13 +60,14 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 	const [teamsToMap, setTeamsToMap] = useState<string[]>([]);
 	// Used to tell the renderer to procoeed to upload once scanned through
 	const [canProceed, setcanProceed] = useState(false);
+	const dispatch = useAppDispatch();
 
-	// Immediatlyrun a teams check
+	// Check for CSV teams that need to be mapped to those already created
 	useEffect(() => {
 		// Get list of teams in CSV
 		// Since it's a Set, will be unique
 		const csvTeamsList = [...new Set(props.csvData.data.map((row) => row[props.csvMetaData.teamIndex]))];
-		// Loop & add to list of teams to map.
+		// Filter the Set to just teams that need to be mapped to ones created by the "set teams" stage of setup
 		const teamsToMap = csvTeamsList.filter((team, teamIndex) => {
 			const indexOfTeam = teams?.findIndex(thisTeam => thisTeam.name === team);
 			if (indexOfTeam === -1 || typeof indexOfTeam === "undefined") {
@@ -69,13 +76,17 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 			}
 		});
 		setTeamsToMap(teamsToMap);
-		setcanProceed(true);
-	}, [props.csvData.data, props.csvMetaData.teamIndex, teams]);
+
+		// Enter -1 for all teams that have not yet been mapped
+		teamsToMap.forEach(theTeam => dispatch(setupAction(SetupActions.CSV_MAP_TEAM, [theTeam, -1])));
+
+		if (teamsToMap.length === 0) { setcanProceed(true); }
+	}, [props.csvData.data, props.csvMetaData.teamIndex, teams, dispatch]);
 
 	return (
 		<div className="competitor-csv-upload">
 			{
-				canProceed && teamsToMap.length === 0 ?
+				canProceed || props.forceUpload ?
 					<>
 						<h1>Uploading...</h1>
 						<FontAwesomeIcon icon={faCircleNotch} spin={true} size={"8x"} />
