@@ -27,6 +27,8 @@ const Teams: React.FC = () => {
 
 	// Temporary store for teams
 	const teamsFromState = useAppSelector(state => state.setup.teams);
+	const eventGroupType = useAppSelector(state => state.setup.type);
+	const eventSettings = useAppSelector(state => state.setup.event_settings);
 	// (you need to attach the names manually as this is done onSubmit)
 	const [teams, setteams] = useState<StagingTeam[]>(teamsFromState as StagingTeam[] || []);
 
@@ -109,7 +111,21 @@ const Teams: React.FC = () => {
 		}));
 
 		// Redirect to next page
-		setupPage("/matches");
+		if (eventGroupType === "event") {
+			if (eventSettings?.data_tracked === "matches") {
+				setupPage("/matches");
+			} else if (eventSettings?.data_tracked === "individual") {
+				setupPage("/competitors");
+			} else {
+				setupPage("/end");
+			}
+			return;
+		} else {
+			// Group
+			setupPage("/competitors");
+			return;
+		}
+		
 	} , [dispatch, teams, setupPage]);
 
 	return (

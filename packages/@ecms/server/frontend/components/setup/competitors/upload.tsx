@@ -65,6 +65,7 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 	// Used to tell the renderer to procoeed to upload once scanned through
 	const [canProceed, setcanProceed] = useState(false);
 	const dispatch = useAppDispatch();
+	const setupPage = useSetupRedirector();
 
 	// Check for CSV teams that need to be mapped to those already created
 	useEffect(() => {
@@ -98,6 +99,7 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 				setupID: setupID,
 			}, { cancelToken: source.token }).then((response) => {
 				console.log(`Uploaded CSV with ${response.status}!`);
+				setupPage("/end");
 				// Redirect
 			}).catch((error) => {
 				console.error(error);
