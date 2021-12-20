@@ -14,4 +14,4 @@ export type RequestWithBody<T> = Request<Record<string, string>, any, Partial<T>
  * Allow us to respond with either the intended response (if code 200), or an error message
  * @template T the type of the intended response if the server returns a 200 code.
  */
-export type ECMSResponse<T> = Response<T | APIMessage>
+export type ECMSResponse<T = undefined> = T extends undefined ? Response<APIMessage> : Response<T | APIMessage>;

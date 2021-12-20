@@ -15,5 +15,6 @@
 		"user.ts",
 		"index.ts",
 		"setup.ts",
+		"common.ts",
 	]
 }

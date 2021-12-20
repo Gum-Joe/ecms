@@ -17,6 +17,8 @@ import {
 	join_roles_usersInitializer
 } from "@ecms/models";
 
+import type { CSVResult } from "./common";
+
 /**
  * Exclude properties ending with _id
  */
@@ -183,3 +185,15 @@ export interface SetupStates {
  * Updates a setup on the server in the Redis DB
  */
 export type ReqPartialSetup = SetupEventOrGroup & SetupStates;
+
+/**
+ * Used to upload a CSV (parsed) of competitiors for storage for later insertion into the DB
+ */
+export type ReqUploadCompetitorsCSV = {
+	/** Metatdata about the CSV */
+	csvMetadata: CompetitorCSVMetatdata,
+	/** PARSED CSV Result in the format of the type specified */
+	csvData: CSVResult,
+	/** ID of setup this is before */
+	setupID: SetupEventOrGroup["setupID"];
+}

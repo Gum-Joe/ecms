@@ -9,7 +9,8 @@ import { useAppDispatch, useAppSelector } from "../../../util/hooks";
 import Card from "../../common/Card";
 import { ColumnsToGetRecord, CSVResult } from "./util";
 import SetupActions, { setupAction } from "../../../actions/setup";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
+import { ReqUploadCompetitorsCSV } from "@ecms/api/setup";
 
 interface UploadProps {
 	/** Metadata about columns in the CSV and how they correspond to required ECMS values */
@@ -59,7 +60,7 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 
 	// Can the redux dispatch action
 	const teams = useAppSelector((state) => state.setup.teams);
-	const setupID = useAppSelector((state) => state.setup.setupID);
+	const setupID = useAppSelector((state) => state.setup.setupID) as string;
 	const [teamsToMap, setTeamsToMap] = useState<string[]>([]);
 	// Used to tell the renderer to procoeed to upload once scanned through
 	const [canProceed, setcanProceed] = useState(false);
@@ -91,12 +92,13 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 		if (canProceed || props.forceUpload) {
 			const cancelToken = axios.CancelToken;
 			const source = cancelToken.source();
-			const request = axios.post("/api/setup/partial/uploadCSV", {
-				csvMetaData: props.csvMetaData,
+			const request = axios.post<unknown, AxiosResponse<unknown, any>, ReqUploadCompetitorsCSV>("/api/setup/partial/uploadCSV", {
+				csvMetadata: props.csvMetaData,
 				csvData: props.csvData,
-				setupId: setupID,
+				setupID: setupID,
 			}, { cancelToken: source.token }).then((response) => {
 				console.log(`Uploaded CSV with ${response.status}!`);
+				// Redirect
 			}).catch((error) => {
 				console.error(error);
 			});
