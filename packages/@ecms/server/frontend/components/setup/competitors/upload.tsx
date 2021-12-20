@@ -11,6 +11,7 @@ import { ColumnsToGetRecord, CSVResult } from "./util";
 import SetupActions, { setupAction } from "../../../actions/setup";
 import axios, { AxiosResponse } from "axios";
 import { ReqUploadCompetitorsCSV } from "@ecms/api/setup";
+import { useSetupRedirector } from "../util";
 
 interface UploadProps {
 	/** Metadata about columns in the CSV and how they correspond to required ECMS values */
