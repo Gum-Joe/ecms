@@ -28,7 +28,6 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 			};
 		case Actions.START_SETUP:
 			return {
-				...state,
 				type: action.payload.type,
 				setupID: action.payload.setupID,
 				state: "in progress",

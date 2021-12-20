@@ -5,6 +5,10 @@ $default-background: #202020;
 // ... so text is white
 $text-color: #ffffff;
 
+:root {
+	--neutral-foreground-rest: $text-color !important;
+}
+
 // Link blue, used for links
 $link-blue: #4AE2FF;
 

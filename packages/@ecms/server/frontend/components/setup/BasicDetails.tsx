@@ -52,13 +52,40 @@ const BasicDetails: FunctionComponent = () => {
 				) as trackable_data,
 			},
 		}));
-		
-		// Decide redirect
+
+
+		// Routing time!
+		// Decide redirects
+
+		// 1: if teams need to be set, let that occurs (unless inheritance from parent is selected, in which case copy in parent's teams?)
 		if (formObject.enableTeams === "on") {
 			setupPage("/teams");
+			return;
 		}
 		
-		// Check competitors
+		// 2: Check event type info if an event - if the setting of matches is on, go to matches page
+		// 2a: if the event type is individual performance, go to competitors
+		// 2b: if neither of the above, go to finalising page (no other things to set)
+		if (setupType === "event") {
+			const dataTracked = dataToTrack.get(
+				getDataFromDropDown("data-settings-dropdown") || "none",
+			) as trackable_data;
+			
+			if (dataTracked === "matches") {
+				// INVALID STATE - Teams need to be set to use matches!
+				alert("Invalid parameters - teams need to be enabled to use matches.");
+				return;
+			} else if (dataTracked === "individual") {
+				setupPage("/competitors");
+				return;
+			} else {
+				setupPage("/end");
+				return;
+			}
+		}
+
+		// 3: Finally, if this is a group or event and there are no teams to add allow competitors to be added 
+		setupPage("/competitors");
 		
 	};
 	
@@ -89,16 +116,21 @@ const BasicDetails: FunctionComponent = () => {
 							<FluentCheckbox name="enableCharity">Enable Charity features <p className="secondary-input">- bring data in from different sources, etc</p></FluentCheckbox>
 							<FluentCheckbox disabled={!parent_id ? true : false} name="enableInherit">Inherit teams &amp; competitors from parent group <p className="secondary-input">- set teams &amp; competitiors from the group this event is in</p></FluentCheckbox>
 						</div>
-						<div>
-							<label htmlFor="dataToTrack">Data to track</label>
-							<Dropdown
-								items={[...dataToTrack.keys()]}
-								placeholder={SETUP_EVENT_DATA_PLACEHOLDER}
-								name="dataToTrack"
-								required={true}
-								id="data-settings-dropdown"
-							/>
-						</div>
+						{
+							setupType === "event" ? // the below is only relevant to events, not groups
+								(<div>
+									<label htmlFor="dataToTrack">Data to track</label>
+									<Dropdown
+										items={[...dataToTrack.keys()]}
+										placeholder={SETUP_EVENT_DATA_PLACEHOLDER}
+										name="dataToTrack"
+										required={true}
+										id="data-settings-dropdown"
+									/>
+								</div>)
+								:
+								null
+						}
 					</section>
 				</SetupForm>
 			</SetupContainer>
