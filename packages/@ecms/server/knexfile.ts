@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 /** Intitalise our config into environmntal variables */
 dotenv.config();
 
+
 // TODO: Configure the correct seeds here
 const config = {
 	

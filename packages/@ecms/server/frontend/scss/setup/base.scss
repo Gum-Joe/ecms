@@ -160,3 +160,16 @@
 	bottom: 32px;
 	right: 36px;
 }
+
+// Big central progress indicator
+.central-progress-box {
+	display: flex;
+	gap: 20px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 300px;
+	h1 {
+		font-size: 2.6em;
+	}
+}

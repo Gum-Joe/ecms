@@ -4,6 +4,7 @@ import Matches from "./Matches";
 import SetupRenderer from "./SetupRender";
 import Teams from "./Teams";
 import Competitors from "./competitors";
+import Finalise from "./Finalise";
 
  
 const SetupRouter: FunctionComponent = () => {
@@ -25,6 +26,9 @@ const SetupRouter: FunctionComponent = () => {
 			</Route>
 			<Route exact path={`${path}/competitors`}>
 				<Competitors />
+			</Route>
+			<Route exact path={`${path}/end`}>
+				<Finalise />
 			</Route>
 		</Switch>
 		
