@@ -112,7 +112,7 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 		}
 	}, [setupID, canProceed, props.forceUpload, props.csvMetaData, props.csvData]);
 	return (
-		<div className="competitor-csv-upload">
+		<div className="competitor-csv-upload central-progress-box">
 			{
 				canProceed || props.forceUpload ?
 					<>
