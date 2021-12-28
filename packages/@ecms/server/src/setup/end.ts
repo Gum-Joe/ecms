@@ -1,7 +1,8 @@
 import SetupEventOrGroup, { SetupStates } from "@ecms/api/setup";
-import { events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer } from "@ecms/models";
+import { events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, teamsInitializer } from "@ecms/models";
 import type { Pool } from "pg";
-import postgresPromise from "pg-promise"
+import postgresPromise from "pg-promise";
+import uuid from "uuid";
 import { SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
 import type connectToDB from "../utils/db";
 import createLogger from "../utils/logger";
@@ -15,6 +16,8 @@ interface PartialSetup {
 	/** JSON setup data of form {@link SetupEventOrGroup} */
 	data: string,
 }
+
+
 
 /**
  * Finalises setup, putting it into the database. Designed to be called by the api.
@@ -63,6 +66,31 @@ export default async function endSetup(setupID: string, pool: ReturnType<typeof 
 		await client.query(queryTxt);
 
 		// If there are teams to create, create them!
+		if (setupInfo.enable_teams && !(setupInfo.inheritance === true)) {
+			logger.debug("Preparing teams to creates...");
+			if (!Array.isArray(setupInfo.teams)) {
+				logger.error("Bad type provided for teams array in setup info.");
+				throw new Error("E_INVALID_SETUP: Bad type provided for teams array in setup info!");
+			}
+			// Generate ids of teams and map to their info, so we can refer back to the IDs 
+			const teamIdMaps: [string, teamsInitializer][] = setupInfo.teams?.map(teamInfo => {
+				if (typeof teamInfo.name !== "string" || typeof teamInfo.colour !== "string") {
+					throw new Error(`E_INVALID_SETUP: Type of name or colour incorrect! Expected string, got ${teamInfo.name} and ${teamInfo.colour}`); 
+				}
+				return [uuid.v4(), teamInfo];
+			});
+
+			// Insert!
+			for (const team of teamIdMaps) {
+				logger.debug(`Inserting team with ID ${team[0]}, name ${team[1].name}`);
+				await client.query(`
+					INSERT INTO teams(team_id, name, colour) VALUES ($1, $2, $3);
+					INSERT INTO join_events_groups_teams(event_group_id, team_id) VALUES ($4, $1)
+				`, [team[0], team[1].name, team[1].colour, setupID]);
+			}
+
+			logger.debug(" Teams processed.");
+		}
 
 		
 		if (setupInfo.type === "event") {
