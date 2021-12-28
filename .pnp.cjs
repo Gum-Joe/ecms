@@ -342,6 +342,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["passport-google-oauth20", "npm:2.0.0"],
             ["passport-local", "npm:1.0.0"],
             ["pg", "virtual:b837e71d5ba61ee72aa6719c0c6c9420b12134e1e6138f55184c382d33c39eb302b615863988a1876d08209667cce6122e004dd5d3235914de4c782272753ab0#npm:8.7.1"],
+            ["pg-promise", "npm:10.11.1"],
             ["pnp-webpack-plugin", "npm:1.7.0"],
             ["postcss", "npm:8.3.11"],
             ["postcss-loader", "virtual:8f646d15ae2d6139b123c44eb8eb5771579ffa8c19d8751c5ddb772d2c9378f744d801ddff48c55a181a8c6e6477d9e94a8f6750059879d9d48735541827b435#npm:4.3.0"],
@@ -3808,6 +3809,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["assert", "npm:1.5.0"],
             ["object-assign", "npm:4.1.1"],
             ["util", "npm:0.10.3"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["assert-options", [
+        ["npm:0.7.0", {
+          "packageLocation": "./.yarn/cache/assert-options-npm-0.7.0-5a2df1d4cc-447e3de35a.zip/node_modules/assert-options/",
+          "packageDependencies": [
+            ["assert-options", "npm:0.7.0"]
           ],
           "linkType": "HARD",
         }]
@@ -10281,6 +10291,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["pg-minify", [
+        ["npm:1.6.2", {
+          "packageLocation": "./.yarn/cache/pg-minify-npm-1.6.2-3329993678-3d2668b5cd.zip/node_modules/pg-minify/",
+          "packageDependencies": [
+            ["pg-minify", "npm:1.6.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["pg-pool", [
         ["npm:3.4.1", {
           "packageLocation": "./.yarn/cache/pg-pool-npm-3.4.1-14f060ebff-50d68bd99a.zip/node_modules/pg-pool/",
@@ -10299,6 +10318,19 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packagePeers": [
             "@types/pg",
             "pg"
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["pg-promise", [
+        ["npm:10.11.1", {
+          "packageLocation": "./.yarn/cache/pg-promise-npm-10.11.1-daa03143f7-17e59742af.zip/node_modules/pg-promise/",
+          "packageDependencies": [
+            ["pg-promise", "npm:10.11.1"],
+            ["assert-options", "npm:0.7.0"],
+            ["pg", "virtual:b837e71d5ba61ee72aa6719c0c6c9420b12134e1e6138f55184c382d33c39eb302b615863988a1876d08209667cce6122e004dd5d3235914de4c782272753ab0#npm:8.7.1"],
+            ["pg-minify", "npm:1.6.2"],
+            ["spex", "npm:3.2.0"]
           ],
           "linkType": "HARD",
         }]
@@ -12369,6 +12401,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/source-map-url-npm-0.4.1-747a1f6eba-64c5c2c77a.zip/node_modules/source-map-url/",
           "packageDependencies": [
             ["source-map-url", "npm:0.4.1"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["spex", [
+        ["npm:3.2.0", {
+          "packageLocation": "./.yarn/cache/spex-npm-3.2.0-ebab5ec92f-2c562283bf.zip/node_modules/spex/",
+          "packageDependencies": [
+            ["spex", "npm:3.2.0"]
           ],
           "linkType": "HARD",
         }]

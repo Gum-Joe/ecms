@@ -5,3 +5,11 @@
 
 /** Name of the users table */
 export const USERS_TABLE = "users";
+
+/**
+ * Beginning of key to store ssetups in redis. Put the setup ID after it.
+ * @example ```ts
+ * await redis.HSET(SETUP_REDIS_KEY_PREFIX + setupID);
+ * ```
+ */
+export const SETUP_REDIS_KEY_PREFIX = "transactions:create_event_group:";

@@ -13,6 +13,8 @@ import connectToRedis from "../utils/redis";
 import { ECMSResponse } from "../utils/interfaces";
 
 import { RequestWithBody as Request } from "../utils/interfaces";
+import { SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
+import endSetup from "../setup/end";
 
 const router = Router();
 const logger = createLogger("api:setup");
@@ -29,12 +31,12 @@ router.post("/start", async (req, res: ECMSResponse<ResStartSetup>, next) => {
 
 	try {
 		// TODO: Check Roles
-		await redis.HSET(`transactions:create_event_group:${setupID}`, {
+		await redis.HSET(`${SETUP_REDIS_KEY_PREFIX}${setupID}`, {
 			status: "pending",
 			data: safeStringify({}),
 		});
 
-		await redis.EXPIRE(`transactions:create_event_group:${setupID}`, SETUP_REDIS_EXPIRE_TTL); // Keep in DB for 1 hr
+		await redis.EXPIRE(`${SETUP_REDIS_KEY_PREFIX}${setupID}`, SETUP_REDIS_EXPIRE_TTL); // Keep in DB for 1 hr
 
 		res.json({
 			setupID,
@@ -63,12 +65,12 @@ router.put("/partial", async (req: Request<ReqPartialSetup>, res: ECMSResponse<S
 
 	try {
 		// TODO: Check Roles
-		await redis.HSET(`transactions:create_event_group:${req.body.setupID}`, {
+		await redis.HSET(`${SETUP_REDIS_KEY_PREFIX}${req.body.setupID}`, {
 			status: "in progress",
 			data: safeStringify(req.body),
 		});
 
-		await redis.EXPIRE(`transactions:create_event_group:${req.body.setupID}`, SETUP_REDIS_EXPIRE_TTL); 
+		await redis.EXPIRE(`${SETUP_REDIS_KEY_PREFIX}${req.body.setupID}`, SETUP_REDIS_EXPIRE_TTL); 
 
 		res.json({
 			message: "Setup updated",
@@ -130,10 +132,10 @@ router.post("/partial/uploadCSV", async (req: Request<ReqUploadCompetitorsCSV>, 
 		await redis.HSET(`transactions:imported_competitors:${req.body.setupID}`, toPutIntoRedis);
 		await redis.EXPIRE(`transactions:imported_competitors:${req.body.setupID}`, SETUP_REDIS_EXPIRE_TTL);
 		logger.debug("Updating partial setup record (key)...");
-		await redis.HSET(`transactions:create_event_group:${req.body.setupID}`, {
+		await redis.HSET(`${SETUP_REDIS_KEY_PREFIX}${req.body.setupID}`, {
 			hasImportedCompetitors: "true", // flag in effect
 		});
-		await redis.EXPIRE(`transactions:create_event_group:${req.body.setupID}`, SETUP_REDIS_EXPIRE_TTL);
+		await redis.EXPIRE(`${SETUP_REDIS_KEY_PREFIX}${req.body.setupID}`, SETUP_REDIS_EXPIRE_TTL);
 
 		logger.debug("Done.");
 
@@ -144,6 +146,35 @@ router.post("/partial/uploadCSV", async (req: Request<ReqUploadCompetitorsCSV>, 
 		res.end();
 	} catch (err) {
 		logger.error("Error updating CSV!");
+		logger.error(err);
+		res.status(500).json({
+			message: `Internal Server Error - ${(err as Error)?.message}`,
+		});
+	}
+});
+
+/** Finalise a setup, placing setup info. into the database to create the event/group. Literally just needs a `setupID` */
+router.post("/end", async (req, res, next) => {
+	logger.debug("Got request to end setup...");
+	if (!req.body.setupID) {
+		res.statusCode = 400;
+		res.json({
+			message: "Please provide a setupID.",
+		});
+	}
+	logger.debug("Checking setup exists...");
+	try {
+		const isExists = await redis.EXISTS(SETUP_REDIS_KEY_PREFIX + req.body.setupID);
+		if (!isExists) {
+			res.statusCode = 404;
+			res.json({
+				message: "setupID not found",
+			});
+		}
+		logger.debug("Found setupID! Proceeding with ending setup...");
+		await endSetup(req.body.setupID, pool, redis);
+	} catch (err) {
+		logger.error("Error ending setup!");
 		logger.error(err);
 		res.status(500).json({
 			message: `Internal Server Error - ${(err as Error)?.message}`,

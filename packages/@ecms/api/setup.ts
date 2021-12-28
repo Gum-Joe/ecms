@@ -178,7 +178,7 @@ export interface ResStartSetup {
  */
 export interface SetupStates {
 	/** Setup state  - pending means not yet started */
-	state: "pending" | "in progress" | "done",
+	state: "pending" | "in progress" | "finalising" | "done",
 }
 
 /**
