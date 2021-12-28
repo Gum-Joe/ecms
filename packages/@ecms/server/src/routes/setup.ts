@@ -14,7 +14,7 @@ import { ECMSResponse } from "../utils/interfaces";
 
 import { RequestWithBody as Request } from "../utils/interfaces";
 import { SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
-import endSetup from "../setup/end";
+import SetupHandler from "../setup/end";
 
 const router = Router();
 const logger = createLogger("api:setup");
@@ -172,7 +172,8 @@ router.post("/end", async (req, res, next) => {
 			});
 		}
 		logger.debug("Found setupID! Proceeding with ending setup...");
-		await endSetup(req.body.setupID, pool, redis);
+		const setupHandler = new SetupHandler(req.body.setupID, pool, redis);
+		await setupHandler.finalise();
 	} catch (err) {
 		logger.error("Error ending setup!");
 		logger.error(err);
