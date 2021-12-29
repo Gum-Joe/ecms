@@ -67,6 +67,8 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 	const [canProceed, setcanProceed] = useState(false);
 	const dispatch = useAppDispatch();
 	const setupPage = useSetupRedirector();
+	const eventOrGroup = useAppSelector(state => state.setup.type);
+	const eventType = useAppSelector(state => state.setup.event_settings?.data_tracked);
 
 	// Check for CSV teams that need to be mapped to those already created
 	useEffect(() => {
@@ -100,7 +102,14 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 				setupID: setupID,
 			}, { cancelToken: source.token }).then((response) => {
 				console.log(`Uploaded CSV with ${response.status}!`);
-				setupPage("/end");
+				// Route
+				if (eventOrGroup === "event" && eventType === "individual") {
+					// Need to set units
+					setupPage("/units");
+				} else {
+					setupPage("/end");
+				}
+				
 				// Redirect
 			}).catch((error) => {
 				console.error(error);
