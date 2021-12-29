@@ -36,7 +36,8 @@ export default class SetupHandler {
 	}
 
 	/**
-	 * Starts finalising setup
+	 * Starts finalising setup.
+	 * Call this function first - it sets us the database connection and gets data from Redis
 	 */
 	public async finalise(): Promise<void> {
 		this.logger.info(`Ending setup with ID ${this.setupID}...`);
@@ -64,27 +65,12 @@ export default class SetupHandler {
 		await this.client.query("BEGIN");
 
 		try {
-			this.logger.info("Creating event_and_groups entry...");
-			// Use setupID as the ID so we know it
-			const event_and_groups: events_and_groupsInitializer = {
-				event_group_id: this.setupID,
-				name: this.setupInfo.name,
-				description: this.setupInfo.description,
-				enable_teams: this.setupInfo.enable_teams === true ? true : false,
-				enable_charity: this.setupInfo.enable_charity === true ? true : false,
-				inheritance: this.setupInfo.inheritance === true ? true : false,
-				type: this.setupInfo.type,
-				parent_id: this.setupInfo.parent_id || null,
-			};
-			// From https://stackoverflow.com/questions/37313571/omiting-column-names-inserting-objects-directly-into-node-postgres
-			const queryTxt = pgp.helpers.insert(event_and_groups, null, "event_and_groups");
-			await this.client.query(queryTxt);
-	
+			let settingsID = null;
 			if (this.setupInfo.type === "event") {
 	
 				// Event specific stuff
 	
-				this.logger.info("Handling event specific information...");
+				this.logger.info("Handling event specific information first...");
 	
 				// 2c: insert event data if required
 				this.logger.info("Adding event specific info...");
@@ -102,12 +88,29 @@ export default class SetupHandler {
 					data_tracked: this.setupInfo.event_settings.data_tracked
 				};
 				// RETURNING * from https://github.com/brianc/node-postgres/issues/1269|
-				const res = await this.client.query<event_only_settings>("INSERT INTO event_only_settings(data_tracked) VALUES ($1) RETURNING *", [event_settings.data_tracked]);
-				const settingsID = res.rows[0].event_settings_id;
-				this.logger.debug("Updating event_and_groups entry...");
-				await this.client.query("UPDATE event_and_groups SET event_settings_id = $1 WHERE event_group_id = $2;", [settingsID, this.setupInfo]);
+				const res = await this.client.query<event_only_settings>("INSERT INTO event_only_settings(data_tracked) VALUES ($1) RETURNING *;", [event_settings.data_tracked]);
+				settingsID = res.rows[0].event_settings_id;
 	
 			}
+
+			this.logger.info("Creating event_and_groups entry...");
+			// Use setupID as the ID so we know it
+			const event_and_groups: events_and_groupsInitializer = {
+				event_group_id: this.setupID,
+				name: this.setupInfo.name,
+				description: this.setupInfo.description,
+				enable_teams: this.setupInfo.enable_teams === true ? true : false,
+				enable_charity: this.setupInfo.enable_charity === true ? true : false,
+				inheritance: this.setupInfo.inheritance === true ? true : false,
+				type: this.setupInfo.type,
+				parent_id: this.setupInfo.parent_id || null,
+				event_settings_id: settingsID,
+			};
+			// From https://stackoverflow.com/questions/37313571/omiting-column-names-inserting-objects-directly-into-node-postgres
+			const queryTxt = pgp.helpers.insert(event_and_groups, null, "events_and_groups");
+			await this.client.query(queryTxt);
+	
+			
 
 
 			// Next: check teams
@@ -120,7 +123,12 @@ export default class SetupHandler {
 			await this.endSetup();
 		} catch (err) {
 			await this.endSetupWithError();
-			throw err;
+			const castError = err as Error;
+			this.logger.error(`Stopped setup due to error ${castError.message || castError || "UNKNOWN"}`);
+			if (process.env.NODE_ENV === "development" && "stack" in castError) {
+				this.logger.error(castError.stack);
+			}
+			throw castError;
 		}
 	} 
 
@@ -132,7 +140,7 @@ export default class SetupHandler {
 	}
 
 	/**
-	 * Inserts teams
+	 * Inserts teams into the database. Will check if this needs to be done.
 	 */
 	protected async checkTeams() {
 		if (this.setupInfo.enable_teams && !(this.setupInfo.inheritance === true)) {
@@ -164,7 +172,7 @@ export default class SetupHandler {
 	}
 
 	/**
-	 * Process matches
+	 * Process matches, adding them to the database
 	 */
 	protected async processMatches() {
 		// Whilst we have access to the list of IDs, process matches
@@ -191,7 +199,8 @@ export default class SetupHandler {
 	}
 
 	/**
-	 * Process competitors if there are any
+	 * Process competitors if there are any.
+	 * Decides what to do for the different competitor_setting types (discrete, filter from parent, etc) and calls the appropriate method
 	 */
 	protected async processCompetitors(): Promise<void> {
 		try {
@@ -226,7 +235,11 @@ export default class SetupHandler {
 		
 	}
 
-	/** Import competitors from a CSV */
+	/**
+	 * Import competitors from a CSV - retrieves the CSV data to import from redis (note the CSV data is already parsed before being put into Redis!)
+	 * @param settings a object mathcing {@link ImportCompetitors} that specifies the settings to use when importing the competitor from the CSV.
+	 * @param settingsID ID of the record in the `competitor_settings` table so we can link competitor to it via `join_competitor_events_group`
+	 */
 	protected async importCompetitors(settings: ImportCompetitors, settingsID: string): Promise<void> {
 		this.logger.info("Importing competitors from CSV...");
 		if (!settings.competitor_import_id) {
@@ -319,15 +332,12 @@ export default class SetupHandler {
 		} catch (err) {
 			this.logger.error("Error during DB insertion of competitors!");
 			throw err;
-		}
-		
+		}	
 		this.logger.info("Data imported.");
-		
-
 	}
 
 	public async rollback() {
-		this.logger.info("Rolling back...");
+		this.logger.error("Rolling back...");
 		await this.client.query("ROLLBACK");
 	}
 

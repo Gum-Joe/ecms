@@ -162,7 +162,7 @@ export default interface SetupEventOrGroup extends
 		users: Omit<join_roles_usersInitializer, "param">[];
 	}
 
-}
+};
 
 // Other requests
 

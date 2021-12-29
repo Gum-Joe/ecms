@@ -11,7 +11,7 @@ BEGIN
 	IF NEW.parent_id IS NOT NULL THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
 		PERFORM * FROM events_and_groups WHERE event_group_id = NEW.parent_group_id AND type = 'group';
 		IF NOT FOUND THEN
-			RAISE NOTICE 'Foreign key violation - tried to refer to record in events_and_groups that was not a group!';
+			RAISE EXCEPTION  'Foreign key violation - tried to refer to record in events_and_groups that was not a group!';
 			RETURN NULL;
 		END IF;
 		RETURN NEW; -- Important to ensure the row being inserted is not modified

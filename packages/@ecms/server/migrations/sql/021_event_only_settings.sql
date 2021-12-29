@@ -9,10 +9,10 @@
 CREATE FUNCTION check_data_tracked_is_individual_if_unit() RETURNS trigger AS $$
 BEGIN
 	IF (NEW.unit_id IS NOT NULL) AND (NEW.data_tracked != 'individual') THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
-		RAISE NOTICE 'Foreign key violation - tried to set a unit (unit_id) on an event where data_tracked is not "individual"';
+		RAISE EXCEPTION  'Foreign key violation - tried to set a unit (unit_id) on an event where data_tracked is not "individual"';
 		RETURN NULL;
 	ELSIF (NEW.data_tracked = 'individual') AND (NEW.unit_id IS NULL) THEN
-		RAISE NOTICE 'Foreign key violation - tried to set the event type as "individual" but failed to specify a unit in "unit_id"';
+		RAISE EXCEPTION  'Foreign key violation - tried to set the event type as "individual" but failed to specify a unit in "unit_id"';
 		RETURN NULL;
 	ELSE
 		RETURN NEW;

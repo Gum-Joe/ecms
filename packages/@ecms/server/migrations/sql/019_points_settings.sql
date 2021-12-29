@@ -9,7 +9,7 @@ CREATE FUNCTION check_module_is_points_system() RETURNS trigger AS $$
 BEGIN
 	PERFORM * FROM "public".installed_modules WHERE module_id = NEW.module_id AND type = 'pointsSystem'; -- see 000_baseline_setup.sql for types
 		IF NOT FOUND THEN
-			RAISE NOTICE 'Foreign key violation - tried to refer to a module that was not a pointsSystem!';
+			RAISE EXCEPTION  'Foreign key violation - tried to refer to a module that was not a pointsSystem!';
 			RETURN NULL;
 		END IF;
 		RETURN NEW; -- Important to ensure the row being inserted is not modified

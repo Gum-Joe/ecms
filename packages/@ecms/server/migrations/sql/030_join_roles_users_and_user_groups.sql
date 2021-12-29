@@ -10,7 +10,7 @@ BEGIN
 	IF NEW.param IS NOT NULL THEN
 		PERFORM * FROM "public".roles WHERE role_id = NEW.role_id AND has_parameter = TRUE;
 		IF NOT FOUND THEN
-			RAISE NOTICE 'Foreign key violation - tried to provide a parameter for a role without one!';
+			RAISE EXCEPTION  'Foreign key violation - tried to provide a parameter for a role without one!';
 			RETURN NULL;
 		END IF;
 		RETURN NEW; -- Important to ensure the row being inserted is not modified

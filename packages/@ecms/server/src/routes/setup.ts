@@ -177,7 +177,8 @@ router.post("/end", async (req, res, next) => {
 		await setupHandler.finalise();
 	} catch (err) {
 		logger.error("Error ending setup!");
-		logger.error(err);
+		const errorCast = err as Error;
+		logger.error("message" in errorCast ? errorCast.message : errorCast);
 		res.status(500).json({
 			message: `Internal Server Error - ${(err as Error)?.message}`,
 		});

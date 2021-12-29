@@ -16,7 +16,7 @@ BEGIN
 	IF NEW.parent_id IS NOT NULL THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
 		PERFORM * FROM events_and_groups WHERE event_group_id = NEW.parent_id AND type = 'group';
 		IF NOT FOUND THEN
-			RAISE NOTICE 'Foreign key violation - tried to refer to record in events_and_groups that was not a group';
+			RAISE EXCEPTION  'Foreign key violation - tried to refer to record in events_and_groups that was not a group';
 			RETURN NULL;
 		END IF;
 		RETURN NEW; -- Important to ensure the row being inserted is not modified
@@ -32,10 +32,10 @@ CREATE FUNCTION check_if_event() RETURNS trigger AS $$
 BEGIN
 	-- First check event_settings_id is set if type event!
 	IF NEW.type = 'event' AND NEW.event_settings_id IS NULL THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
-		RAISE NOTICE 'Foreign key violation - tried to store an event without specifying event_only_settings (please create a record in event_only_settings and point it to this event';
+		RAISE EXCEPTION  'Foreign key violation - tried to store an event without specifying event_only_settings (please create a record in event_only_settings and point it to this event';
 			RETURN NULL;
 	ELSIF NEW.type != 'event' AND NEW.event_settings_id IS NOT NULL THEN
-		RAISE NOTICE 'Foreign key violation - tried to specifying event_only_settings for a non-event';
+		RAISE EXCEPTION  'Foreign key violation - tried to specifying event_only_settings for a non-event';
 			RETURN NULL;
 	ELSE
 		RETURN NEW;

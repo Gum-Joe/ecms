@@ -10,7 +10,7 @@ BEGIN
 	IF NEW.data_source_id IS NOT NULL THEN -- Handle the fact parent_id can be null - events/group do not necessarily have to have a parent
 		PERFORM * FROM data_sources WHERE module_id = NEW.module_id AND data_source_id = data_source_id;
 		IF NOT FOUND THEN
-			RAISE NOTICE 'Foreign key violation - tried to refer to a module_id that is not the same as the one in the referred data_source_id!';
+			RAISE EXCEPTION  'Foreign key violation - tried to refer to a module_id that is not the same as the one in the referred data_source_id!';
 			RETURN NULL;
 		END IF;
 		RETURN NEW; -- Important to ensure the row being inserted is not modified
