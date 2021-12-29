@@ -71,7 +71,7 @@ export type CompetitorCSVMetatdata = Record<CompetitorCSVMetadataColumns, number
 /**
  * Competitors defined by import
  */
-interface ImportCompetitors extends BaseSetupCompetitor {
+export interface ImportCompetitors extends BaseSetupCompetitor {
 	type: "discrete";
 	competitor_import_id: string;
 	csvMetadata: CompetitorCSVMetatdata;

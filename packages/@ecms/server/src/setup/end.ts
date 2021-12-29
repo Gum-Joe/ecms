@@ -1,23 +1,18 @@
-import SetupEventOrGroup, { SetupStates } from "@ecms/api/setup";
-import { events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, teamsInitializer } from "@ecms/models";
+import SetupEventOrGroup, { ImportCompetitors, ReqUploadCompetitorsCSV, SetupStates } from "@ecms/api/setup";
+import { competitorsInitializer, events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, teamsInitializer } from "@ecms/models";
 import type { Pool, PoolClient } from "pg";
 import postgresPromise from "pg-promise";
 import uuid from "uuid";
-import { SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
+import { COMPETITOR_IMPORT_REDIS_KEY_PREFIX, SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
 import type connectToDB from "../utils/db";
+import { PartialSetup, RedisCompetitorImport } from "../utils/interfaces";
 import createLogger from "../utils/logger";
 import type connectToRedis from "../utils/redis";
 
 //const logger = createLogger("setup:end");
 const pgp = postgresPromise();
 
-interface PartialSetup {
-	status: SetupStates;
-	/** JSON setup data of form {@link SetupEventOrGroup} */
-	data: string;
-	// If set, means we need to grab a CSV.
-	hasImportedCompetitors?: boolean;
-}
+
 
 
 export default class SetupHandler {
@@ -29,7 +24,11 @@ export default class SetupHandler {
 
 	/** Set to true once teams have been processed and added to the DB (if there are any) */
 	protected hasTeams = false;
+	/** Map UUIDs of teams to data on them. Index is index from {@link this.setupInfo.teams} */
 	protected teamIdMaps: [string, teamsInitializer][] = [];
+
+	/** Start time */
+	protected startTime = Date.now();
  
 
 	constructor(public readonly setupID: string, protected pool: ReturnType<typeof connectToDB>, protected redis: ReturnType<typeof connectToRedis>) {
@@ -39,9 +38,9 @@ export default class SetupHandler {
 	/**
 	 * Starts finalising setup
 	 */
-	public async finalise() {
+	public async finalise(): Promise<void> {
 		this.logger.info(`Ending setup with ID ${this.setupID}...`);
-		// 1: retrieve from redis
+		// 1: *9-retrieve from redis
 		this.logger.info("Marking setup as being finalised...");
 		await this.redis.HSET(SETUP_REDIS_KEY_PREFIX + this.setupID, "status", "finalising");
 		this.logger.debug("Retrieiving setup from redis...");
@@ -106,7 +105,7 @@ export default class SetupHandler {
 				const res = await this.client.query<event_only_settings>("INSERT INTO event_only_settings(data_tracked) VALUES ($1) RETURNING *", [event_settings.data_tracked]);
 				const settingsID = res.rows[0].event_settings_id;
 				this.logger.debug("Updating event_and_groups entry...");
-				await this.client.query("UPDATE event_and_groups SET event_settings_id = $1 WHERE event_group_id = $2 ", [settingsID, this.setupInfo])
+				await this.client.query("UPDATE event_and_groups SET event_settings_id = $1 WHERE event_group_id = $2;", [settingsID, this.setupInfo]);
 	
 			}
 
@@ -116,11 +115,21 @@ export default class SetupHandler {
 			// Then matches (function checks if needs to run!)
 			await this.processMatches();
 			// Now competitors
+			await this.processCompetitors();
+			// Done!
+			await this.endSetup();
 		} catch (err) {
 			await this.endSetupWithError();
 			throw err;
 		}
 	} 
+
+	public async endSetup(): Promise<void> {
+		await this.client.query("COMMIT");
+		this.client.release();
+		this.logger.info(`Done in ${(Date.now() - this.startTime) / 1000} seconds. Client released.`);
+		return;
+	}
 
 	/**
 	 * Inserts teams
@@ -181,9 +190,151 @@ export default class SetupHandler {
 		}
 	}
 
+	/**
+	 * Process competitors if there are any
+	 */
+	protected async processCompetitors(): Promise<void> {
+		try {
+			if (this.setupInfoRedis.hasImportedCompetitors) {
+				this.logger.info("Processing competitors to import...");
+				// Validate info present
+				if (!this.setupInfo.competitor_settings) {
+					throw new Error("No competitor settings found in setup info!");
+				}
+	
+				if (this.setupInfo.competitor_settings.type === "discrete") {
+					this.logger.info("Using discretely set competitors, either import or list");
+					if ("competitor_import_id" in this.setupInfo.competitor_settings) {
+						this.logger.info("Setting competitor metatdata in the DB...");
+						const settingsID = uuid.v4();
+						await this.client.query(`
+							INSERT INTO competitor_settings(competitor_settings_id, type) VALUES ($1, 'discrete');
+							UPDATE event_and_groups SET competitor_settings_id = $1 WHERE event_group_id = $2;
+						`, [settingsID, this.setupID]);
+						await this.importCompetitors(this.setupInfo.competitor_settings, settingsID);
+					} else {
+						this.logger.warn("Explicitly set competitors not yet supported. Skipping...");
+					}
+				} else {
+					this.logger.warn("No other competitor import types currently supported. Skipping...");
+				}
+			}
+		} catch (err) {
+			this.logger.error("Error importing competitors!");
+			throw err;
+		}
+		
+	}
+
+	/** Import competitors from a CSV */
+	protected async importCompetitors(settings: ImportCompetitors, settingsID: string): Promise<void> {
+		this.logger.info("Importing competitors from CSV...");
+		if (!settings.competitor_import_id) {
+			throw new Error("No competitor import ID found - competitors may not have been uploaded to the server!");
+		}
+		
+
+		// Grab from Redis
+		this.logger.debug("Grabbing from redis and validating...");
+		const importData = this.redis.HGETALL(COMPETITOR_IMPORT_REDIS_KEY_PREFIX + this.setupID) as unknown as Partial<RedisCompetitorImport>;
+		if (!importData) {
+			throw new Error("Imported competitor data not found in redis!");
+		}
+		if (!importData.csvData || !importData.csvMetadata) {
+			throw new Error("CSV Data or Metedata not found in redis when importing competitors!");
+		}
+
+		this.logger.debug("Preparing CSV data...");
+		this.logger.debug("Parsing import data...");
+		this.logger.warn("Using first part of name for firstname");
+		const parsedImportData: ReqUploadCompetitorsCSV = {
+			csvData: JSON.parse(importData.csvData),
+			csvMetadata: JSON.parse(importData.csvMetadata),
+			setupID: this.setupID,
+		};
+		const processedList: competitorsInitializer[] = parsedImportData.csvData.data.map((data, index) => {
+			this.logger.debug(`Preparing entry ${index} of ${parsedImportData.csvData.data.length}`);
+			const name = data[parsedImportData.csvMetadata.nameIndex].split(" ");
+			let team_id = null;
+			if (this.hasTeams) {
+				const teamIndex = settings.teamsMap[data[parsedImportData.csvMetadata.nameIndex]];
+				team_id = this.teamIdMaps[teamIndex][0];
+			}
+			// Remove columns we don't want
+			const filteredData = data.filter((value, index) => index !== parsedImportData.csvMetadata.nameIndex && index !== parsedImportData.csvMetadata.teamIndex);
+			const dataAsObject: Record<string, string> = {};
+			for (const [index, datum] of data.entries()) {
+				if (index !== parsedImportData.csvMetadata.nameIndex && index !== parsedImportData.csvMetadata.teamIndex) {
+					dataAsObject[parsedImportData.csvData.headers[index]] = datum;
+				} else {
+					continue;
+				}
+			}
+			return {
+				id: uuid.v4(),
+				firstname: name[0],
+				lastname: name.slice(1).join(" "),
+				/** Index: fkidx_90 */
+				team_id,
+				data: dataAsObject,
+			};
+		});
+
+		this.logger.debug("Data parsed. Now inserting into database...");
+		const numberCompetitors = processedList.length;
+		
+		try {
+			for (const [compIndex, competitor] of processedList.entries()) {
+				this.logger.debug(`Importing ID ${competitor.id} (${compIndex + 1}/${numberCompetitors})`);
+				// We also need to handle jopining, hence the query
+				await this.client.query(`
+				WITH competitor AS (
+					INSERT INTO competitors (
+						id,
+						firstname,
+						lastname,
+						team_id,
+						data
+					) VALUES (
+						$1,
+						$2,
+						$3,
+						$4,
+						$5
+					) RETURNING competitor_id
+				)
+				INSERT INTO join_competitor_events_group(competitor_id, competitor_settings_id) VALUES (
+					(SELECT competitor_id FROM competitor),
+					$6
+				);
+				`, [
+					competitor.id,
+					competitor.firstname,
+					competitor.lastname,
+					competitor.team_id,
+					competitor.data,
+					settingsID
+				]);
+			}
+		} catch (err) {
+			this.logger.error("Error during DB insertion of competitors!");
+			throw err;
+		}
+		
+		this.logger.info("Data imported.");
+		
+
+	}
+
+	public async rollback() {
+		this.logger.info("Rolling back...");
+		await this.client.query("ROLLBACK");
+	}
+
+
 	/** Use this to end a currently running transaction when there's an error */
 	protected async endSetupWithError() {
-		await this.client.query("ROLLBACK");
+		await this.rollback();
 		this.client.release();
 	}
 

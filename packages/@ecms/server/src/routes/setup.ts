@@ -10,10 +10,10 @@ import { ReqPartialSetup, ReqUploadCompetitorsCSV, ResStartSetup, SetupStates } 
 import connectToDB from "../utils/db";
 import createLogger from "../utils/logger";
 import connectToRedis from "../utils/redis";
-import { ECMSResponse } from "../utils/interfaces";
+import { ECMSResponse, PartialSetup, RedisCompetitorImport } from "../utils/interfaces";
 
 import { RequestWithBody as Request } from "../utils/interfaces";
-import { SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
+import { COMPETITOR_IMPORT_REDIS_KEY_PREFIX, SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
 import SetupHandler from "../setup/end";
 
 const router = Router();
@@ -65,10 +65,11 @@ router.put("/partial", async (req: Request<ReqPartialSetup>, res: ECMSResponse<S
 
 	try {
 		// TODO: Check Roles
-		await redis.HSET(`${SETUP_REDIS_KEY_PREFIX}${req.body.setupID}`, {
-			status: "in progress",
+		const partialUpdate: PartialSetup = {
+			status: "in progress" as unknown as SetupStates,
 			data: safeStringify(req.body),
-		});
+		};
+		await redis.HSET(`${SETUP_REDIS_KEY_PREFIX}${req.body.setupID}`, partialUpdate as unknown as Record<string, string>);
 
 		await redis.EXPIRE(`${SETUP_REDIS_KEY_PREFIX}${req.body.setupID}`, SETUP_REDIS_EXPIRE_TTL); 
 
@@ -118,7 +119,7 @@ router.post("/partial/uploadCSV", async (req: Request<ReqUploadCompetitorsCSV>, 
 		return;
 	}
 
-	const toPutIntoRedis: Record<keyof ReqUploadCompetitorsCSV, string | number> = {
+	const toPutIntoRedis: RedisCompetitorImport = {
 		csvMetadata: safeStringify(req.body.csvMetadata),
 		csvData: safeStringify(req.body.csvData),
 		setupID: req.body.setupID,
@@ -129,8 +130,8 @@ router.post("/partial/uploadCSV", async (req: Request<ReqUploadCompetitorsCSV>, 
 		// This is to prevent having to retrieve this if we just want to access the partial setup
 		// We then set a flag (hasImportedCompetitors) on the record in transactions:imported_competitors:<setupID> to indicate a competitors CSV has been uploaded
 		logger.debug("Adding CSV to redis...");
-		await redis.HSET(`transactions:imported_competitors:${req.body.setupID}`, toPutIntoRedis);
-		await redis.EXPIRE(`transactions:imported_competitors:${req.body.setupID}`, SETUP_REDIS_EXPIRE_TTL);
+		await redis.HSET(`${COMPETITOR_IMPORT_REDIS_KEY_PREFIX}${req.body.setupID}`, toPutIntoRedis);
+		await redis.EXPIRE(`${COMPETITOR_IMPORT_REDIS_KEY_PREFIX}${req.body.setupID}`, SETUP_REDIS_EXPIRE_TTL);
 		logger.debug("Updating partial setup record (key)...");
 		await redis.HSET(`${SETUP_REDIS_KEY_PREFIX}${req.body.setupID}`, {
 			hasImportedCompetitors: "true", // flag in effect
