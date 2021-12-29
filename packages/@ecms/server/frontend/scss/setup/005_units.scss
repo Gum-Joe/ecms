@@ -1,0 +1,25 @@
+#setup-units-form {
+    section {
+        padding: 10px;
+    }
+    .unit-section {
+        #unit-dropdown {
+            margin-top: 5px;
+            width: fit-content;
+            margin-right: 20px;
+        }
+        .unit-setter {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+        }
+    }
+
+    .unit-example {
+        p {
+            margin-top: 0;
+            font-weight: 300;
+        }
+    }
+}

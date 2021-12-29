@@ -12,6 +12,7 @@ import SetupActions, { setupAction } from "../../../actions/setup";
 import axios, { AxiosResponse } from "axios";
 import { ReqUploadCompetitorsCSV } from "@ecms/api/setup";
 import { useSetupRedirector } from "../util";
+import updateSetup from "../../../actions/setup/updateSetup";
 
 interface UploadProps {
 	/** Metadata about columns in the CSV and how they correspond to required ECMS values */
@@ -70,6 +71,10 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 	const eventOrGroup = useAppSelector(state => state.setup.type);
 	const eventType = useAppSelector(state => state.setup.event_settings?.data_tracked);
 
+	useEffect(() => {
+		dispatch(setupAction(SetupActions.SET_COMPETITOR_IMPORT_TYPE, "discrete"));
+	}, []);
+
 	// Check for CSV teams that need to be mapped to those already created
 	useEffect(() => {
 		// Get list of teams in CSV
@@ -102,6 +107,9 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 				setupID: setupID,
 			}, { cancelToken: source.token }).then((response) => {
 				console.log(`Uploaded CSV with ${response.status}!`);
+				// set metatdat
+				console.log("Storing metadata...");
+				
 				// Route
 				if (eventOrGroup === "event" && eventType === "individual") {
 					// Need to set units

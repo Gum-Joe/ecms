@@ -6,6 +6,7 @@
  * @packageDocumentation
  */
 import { ResStartSetup } from "@ecms/api/setup";
+import { competitor_setting_types, data_units, data_unitsInitializer } from "@ecms/models";
 import { StagingTeam } from "../../components/setup/util";
 import { SetupState } from "../../constants/interfaces";
 import { createGeneralAction } from "../createGeneralAction";
@@ -28,6 +29,10 @@ export enum SetupActionsList {
 	DELETE_MATCH = "DELETE_MATCH",
 	/** Maps a team in the CSV to a team in {@link SetupState.teams} */
 	CSV_MAP_TEAM = "CSV_MAP_TEAM",
+	/** Add unit information for event type individual */
+	SET_DATA_UNIT = "SET_DATA_UNIT",
+	/** Set competitor upload type */
+	SET_COMPETITOR_IMPORT_TYPE = "SET_COMPETITOR_IMPORT_TYPE",
 }
 
 /**
@@ -69,6 +74,8 @@ export type SetupActionPayloads = {
 	[SetupActionsList.DELETE_MATCH]: number;
 	/** First param is name of team in the CSV, second is index of team in {@link SetupState.teams} to map to */
 	[SetupActionsList.CSV_MAP_TEAM]: [string, number];
+	[SetupActionsList.SET_DATA_UNIT]: data_unitsInitializer;
+	[SetupActionsList.SET_COMPETITOR_IMPORT_TYPE]: competitor_setting_types,
 
 }
 

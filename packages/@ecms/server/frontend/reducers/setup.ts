@@ -77,6 +77,19 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 				...state,
 				matches: ((state.matches || []).filter((_, i) => i !== action.payload)), // Filter from GitHub CoPilot
 			};
+		case Actions.SET_COMPETITOR_IMPORT_TYPE:
+			if (action.payload === "discrete") {
+				return {
+					...state,
+					competitor_settings: {
+						...state.competitor_settings,
+						competitor_import_id: "doesn't matter", // HACK: Remove once also can set a list of them
+						type: "discrete",
+					}
+				};
+			} else {
+				return state;
+			}
 		case Actions.CSV_MAP_TEAM:
 			const newTeamMap = {};
 			newTeamMap[action.payload[0]] = action.payload[1];
@@ -84,11 +97,20 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 				...state,
 				competitor_settings: {
 					...state.competitor_settings,
+					competitor_import_id: "doesn't matter", // CSV only
 					teamsMap: {
 						...(state?.competitor_settings?.teamsMap || {}),
 						...newTeamMap,
 					}
 
+				}
+			};
+		case Actions.SET_DATA_UNIT:
+			return {
+				...state,
+				event_settings: {
+					...state.event_settings,
+					unit: action.payload,
 				}
 			};
 		default:

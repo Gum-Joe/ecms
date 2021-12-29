@@ -2,7 +2,7 @@ import SetupEventOrGroup, { ImportCompetitors, ReqUploadCompetitorsCSV, SetupSta
 import { competitorsInitializer, events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, teamsInitializer } from "@ecms/models";
 import type { Pool, PoolClient } from "pg";
 import postgresPromise from "pg-promise";
-import uuid from "uuid";
+import * as uuid from "uuid";
 import { COMPETITOR_IMPORT_REDIS_KEY_PREFIX, SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
 import type connectToDB from "../utils/db";
 import { PartialSetup, RedisCompetitorImport } from "../utils/interfaces";
@@ -74,22 +74,48 @@ export default class SetupHandler {
 	
 				// 2c: insert event data if required
 				this.logger.info("Adding event specific info...");
+				this.logger.debug("Validating...");
 				if (!this.setupInfo.event_settings) {
 					this.logger.error("No event settings found, despite this being an event!");
 					throw new Error("E_INVALID_SETUP: No event settings found, despite this being an event!");
 				} else if (!this.setupInfo.event_settings.data_tracked) {
 					this.logger.error("Data tracked for this event not specified!");
 					throw new Error("E_INVALID_SETUP: Data tracked for this event not specified!");
+				} else if (this.setupInfo.event_settings.data_tracked === "individual" && !this.setupInfo.event_settings.unit) {
+					this.logger.error("No unit provided depsite 'individual' tracking set!");
+					throw new Error("E_INVALID_SETUP: No unit provided depsite 'individual' tracking set!");
 				}
-	
-				/// TODO: Add data unit
-				this.logger.warn("Event unit currently not stored!");
+
+
 				const event_settings: event_only_settingsInitializer = {
 					data_tracked: this.setupInfo.event_settings.data_tracked
 				};
-				// RETURNING * from https://github.com/brianc/node-postgres/issues/1269|
-				const res = await this.client.query<event_only_settings>("INSERT INTO event_only_settings(data_tracked) VALUES ($1) RETURNING *;", [event_settings.data_tracked]);
-				settingsID = res.rows[0].event_settings_id;
+
+				if (this.setupInfo.event_settings.data_tracked === "individual") {
+					this.logger.debug("Also adding a unit.");
+					const res = await this.client.query(`
+					WITH theUnit AS (
+						INSERT INTO data_units(unit_name, unit, decimal_places)
+						VALUES ($1, $2, $3)
+						RETURNING unit_id
+					)
+					INSERT INTO event_only_settings(data_tracked, unit_id)
+						VALUES (
+							$4,
+							( SELECT unit_id FROM theUnit )
+						) RETURNING *;
+					`, [
+						this.setupInfo.event_settings.unit?.unit_name,
+						this.setupInfo.event_settings.unit?.unit,
+						this.setupInfo.event_settings.unit?.decimal_places,
+						event_settings.data_tracked,
+					]);
+					settingsID = res.rows[0].event_settings_id;
+				} else {
+					const res = await this.client.query<event_only_settings>("INSERT INTO event_only_settings(data_tracked) VALUES ($1) RETURNING *;", [event_settings.data_tracked]);
+					settingsID = res.rows[0].event_settings_id;
+				}
+				
 	
 			}
 
@@ -144,7 +170,7 @@ export default class SetupHandler {
 	 */
 	protected async checkTeams() {
 		if (this.setupInfo.enable_teams && !(this.setupInfo.inheritance === true)) {
-			this.logger.debug("Preparing teams to creates...");
+			this.logger.debug("Preparing teams to create...");
 			if (!Array.isArray(this.setupInfo.teams)) {
 				this.logger.error("Bad type provided for teams array in setup info.");
 				throw new Error("E_INVALID_SETUP: Bad type provided for teams array in setup info!");
@@ -162,8 +188,10 @@ export default class SetupHandler {
 				this.logger.debug(`Inserting team with ID ${team[0]}, name ${team[1].name}`);
 				await this.client.query(`
 					INSERT INTO teams(team_id, name, colour) VALUES ($1, $2, $3);
-					INSERT INTO join_events_groups_teams(event_group_id, team_id) VALUES ($4, $1)
-				`, [team[0], team[1].name, team[1].colour, this.setupID]);
+				`, [team[0], team[1].name, team[1].colour]);
+				await this.client.query(`
+					INSERT INTO join_events_groups_teams(event_group_id, team_id) VALUES ($1, $2)
+				`, [ this.setupID,  team[0] ]);
 			}
 
 			this.logger.debug("Teams processed.");
@@ -218,7 +246,9 @@ export default class SetupHandler {
 						const settingsID = uuid.v4();
 						await this.client.query(`
 							INSERT INTO competitor_settings(competitor_settings_id, type) VALUES ($1, 'discrete');
-							UPDATE event_and_groups SET competitor_settings_id = $1 WHERE event_group_id = $2;
+						`, [settingsID]);
+						await this.client.query(`
+							UPDATE events_and_groups SET competitor_settings_id = $1 WHERE event_group_id = $2;
 						`, [settingsID, this.setupID]);
 						await this.importCompetitors(this.setupInfo.competitor_settings, settingsID);
 					} else {
@@ -249,12 +279,12 @@ export default class SetupHandler {
 
 		// Grab from Redis
 		this.logger.debug("Grabbing from redis and validating...");
-		const importData = this.redis.HGETALL(COMPETITOR_IMPORT_REDIS_KEY_PREFIX + this.setupID) as unknown as Partial<RedisCompetitorImport>;
+		const importData = await this.redis.HGETALL(COMPETITOR_IMPORT_REDIS_KEY_PREFIX + this.setupID) as unknown as Partial<RedisCompetitorImport>;
 		if (!importData) {
 			throw new Error("Imported competitor data not found in redis!");
 		}
 		if (!importData.csvData || !importData.csvMetadata) {
-			throw new Error("CSV Data or Metedata not found in redis when importing competitors!");
+			throw new Error("CSV Data or Metadata not found in redis when importing competitors!");
 		}
 
 		this.logger.debug("Preparing CSV data...");
@@ -265,33 +295,53 @@ export default class SetupHandler {
 			csvMetadata: JSON.parse(importData.csvMetadata),
 			setupID: this.setupID,
 		};
-		const processedList: competitorsInitializer[] = parsedImportData.csvData.data.map((data, index) => {
-			this.logger.debug(`Preparing entry ${index} of ${parsedImportData.csvData.data.length}`);
-			const name = data[parsedImportData.csvMetadata.nameIndex].split(" ");
-			let team_id = null;
-			if (this.hasTeams) {
-				const teamIndex = settings.teamsMap[data[parsedImportData.csvMetadata.nameIndex]];
-				team_id = this.teamIdMaps[teamIndex][0];
-			}
-			// Remove columns we don't want
-			const filteredData = data.filter((value, index) => index !== parsedImportData.csvMetadata.nameIndex && index !== parsedImportData.csvMetadata.teamIndex);
-			const dataAsObject: Record<string, string> = {};
-			for (const [index, datum] of data.entries()) {
-				if (index !== parsedImportData.csvMetadata.nameIndex && index !== parsedImportData.csvMetadata.teamIndex) {
-					dataAsObject[parsedImportData.csvData.headers[index]] = datum;
+		const processedList: competitorsInitializer[] = parsedImportData.csvData.data
+			.filter((data, index) => {
+				if (typeof data?.[parsedImportData.csvMetadata.teamIndex] === "undefined") {
+					this.logger.warn(`Skipping entry ${index} of ${parsedImportData.csvData.data.length} as missing teamIndex column`);
+					return false;
+				} else if (typeof data?.[parsedImportData.csvMetadata.nameIndex] === "undefined") {
+					this.logger.warn(`Skipping entry ${index} of ${parsedImportData.csvData.data.length} as missing nameIndex column`);
+					return false;
 				} else {
-					continue;
+					return true;
 				}
-			}
-			return {
-				id: uuid.v4(),
-				firstname: name[0],
-				lastname: name.slice(1).join(" "),
-				/** Index: fkidx_90 */
-				team_id,
-				data: dataAsObject,
-			};
-		});
+			})
+			.map((data, index) => { 
+				this.logger.debug(`Preparing entry ${index} of ${parsedImportData.csvData.data.length}`);
+				const name = data[parsedImportData.csvMetadata.nameIndex].split(" ");
+				let team_id = null;
+				if (this.hasTeams) {
+				// Teams already in the list aren't mapped, so check for those!
+					const teamsCheckIndex = this.setupInfo.teams?.findIndex(team => team.name === data[parsedImportData.csvMetadata.teamIndex]);
+					if (teamsCheckIndex !== -1 && (teamsCheckIndex || teamsCheckIndex === 0)) {
+						team_id = this.teamIdMaps[teamsCheckIndex][0];
+					} else {
+					// Find in map
+						const teamIndex = settings.teamsMap[data[parsedImportData.csvMetadata.teamIndex]];
+						team_id = this.teamIdMaps[teamIndex][0];
+					}
+				
+				}
+				// Remove columns we don't want
+				const filteredData = data.filter((value, index) => index !== parsedImportData.csvMetadata.nameIndex && index !== parsedImportData.csvMetadata.teamIndex);
+				const dataAsObject: Record<string, string> = {};
+				for (const [index, datum] of data.entries()) {
+					if (index !== parsedImportData.csvMetadata.nameIndex && index !== parsedImportData.csvMetadata.teamIndex) {
+						dataAsObject[parsedImportData.csvData.headers[index]] = datum;
+					} else {
+						continue;
+					}
+				}
+				return {
+					id: uuid.v4(),
+					firstname: name[0],
+					lastname: name.slice(1).join(" "),
+					/** Index: fkidx_90 */
+					team_id,
+					data: dataAsObject,
+				};
+			});
 
 		this.logger.debug("Data parsed. Now inserting into database...");
 		const numberCompetitors = processedList.length;
