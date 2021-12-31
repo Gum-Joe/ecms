@@ -6,7 +6,7 @@
 import { Router } from "express";
 import { v4 as uuidv4 } from "uuid";
 import safeStringify from "fast-safe-stringify";
-import { ReqPartialSetup, ReqUploadCompetitorsCSV, ResStartSetup, SetupStates } from "@ecms/api/setup";
+import { ReqPartialSetup, ReqUploadCompetitorsCSV, ResSetupStatus, ResStartSetup, SetupStates } from "@ecms/api/setup";
 import connectToDB from "../utils/db";
 import createLogger from "../utils/logger";
 import connectToRedis from "../utils/redis";
@@ -162,6 +162,7 @@ router.post("/end", async (req, res, next) => {
 		res.json({
 			message: "Please provide a setupID.",
 		});
+		return;
 	}
 	logger.debug("Checking setup exists...");
 	try {
@@ -171,12 +172,18 @@ router.post("/end", async (req, res, next) => {
 			res.json({
 				message: "setupID not found",
 			});
+			return;
 		}
 		logger.debug("Found setupID! Proceeding with ending setup...");
 		const setupHandler = new SetupHandler(req.body.setupID, pool, redis);
-		await setupHandler.finalise();
+		// HAND-OFF - runs async, don't care about result.
+		setupHandler.finaliseHandOff();
+		res.statusCode = 202;
+		res.json({
+			message: "Response accepted. Finalising setup...",
+		});
 	} catch (err) {
-		logger.error("Error ending setup!");
+		logger.error("Error starting the process of ending setup!");
 		const errorCast = err as Error;
 		logger.error("message" in errorCast ? errorCast.message : errorCast);
 		res.status(500).json({
@@ -184,5 +191,31 @@ router.post("/end", async (req, res, next) => {
 		});
 	}
 });
+
+/** Returns setup state */
+router.get("/state/:setupID", async (req, res: ECMSResponse<ResSetupStatus>, next) => {
+	try {
+		const state: SetupStates["status"] | string | undefined = await redis.HGET(SETUP_REDIS_KEY_PREFIX + req.params.setupID, "status");
+		if (typeof state === "undefined") {
+			res.statusCode = 404;
+			res.json({
+				message: "Setup not found, or ID couldn't be retrieved."
+			});
+		} else {
+			res.statusCode = 200;
+			res.json({
+				status: state as SetupStates["status"],
+				error: await redis.HGET(SETUP_REDIS_KEY_PREFIX + req.params.setupID, "error"),
+			});
+		}
+	} catch (err) {
+		logger.error("Error getting setup state!");
+		const errorCast = err as Error;
+		logger.error("message" in errorCast ? errorCast.message : errorCast);
+		res.status(500).json({
+			message: `Internal Server Error - ${(err as Error)?.message}`,
+		});
+	}
+})
 
 export default router;

@@ -8,7 +8,7 @@ import { Dropdown } from "@fluentui/react-northstar";
 import { useAppDispatch, useAppSelector } from "../../../util/hooks";
 import Card from "../../common/Card";
 import { ColumnsToGetRecord, CSVResult } from "./util";
-import SetupActions, { setupAction } from "../../../actions/setup";
+import SetupActions, { setupAction, SetupActionsList } from "../../../actions/setup";
 import axios, { AxiosResponse } from "axios";
 import { ReqUploadCompetitorsCSV } from "@ecms/api/setup";
 import { useSetupRedirector } from "../util";
@@ -72,6 +72,7 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 	const eventType = useAppSelector(state => state.setup.event_settings?.data_tracked);
 
 	useEffect(() => {
+		// Provision state so information that we are uploading a CSV is stored
 		dispatch(setupAction(SetupActions.SET_COMPETITOR_IMPORT_TYPE, "discrete"));
 	}, []);
 
@@ -101,31 +102,36 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 		if (canProceed || props.forceUpload) {
 			const cancelToken = axios.CancelToken;
 			const source = cancelToken.source();
-			const request = axios.post<unknown, AxiosResponse<unknown, any>, ReqUploadCompetitorsCSV>("/api/setup/partial/uploadCSV", {
-				csvMetadata: props.csvMetaData,
-				csvData: props.csvData,
-				setupID: setupID,
-			}, { cancelToken: source.token }).then((response) => {
-				console.log(`Uploaded CSV with ${response.status}!`);
-				// set metatdat
-				console.log("Storing metadata...");
-				
-				// Route
-				if (eventOrGroup === "event" && eventType === "individual") {
-					// Need to set units
-					setupPage("/units");
-				} else {
-					setupPage("/end");
-				}
-				
-				// Redirect
-			}).catch((error) => {
-				console.error(error);
-			});
-
-			return () => {
-				source.cancel("Cancelled.");
-			};
+			try {
+				const request = axios.post<unknown, AxiosResponse<unknown, any>, ReqUploadCompetitorsCSV>("/api/setup/partial/uploadCSV", {
+					csvMetadata: props.csvMetaData,
+					csvData: props.csvData,
+					setupID: setupID,
+				}, { cancelToken: source.token }).then((response) => {
+					console.log(`Uploaded CSV with ${response.status}!`);
+					// set metatdat
+					console.log("Storing metadata...");
+					
+					// Route
+					if (eventOrGroup === "event" && eventType === "individual") {
+						// Need to set units
+						setupPage("/units");
+					} else {
+						setupPage("/end");
+					}
+					
+					// Redirect
+				}).catch((error) => {
+					console.error(error);
+				});
+	
+				return () => {
+					source.cancel("Cancelled.");
+				};
+			} catch (err) {
+				dispatch(setupAction(SetupActionsList.SETUP_FAILED, err));
+			}
+			
 		}
 	}, [setupID, canProceed, props.forceUpload, props.csvMetaData, props.csvData]);
 	return (

@@ -1,3 +1,4 @@
+import { TaskStatus } from "@ecms/api/common";
 import SetupEventOrGroup, { ImportCompetitors, ReqUploadCompetitorsCSV, SetupStates } from "@ecms/api/setup";
 import { competitorsInitializer, events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, teamsInitializer } from "@ecms/models";
 import type { Pool, PoolClient } from "pg";
@@ -13,9 +14,36 @@ import type connectToRedis from "../utils/redis";
 const pgp = postgresPromise();
 
 
+/**
+ * Used to handle redis status messages for long running tasks
+ */
+class RedisStateHandler {
+	protected logger: ReturnType<typeof createLogger>;
 
+	constructor(protected redisClient: ReturnType<typeof connectToRedis>, protected redisKey: string) {
+		this.logger = createLogger("redis:state");
+	}
+	
+	public setRedisDone() {
+		return this.redisClient.HSET(this.redisKey, "status", "done");
+	}
 
-export default class SetupHandler {
+	public setRedisError(err: unknown) {
+		let errorMessage = `Unknown error encountered. Error object was ${err}.`;
+		if (typeof err === "object") {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore: error handling
+			errorMessage = err?.message || `Unknown error encountered. Error object was ${err}.`;
+		}
+		const status: TaskStatus & Record<string, string> = {
+			status: "error",
+			error: errorMessage,
+		};
+		return this.redisClient.HSET(this.redisKey, status);
+	}
+}
+
+export default class SetupHandler extends RedisStateHandler {
 	protected client!: PoolClient;
 	protected logger: ReturnType<typeof createLogger>;
 
@@ -32,8 +60,29 @@ export default class SetupHandler {
  
 
 	constructor(public readonly setupID: string, protected pool: ReturnType<typeof connectToDB>, protected redis: ReturnType<typeof connectToRedis>) {
+		super(redis, SETUP_REDIS_KEY_PREFIX + setupID);
 		this.logger = createLogger(`setup:end:${setupID}`);
 	}
+
+	/**
+	 * Finalise setup, but do so in the background.
+	 * This run finalise and stores the result in redis, for picking up by the client from there later
+	 */
+	public async finaliseHandOff() {
+		this.logger.info(`Ending setup with ID ${this.setupID}, but storing state in Redis...`);
+		try {
+			await this.finalise();
+			await this.setRedisDone();
+		} catch (err) {
+			this.logger.error("Error detected in setup handoff mode!");
+			this.setRedisError(err)
+				.catch(err => this.logger.error(`Error setting setup error state: ${err?.message}`));
+		}
+	}
+
+	/**
+	 * Error 
+	 */
 
 	/**
 	 * Starts finalising setup.

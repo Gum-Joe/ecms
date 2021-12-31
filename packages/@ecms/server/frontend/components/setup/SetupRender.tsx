@@ -36,14 +36,14 @@ const SetupRenderer: React.FC = (props) => {
 		} else {
 			dispatch(startSetup(typeToSetup));
 		}
-	}, []); // We don't want this to run on every render
+	}, [dispatch, query]); // We don't want this to run on every render
 	
 	if (isError) {
 		return (
 			<SetupFrame nextPage="/" id="setup-renderer">
 				<SetupHeader>
 					<h1>An error was encountered</h1>
-					<h3>{isError.message}</h3>
+					<h3>{isError.message || isError}</h3>
 				</SetupHeader>
 			</SetupFrame>
 		);

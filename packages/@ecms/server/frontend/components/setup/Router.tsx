@@ -6,6 +6,8 @@ import Teams from "./Teams";
 import Competitors from "./competitors";
 import Finalise from "./Finalise";
 import Units from "./Units";
+import { useAppSelector } from "../../util/hooks";
+import SetupFrame, { SetupHeader } from "./SetupFrame";
 
  
 const SetupRouter: FunctionComponent = () => {
@@ -14,7 +16,21 @@ const SetupRouter: FunctionComponent = () => {
 	// relative to the parent route, while the `url` lets
 	// us build relative links."
 	const { path, url } = useRouteMatch();
+	const isError = useAppSelector(state => state.setup.error);
+	
+	if (isError) {
+		return (
+			<SetupFrame nextPage="/" id="setup-renderer">
+				<SetupHeader>
+					<h1>An error was encountered</h1>
+					<h3>{isError.message || isError}</h3>
+				</SetupHeader>
+			</SetupFrame>
+		);
+	}
+
 	return (
+		
 		<Switch>
 			<Route exact path={path}>
 				<SetupRenderer />

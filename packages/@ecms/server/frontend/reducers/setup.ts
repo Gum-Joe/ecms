@@ -18,14 +18,24 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 		//case Actions.SETUP_BASIC_DETAILS:
 		//	return {};
 		case Actions.SETUP_FAILED:
-			return {
-				...state,
-				error: {
-					message: action.payload.message,
-					name: action.payload.name,
-					stack: action.payload.stack,
-				},
-			};
+			if (action.payload instanceof Error) {
+				return {
+					...state,
+					error: {
+						message: action.payload.message,
+						name: action.payload.name,
+						stack: action.payload.stack,
+					},
+				};
+			} else {
+				return {
+					...state,
+					error: {
+						message: action.payload,
+						name: "Unknown error"
+					},
+				};
+			}
 		case Actions.START_SETUP:
 			return {
 				type: action.payload.type,

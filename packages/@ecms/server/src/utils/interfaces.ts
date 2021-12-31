@@ -2,7 +2,8 @@
  * Stores interfaces used by ECMS
  * @packageDocumentation
  */
-import { APIMessage } from "@ecms/api";
+import { APIMessage } from "@ecms/api/common";
+import { GeneralTaskStatus, TaskStatus } from "@ecms/api/common";
 import { ReqUploadCompetitorsCSV, SetupStates } from "@ecms/api/setup";
 import type { Request, Response } from "express";
 
@@ -21,6 +22,8 @@ export type ECMSResponse<T = undefined> = T extends undefined ? Response<APIMess
  *  What's stored in Redis when importing competitors
  */
 export type RedisCompetitorImport = Record<keyof ReqUploadCompetitorsCSV, string>
+
+
 
 /**
  * Partial setup in redis when setup is running

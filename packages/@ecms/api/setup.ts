@@ -17,7 +17,7 @@ import {
 	join_roles_usersInitializer
 } from "@ecms/models";
 
-import type { CSVResult } from "./common";
+import type { APIMessage, CSVResult, TaskStatus, TaskStatuses } from "./common";
 
 /**
  * Exclude properties ending with _id
@@ -176,10 +176,7 @@ export interface ResStartSetup {
 /**
  * Setup state
  */
-export interface SetupStates {
-	/** Setup state  - pending means not yet started */
-	state: "pending" | "in progress" | "finalising" | "done",
-}
+export type SetupStates = TaskStatus<"finalising">;
 
 /**
  * Updates a setup on the server in the Redis DB
@@ -197,3 +194,11 @@ export type ReqUploadCompetitorsCSV = {
 	/** ID of setup this is before */
 	setupID: SetupEventOrGroup["setupID"];
 }
+
+/**
+ * Response when requesting the status of a setup
+ */
+export type ResSetupStatus =  {
+	status: SetupStates["status"],
+	error?: string,
+};

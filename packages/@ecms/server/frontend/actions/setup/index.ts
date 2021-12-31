@@ -66,7 +66,7 @@ export interface UpdateMatch {
 export type SetupActionPayloads = {
 	[SetupActionsList.START_SETUP]: StartSetup
 	[SetupActionsList.UPDATE_SETUP]: Omit<SetupState, "state">,
-	[SetupActionsList.SETUP_FAILED]: Error,
+	[SetupActionsList.SETUP_FAILED]: Error | unknown,
 	[SetupActionsList.SET_TEAMS]: StagingTeam[]
 	[SetupActionsList.ADD_MATCH]: null;
 	[SetupActionsList.UPDATE_MATCH]: UpdateMatch;

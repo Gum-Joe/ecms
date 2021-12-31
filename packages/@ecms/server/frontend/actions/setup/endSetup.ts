@@ -20,6 +20,7 @@ const endSetup: () => ThunkAction<Promise<SetupActions>, RootState, void, SetupA
 	} catch (err) {
 		console.error("Error updating (ending) setup on the server:", err);
 		// TODO: Handle error
+		return dispatch(setupAction(SetupActionsList.SETUP_FAILED, err));
 		
 	}
 

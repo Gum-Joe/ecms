@@ -3,11 +3,11 @@
  * @packageDocumentation
  */
 import SetupEventOrGroup, { SetupStates } from "@ecms/api/setup";
-export type SetupState = Partial<SetupEventOrGroup> & SetupStates & {
+export type SetupState = Partial<SetupEventOrGroup> & Partial<SetupStates> & {
 	error?: {
 		message: string;
 		name: string;
 		stack?: any;
-	},
+	} | unknown,
 	
 };
