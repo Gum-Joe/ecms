@@ -32,6 +32,7 @@ import { join } from "path";
 import userRouter from "./routes/users";
 import setupRouter from "./routes/setup";
 import commonRouter from "./routes/common";
+import eventsRouter from "./routes/events";
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
@@ -107,6 +108,7 @@ app.use(express.static(join(__dirname, "../public")));
 app.use("/api/user", userRouter);
 app.use("/api/setup", setupRouter);
 app.use("/api/common", commonRouter);
+app.use("/api/events", eventsRouter);
 // Ensure API routes that are missing give a proper 404 page
 app.get("/api/*", (req, res) => {
 	res.status(404);

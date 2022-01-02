@@ -9,9 +9,11 @@
 
 import { Pool } from "pg";
 import createLogger from "./logger";
+import makeKnex from "knex";
 
 /** Store the pool itself to distribute out when requested */
 let thePool: Pool;
+let theKnexPool: ReturnType<typeof makeKnex>;
 
 /**
  * Get the connection params for the DB client
@@ -25,6 +27,31 @@ export function getDBParams() {
 		password: process.env.ECMS_DB_PASSWORD,
 		database: process.env.ECMS_DB_DB,
 	};
+}
+
+/**
+ * Creates a connection to the DB based on the ECMS config, that used the Knex library
+ * 
+ * Make sure the ECMS config (the .env file) is loaded!
+ * 
+ * Prefer using a provided pool instead.
+ * 
+ * @returns knex object to interacty with the DB
+ */
+ export function connectToDBKnex(): ReturnType<typeof makeKnex> {
+	const logger = createLogger("db");
+	logger.info("Creating new DB connection with knex...");
+	if (typeof theKnexPool !== "undefined") {
+		logger.info("Reusing already created Knex object...");
+		return theKnexPool;
+	}
+	theKnexPool = makeKnex({
+		connection: getDBParams(),
+		client: "pg",
+	});
+
+	logger.info("Connected.");
+	return theKnexPool;
 }
 
 /**

@@ -45,6 +45,9 @@ button.green-button {
 	font-size: 15.8667px;
 	text-align: center;
 	color: $text-color;
+	&:hover {
+		background: rgba(124, 196, 159, 0.5);
+	}
 }
 
 .icon-button  {

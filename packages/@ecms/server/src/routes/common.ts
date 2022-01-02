@@ -3,24 +3,18 @@
  * @packageDocumentation
  */
 import { ResEventsGroupsList } from "@ecms/api/common";
+import { teams } from "@ecms/models";
 import { Router } from "express";
-import makeKnex from "knex";
-import connectToDB, { getDBParams } from "../utils/db";
+import { connectToDBKnex } from "../utils/db";
 import { ECMSResponse } from "../utils/interfaces";
 import createLogger from "../utils/logger";
-import connectToRedis from "../utils/redis";
 
 const router = Router();
 const logger = createLogger("api:setup");
- 
-const pool = connectToDB();
-const redis = connectToRedis();
+
 
 // Use Knex - easier to query with!
-const knex = makeKnex({
-	client: "pg",
-	connection: getDBParams(),
-});
+const knex = connectToDBKnex();
 
 /**
  * Returns a list of events/groups, by default those not in a group
@@ -41,11 +35,35 @@ router.get("/list", async (req, res: ECMSResponse<ResEventsGroupsList>) => {
 		res.json(theList);
 	} catch (err) {
 		logger.error("Error getting list of events!");
-		logger.error(err);
+		logger.error((err as Error)?.message);
 		res.status(500).json({
 			message: `Internal Server Error - ${(err as Error)?.message}`,
 		});
 	}
+});
+
+/**
+ * Retrieve teams associated with an event/group
+ */
+router.get("/:id/teams", async (req, res: ECMSResponse<teams>, next) => {
+	const eventID = req.params.id;
+	logger.info(`Retrieving teams for ${eventID}...`);
+	try {
+		const teams = await knex
+			.select<teams>("*")
+			.from("join_events_groups_teams")
+			.where("event_group_id", eventID)
+			.join("teams", "join_events_groups_teams.team_id", "teams.team_id");
+
+		res.json(teams);
+	} catch (err) {
+		logger.error(`Error getting matches for event ${eventID}!`);
+		logger.error((err as Error)?.message);
+		res.status(500).json({
+			message: `Internal Server Error - ${(err as Error)?.message}`,
+		});
+	}
+	
 });
 
 export default router;

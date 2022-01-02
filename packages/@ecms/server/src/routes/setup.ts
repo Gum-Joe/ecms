@@ -46,7 +46,7 @@ router.post("/start", async (req, res: ECMSResponse<ResStartSetup>, next) => {
 		logger.info("Setup started.");
 	} catch (err) {
 		logger.error("Error creating new setup!");
-		logger.error(err);
+		logger.error((err as Error)?.message);
 		res.status(500).json({
 			message: `Internal Server Error - ${(err as Error)?.message}`,
 		});
@@ -81,7 +81,7 @@ router.put("/partial", async (req: Request<ReqPartialSetup>, res: ECMSResponse<S
 		logger.info("Setup updated.");
 	} catch (err) {
 		logger.error("Error creating new setup!");
-		logger.error(err);
+		logger.error((err as Error)?.message);
 		res.status(500).json({
 			message: `Internal Server Error - ${(err as Error)?.message}`,
 		});
