@@ -14,6 +14,20 @@ import createLogger from "./logger";
 let thePool: Pool;
 
 /**
+ * Get the connection params for the DB client
+ * @returns Parameters to pass to the DB client
+ */
+export function getDBParams() {
+	return {
+		host: process.env.ECMS_DB_HOSTNAME,
+		port: parseInt(process.env.ECMS_DB_PORT || "5434", 10),
+		user: process.env.ECMS_DB_USERNAME,
+		password: process.env.ECMS_DB_PASSWORD,
+		database: process.env.ECMS_DB_DB,
+	};
+}
+
+/**
  * Creates a connection to the DB based on the ECMS config.
  * 
  * Make sure the ECMS config (the .env file) is loaded!
@@ -29,13 +43,7 @@ export default function connectToDB(): Pool {
 		logger.info("Reusing already created Postgres Pool...");
 		return thePool;
 	}
-	thePool = new Pool({
-		host: process.env.ECMS_DB_HOSTNAME,
-		port: parseInt(process.env.ECMS_DB_PORT || "5434", 10),
-		user: process.env.ECMS_DB_USERNAME,
-		password: process.env.ECMS_DB_PASSWORD,
-		database: process.env.ECMS_DB_DB,
-	});
+	thePool = new Pool(getDBParams());
 	
 	// Setup error handling
 	logger.debug("Setting up error handling...");

@@ -31,6 +31,7 @@ const clientDB = connectToDB();
 import { join } from "path";
 import userRouter from "./routes/users";
 import setupRouter from "./routes/setup";
+import commonRouter from "./routes/common";
 import express from "express";
 import morgan from "morgan";
 import helmet from "helmet";
@@ -105,6 +106,7 @@ app.use(express.static(join(__dirname, "../public")));
 // Setup routes
 app.use("/api/user", userRouter);
 app.use("/api/setup", setupRouter);
+app.use("/api/common", commonRouter);
 // Ensure API routes that are missing give a proper 404 page
 app.get("/api/*", (req, res) => {
 	res.status(404);
@@ -118,6 +120,9 @@ app.get("/login*", (req, res) => {
 	res.sendFile(join(__dirname, "../public/index.html"));
 });
 app.get("/setup*", (req, res) => {
+	res.sendFile(join(__dirname, "../public/index.html"));
+});
+app.get("/entry*", (req, res) => {
 	res.sendFile(join(__dirname, "../public/index.html"));
 });
 

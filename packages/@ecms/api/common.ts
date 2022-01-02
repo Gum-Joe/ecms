@@ -3,6 +3,8 @@
  * @packageDocumentation
  */
 
+import { events_and_groups } from "@ecms/models";
+
 /**
  * Basic API Response
  * Allows us to respond with an error message or some other message
@@ -49,3 +51,8 @@ interface ErrorTaskStatus {
  * @template AdditionalStatus use this to add additional statuses to {@link GeneralTaskStatus.status}
  */
 export type TaskStatus<AdditionalStatus extends string = "pending"> = GeneralTaskStatus<AdditionalStatus> | ErrorTaskStatus;
+
+/**
+ * Response when requesting a list of event and groups
+ */
+export type ResEventsGroupsList = Pick<events_and_groups, "name" | "description" | "type" | "event_group_id" | "parent_id" | "complete" | "archived">[];

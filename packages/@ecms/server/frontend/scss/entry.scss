@@ -1,0 +1,94 @@
+/**
+SCSS for the data entry pages
+*/
+
+.entry-page {
+    overflow: auto;
+    * {
+        overflow: auto;  
+    }
+
+    // From https://grid.layoutit.com/
+    display: grid;
+    grid-template-columns: 1fr; 
+    grid-template-rows: 1fr 57px; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+        "."
+        "."; 
+
+    .entry-bottom-nav {
+        min-height: 57px;
+    }
+}
+
+.entry-list {
+    // From figma
+    background: #202020;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.25);
+
+    h1 {
+        text-align: center;
+        margin: 30px;
+    }
+
+    .entry-list-container {
+        // From figma
+        /* Auto Layout */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0px;
+
+        padding-left: 26px;
+        padding-right: 26px;
+
+        .entry-list-item {
+            /* Button */
+            position: static;
+            width: 100%;
+            min-height: 60px;
+            left: 0px;
+            top: 0px;
+
+
+            /* Inside Auto Layout */
+            flex: none;
+            order: 0;
+            flex-grow: 0;
+            margin-bottom: 30px;
+
+            background: rgba(169, 52, 54, 0.56);
+            border: 2.1452px solid #281D1E;
+            box-sizing: border-box;
+            border-radius: 8px;
+
+            // Inside it
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 0 20px;
+
+            svg {
+                width: 60px;
+            }
+
+            p {
+                flex: 1;
+                font-family: Dosis;
+                font-style: normal;
+                font-weight: normal;
+                font-size: 18px;
+            }
+
+
+            // Use button hover props
+            &:hover {
+                background-color: lighten($color: rgba(169, 52, 54, 0.56), $amount: 5%);
+                border-color: darken(#882B2D, 5%);
+                cursor: pointer;
+                color: darken($text-color, 5%);
+            }
+        }
+    }
+}

@@ -8,6 +8,7 @@ import HomepageMain from "./main/Homepage";
 import SetupRouter from "./setup/Router";
 import { SETUP_BASE_ROUTE } from "./setup/util";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
+import DataEntry from "./entry";
 
 
 /**
@@ -37,7 +38,7 @@ const ProtectedHomePage: React.FC = (props) => {
 
 const darkTheme = createTheme({
 	palette: {
-		mode: 'dark',
+		mode: "dark",
 	},
 });
 
@@ -54,6 +55,10 @@ const App: React.FC = () =>  {
 			<Router>
 				<Route exact path="/">
 					<ProtectedHomePage />
+				</Route>
+
+				<Route exact path="/entry">
+					<DataEntry />
 				</Route>
 
 				<Route exact path="/login">
