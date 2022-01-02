@@ -32,6 +32,21 @@ button {
 	}
 }
 
+button.green-button {
+	background: rgba(124, 196, 159, 0.27);
+	border: 1px solid rgba(147, 226, 186, 0.1);
+	box-sizing: border-box;
+	border-radius: 6px;
+
+	// Text
+	font-family: Dosis;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 15.8667px;
+	text-align: center;
+	color: $text-color;
+}
+
 .icon-button  {
 	padding-right: 20px !important; 
 	padding-left: 20px !important; 

@@ -92,3 +92,24 @@ SCSS for the data entry pages
         }
     }
 }
+
+footer.entry-bottom-nav {
+    display: grid; 
+    grid-template-columns: min-content 1fr min-content; 
+    grid-template-rows: 1fr; 
+    gap: 0px 0px; 
+    grid-template-areas: 
+        ". . ."; 
+    padding: 0px 22px;
+    > * {
+        margin: auto;
+    }
+    svg {
+        font-size: 18px;
+    }
+
+    .green-button {
+        width: 100px;
+        height: 40px;
+    }
+}

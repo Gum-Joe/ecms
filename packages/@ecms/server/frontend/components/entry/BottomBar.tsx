@@ -6,7 +6,7 @@ import React from "react";
 const BottomBar: React.FC = (props) => {
 	return (
 		<footer className="entry-bottom-nav">
-
+			{props.children}
 		</footer>
 	);
 };

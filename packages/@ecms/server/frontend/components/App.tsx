@@ -57,7 +57,7 @@ const App: React.FC = () =>  {
 					<ProtectedHomePage />
 				</Route>
 
-				<Route exact path="/entry">
+				<Route path="/entry">
 					<DataEntry />
 				</Route>
 
