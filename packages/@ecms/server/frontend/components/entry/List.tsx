@@ -1,20 +1,22 @@
 import { ResEventsGroupsList } from "@ecms/api/common";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 interface ListItemProps {
 	name: string;
+	onClick: () => void;
 }
 
 /**
- * 
+ * An item in the list of events
  * @param props 
  * @returns 
  */
 const ListItem: React.FC<ListItemProps> = (props) => {
 	return (
-		<div className="entry-list-item">
+		<div className="entry-list-item" onClick={props.onClick}>
 			<p>{props.name}</p>
 			<FontAwesomeIcon icon={faArrowRight} />
 		</div>
@@ -26,6 +28,19 @@ const ListItem: React.FC<ListItemProps> = (props) => {
  */
 const List: React.FC = (props) => {
 	const [eventAndGroupsList, seteventAndGroupsList] = useState<ResEventsGroupsList>([]);
+	const history = useHistory();
+
+	const handleRedirect = useCallback(
+		(eventOrGroup: ResEventsGroupsList[0]) => {
+			return () => {
+				// Handle red
+				if (eventOrGroup.type === "event") {
+					history.push(`/entry/${eventOrGroup.event_group_id}`);
+				}
+			};
+		},
+		[history],
+	);
 	
 	useEffect(() => {
 		fetch("/api/common/list")
@@ -41,7 +56,11 @@ const List: React.FC = (props) => {
 			<h1 className="sub-header">Select an event</h1>
 			<div className="entry-list-container">
 				{
-					eventAndGroupsList.map((eventOrGroup, index) => (<ListItem key={index} name={eventOrGroup.name} />))
+					eventAndGroupsList.map((eventOrGroup, index) => (<ListItem
+						key={index}
+						name={eventOrGroup.name}
+						onClick={handleRedirect(eventOrGroup)}
+					/>))
 				}
 			</div>
 		</div>
