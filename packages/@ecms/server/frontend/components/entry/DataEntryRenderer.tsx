@@ -4,7 +4,8 @@
 import { event_only_settings, matches, teams } from "@ecms/models";
 import { faArrowLeft, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useCallback, useEffect, useState } from "react";
+import axios from "axios";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import CHBBlurredBG from "../common/AcrylicBackground";
 import BottomBar from "./BottomBar";
@@ -19,11 +20,18 @@ const DataEntryBase: React.FC<{ className: string, name: string }> = (props) => 
 	);
 };
 
-const MatchEntry: React.FC<{ eventId: string }> = (props) => {
+/**
+ * We add these props to the matches state to mark those in need of update
+ */
+interface AdditionalMatchProps {
+	didUpdate?: boolean;
+}
+
+const MatchEntry: React.FC<{ eventId: string, formID: string }> = (props) => {
 
 	// Retrieve matches & teams lists
 	const [teams, setteams] = useState<teams[]>();
-	const [matches, setmatches] = useState<matches[]>();
+	const [matches, setmatches] = useState<(matches & AdditionalMatchProps)[]>(); 	
 
 	useEffect(() => {
 		// Code from Co-pilot
@@ -41,9 +49,40 @@ const MatchEntry: React.FC<{ eventId: string }> = (props) => {
 			});
 	}, [props.eventId]);
 
+	const updateMatch = useCallback((matchIndex: number, teamIndex: 1 | 2) => {
+		return (event: ChangeEvent<HTMLInputElement>) => {
+			const newMatches = [...(matches || [])];
+			newMatches[matchIndex].didUpdate = true;
+			if (teamIndex === 1) {
+				newMatches[matchIndex].team_1_score = parseInt(event.target.value, 10);
+			} else if (teamIndex === 2) {
+				newMatches[matchIndex].team_2_score = parseInt(event.target.value, 10);
+			}
+			setmatches(newMatches);
+		};
+	}, [matches]);
+	
+	const handleSubmit: React.FormEventHandler<HTMLFormElement> = useCallback((event) => {
+		event.preventDefault();
+		console.log("Submitting matches...");
+		if (!Array.isArray(matches)) {
+			throw new Error("No matches to submit (matches not an array)!");
+		}
+
+		const dataToSubmit = matches.filter(match => match.didUpdate);
+
+		axios.post(`/api/events/${props.eventId}/matches/edit/score`, dataToSubmit)
+			.then(response => {
+				console.log("Matches updated.");
+			})
+			.catch((err) => {
+				console.error(err);
+			});
+	}, [matches, props.eventId]);
+
 	return (
 		<DataEntryBase className="entry-matches" name="Match Entry">
-			<div className="entry-matches-container">
+			<form className="entry-matches-container" onSubmit={handleSubmit} id={props.formID}>
 				{
 					matches?.map((match, index) => {
 						const team1Info = teams?.find(team => team.team_id === match.team_1);
@@ -56,17 +95,17 @@ const MatchEntry: React.FC<{ eventId: string }> = (props) => {
 									<div className="team-vs"><p>vs</p></div>
 								</div>
 								<div className="matches-inputs">
-									<div className="match-input-container"><input type="number" placeholder="1" className="match-team-1" /></div>
+									<div className="match-input-container"><input type="number" min={0} value={match.team_1_score} className="match-team-1" onChange={updateMatch(index, 1)} /></div>
 									<p>-</p>
-									<div className="match-input-container"><input type="number" placeholder="1" className="match-team-2" /></div>	
+									<div className="match-input-container"><input type="number" min={0} value={match.team_2_score} className="match-team-2" onChange={updateMatch(index, 2)} /></div>	
 								</div>
 							</div>
-						)}
-					)
+						);
+					})
 				}
 				
 				
-			</div>
+			</form>
 		</DataEntryBase>
 	);
 };
@@ -86,10 +125,10 @@ const DataEntryRenderer: React.FC = (props) => {
 	}, [id]);
 
 	const getEntryPage = useCallback(
-		() => {
+		(formID: string) => {
 			switch (eventInfo?.data_tracked) {
 				case "matches":
-					return <MatchEntry eventId={id} />;
+					return <MatchEntry eventId={id} formID={formID} />;
 				default:
 					return <div className={"entry-renderer"}>
 						<h1 className="sub-header">Loading...</h1>
@@ -98,14 +137,15 @@ const DataEntryRenderer: React.FC = (props) => {
 		},
 		[eventInfo],
 	);
+	const formID = "entry-submission-form";
 	return (
 		<CHBBlurredBG className="entry-page">
 			{
-				getEntryPage()
+				getEntryPage(formID)
 			}
 			<BottomBar>
 				<FontAwesomeIcon icon={faArrowLeft} />
-				<SaveButton>Save</SaveButton>
+				<SaveButton type="submit" form={formID}>Save</SaveButton>
 				<FontAwesomeIcon icon={faEllipsisH} />
 			</BottomBar>
 		</CHBBlurredBG>

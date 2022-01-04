@@ -16,5 +16,6 @@
 		"index.ts",
 		"setup.ts",
 		"common.ts",
+		"events.ts",
 	]
 }
