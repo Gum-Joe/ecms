@@ -2,7 +2,7 @@
  * Renders the appropriate data entry component for the given event type
  */
 import { event_only_settings, matches, teams } from "@ecms/models";
-import { faArrowLeft, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faCheckCircle, faEllipsisH, faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
@@ -15,6 +15,7 @@ const DataEntryBase: React.FC<{ className: string, name: string }> = (props) => 
 	return (
 		<div className={`entry-renderer ${props.className}`}>
 			<h1 className="sub-header">{props.name}</h1>
+			<p>You may need to scroll to see all items</p>
 			{props.children}
 		</div>
 	);
@@ -27,11 +28,21 @@ interface AdditionalMatchProps {
 	didUpdate?: boolean;
 }
 
+interface MatchUpdateState {
+	didUpdate: boolean;
+	state: null | "success" | "error";
+	message?: string;
+}
+
 const MatchEntry: React.FC<{ eventId: string, formID: string }> = (props) => {
 
 	// Retrieve matches & teams lists
 	const [teams, setteams] = useState<teams[]>();
-	const [matches, setmatches] = useState<(matches & AdditionalMatchProps)[]>(); 	
+	const [matches, setmatches] = useState<(matches & AdditionalMatchProps)[]>();
+	const [updatingState, setupdatingState] = useState<MatchUpdateState>({
+		didUpdate: false,
+		state: null
+	}); 	
 
 	useEffect(() => {
 		// Code from Co-pilot
@@ -71,17 +82,39 @@ const MatchEntry: React.FC<{ eventId: string, formID: string }> = (props) => {
 
 		const dataToSubmit = matches.filter(match => match.didUpdate);
 
-		axios.post(`/api/events/${props.eventId}/matches/edit/score`, dataToSubmit)
+		axios.patch(`/api/events/${props.eventId}/matches/edit/score`, dataToSubmit)
 			.then(response => {
+				(document.querySelector(".entry-renderer") || ({} as any)).scrollTop = 0;
 				console.log("Matches updated.");
+				setupdatingState({
+					didUpdate: true,
+					state: "success"
+				});
 			})
 			.catch((err) => {
+				(document.querySelector(".entry-renderer") || ({} as any)).scrollTop = 0;
 				console.error(err);
+				setupdatingState({
+					didUpdate: true,
+					state: "error",
+					message: err.message || "An unknown error occurred",
+				});
 			});
 	}, [matches, props.eventId]);
 
 	return (
 		<DataEntryBase className="entry-matches" name="Match Entry">
+			{ updatingState.didUpdate && 
+				<div className={"update-banner " + (updatingState.state === "error" ? "update-banner-error" : "update-banner-sucess")}>
+					{updatingState.state === "error" ? (
+						<><FontAwesomeIcon icon={faTimesCircle} /> Error updating matches: {updatingState.message}</>
+					) :
+						(
+							<><FontAwesomeIcon icon={faCheckCircle} /> Matches updated successfully</>
+						) 
+					}
+				</div>
+			}
 			<form className="entry-matches-container" onSubmit={handleSubmit} id={props.formID}>
 				{
 					matches?.map((match, index) => {

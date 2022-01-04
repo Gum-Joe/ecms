@@ -43,7 +43,7 @@ router.get("/:id/matches", async (req, res, next) => {
 /**
  * Update matches - can update multiple
  */
-router.post("/:id/matches/edit/score", async (req: RequestWithBody<ReqEditMatchScores>, res, next) => {
+router.patch("/:id/matches/edit/score", async (req: RequestWithBody<ReqEditMatchScores>, res, next) => {
 	const eventID = req.params.id;
 	logger.info("Updating matches for " + eventID);
 

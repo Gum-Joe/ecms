@@ -2,6 +2,11 @@
 SCSS for the data entry pages
 */
 
+@import "variables";
+
+$entry-footer-height: 57px;
+$entry-card-radius: 8px;
+
 .entry-page {
     overflow: auto;
     * {
@@ -11,7 +16,7 @@ SCSS for the data entry pages
     // From https://grid.layoutit.com/
     display: grid;
     grid-template-columns: 1fr; 
-    grid-template-rows: 1fr 57px; 
+    grid-template-rows: minmax(0, 1fr) $entry-footer-height; 
     gap: 0px 0px; 
     grid-template-areas: 
         "."
@@ -19,6 +24,13 @@ SCSS for the data entry pages
 
     .entry-bottom-nav {
         min-height: 57px;
+    }
+
+    .entry-renderer {
+        max-height: calc(100vh - $entry-footer-height);
+        & > p {
+           margin-top: -15px; 
+        }
     }
 }
 
@@ -95,6 +107,8 @@ SCSS for the data entry pages
 
 .entry-renderer {
     padding: 0px 18px;
+    padding-bottom: $entry-footer-height;
+    box-sizing: border-box;
 }
 
 .matches-item {
@@ -103,7 +117,7 @@ SCSS for the data entry pages
     width: 100%;
 
     background: rgba(32, 32, 32, 0.7);
-    border-radius: 8px;
+    border-radius: $entry-card-radius;
 
     //display: flex;
 
@@ -225,6 +239,9 @@ footer.entry-bottom-nav {
     grid-template-areas: 
         ". . ."; 
     padding: 0px 22px;
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
     > * {
         margin: auto;
     }
@@ -241,4 +258,20 @@ footer.entry-bottom-nav {
         width: 45px;
         height: 20px;
     }
+}
+
+.update-banner-sucess {   
+    background-color: $save-button-color;
+}
+
+.update-banner-error {   
+    background-color: rgba(204, 0, 0, 0.33);
+}
+
+.update-banner {
+    width: 100%;
+    text-align: center;
+    padding: 5px;
+    border-radius: $entry-card-radius;
+    margin-bottom: 15px;
 }

@@ -33,7 +33,7 @@ button {
 }
 
 button.green-button {
-	background: rgba(124, 196, 159, 0.27);
+	background: $save-button-color;
 	border: 1px solid rgba(147, 226, 186, 0.1);
 	box-sizing: border-box;
 	border-radius: 6px;
