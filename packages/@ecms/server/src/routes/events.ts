@@ -2,8 +2,8 @@
  * API routes for events
  * @packageDocumentation
  */
-import { event_only_settings, matches } from "@ecms/models";
-import { ReqEditMatchScores } from "@ecms/api/events";
+import { data_units, event_only_settings, matches } from "@ecms/models";
+import { ReqEditMatchScores, ResEventInfo } from "@ecms/api/events";
 import { Router } from "express";
 import connectToDB, { connectToDBKnex } from "../utils/db";
 import { ECMSResponse, RequestWithBody } from "../utils/interfaces";
@@ -107,9 +107,9 @@ router.patch("/:id/matches/edit/score", async (req: RequestWithBody<ReqEditMatch
 });
 
 /**
- * Retrieve event info
+ * Retrieve event SPECIFIC info
  */
-router.get("/:id/info", async (req, res: ECMSResponse<event_only_settings>, next) => {
+router.get("/:id/info", async (req, res: ECMSResponse<ResEventInfo>, next) => {
 	const eventID = req.params.id;
 	logger.info(`Retrieving information for event ${eventID}...`);
 	try {
@@ -118,8 +118,19 @@ router.get("/:id/info", async (req, res: ECMSResponse<event_only_settings>, next
 			.from("event_only_settings")
 			.join("events_and_groups", "event_only_settings.event_settings_id", "events_and_groups.event_settings_id")
 			.where("events_and_groups.event_group_id", eventID);
+		
+		const theEvent: ResEventInfo = info[0];
 
-		res.json(info[0]);
+		if (theEvent.unit_id || theEvent.unit_id === 0) {
+			const theUnit = await knex
+				.select<data_units[]>("*")
+				.from("data_units")
+				.where("unit_id", theEvent.unit_id);
+			
+			theEvent.unit = theUnit?.[0];
+		}
+
+		res.json(theEvent);
 	} catch (err) {
 		logger.error(`Error getting matches for event ${eventID}!`);
 		logger.error((err as Error)?.message);

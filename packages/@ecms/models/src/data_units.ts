@@ -1,7 +1,7 @@
 // @generated
 // Automatically generated. Don't change this file manually.
 
-export type data_unitsId = string & { " __flavor"?: 'data_units' };
+export type data_unitsId = number & { " __flavor"?: 'data_units' };
 
 /**
  * Used for events that require units - stores the units used by these events, and their names.

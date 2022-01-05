@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 import { ResEventsGroupsList } from "@ecms/api/common";
-import { teams } from "@ecms/models";
+import { events_and_groups, teams } from "@ecms/models";
 import { Router } from "express";
 import { connectToDBKnex } from "../utils/db";
 import { ECMSResponse } from "../utils/interfaces";
@@ -58,6 +58,30 @@ router.get("/:id/teams", async (req, res: ECMSResponse<teams>, next) => {
 		res.json(teams);
 	} catch (err) {
 		logger.error(`Error getting matches for event ${eventID}!`);
+		logger.error((err as Error)?.message);
+		res.status(500).json({
+			message: `Internal Server Error - ${(err as Error)?.message}`,
+		});
+	}
+	
+});
+
+
+/**
+ * Retrieve general info about an event/group
+ */
+ router.get("/:id/info", async (req, res: ECMSResponse<events_and_groups>, next) => {
+	const eventID = req.params.id;
+	logger.info(`Retrieving information for event/group ${eventID}...`);
+	try {
+		const info = await knex
+			.select<events_and_groups[]>("*")
+			.from("events_and_groups")
+			.where("event_group_id", eventID);
+
+		res.json(info[0]);
+	} catch (err) {
+		logger.error(`Error getting info for event ${eventID}!`);
 		logger.error((err as Error)?.message);
 		res.status(500).json({
 			message: `Internal Server Error - ${(err as Error)?.message}`,
