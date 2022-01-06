@@ -1,27 +1,40 @@
-import { ResEventInfo } from "@ecms/api/events";
+import { ResCompetitors, ResEventInfo } from "@ecms/api/events";
 import { data_units, events_and_groups, teams } from "@ecms/models";
 import React, { useEffect, useState } from "react";
 import { DataEntryBase } from "./DataEntryBase";
 import EntryCard from "./EntryCard";
 import { EntryComponentProps } from "./interfaces";
-import { fetchEventOnlyInfo, fetchTeams } from "./util";
+import { fetchEventOnlyInfo, fetchJSONfromRoute, fetchTeams } from "./util";
 
 interface TableProps {
 	teamInfo: teams;
 	eventId: string;
 	unitInfo: data_units;
-	key: number;
 }
 
 const CompetitorTeamTable: React.FC<TableProps> = (props) => {
+
+	const [competitors, setcompetitors] = useState<ResCompetitors>([]);
+
+	useEffect(() => {
+		fetchJSONfromRoute<ResCompetitors>(`/api/common/${props.eventId}/competitors?team_id=${props.teamInfo.team_id}`)
+			.then(data => setcompetitors(data))
+			.catch((err) => {
+				console.error(err);
+			});
+	}, [props.eventId, props.teamInfo.team_id]);
+
 	return (
-		<EntryCard className="competitor-table" key={props.key} style={{
+		<EntryCard className="competitor-table" style={{
 			borderColor: props.teamInfo.colour,
 		}}>
 			<div className="competitor-table-header">
 				<h3>{props.teamInfo.name}</h3>
 				<h4>Tap a row to edit</h4>
 			</div>
+			{competitors.map((competitor, index) => (
+				<p key={index}>{competitor.firstname} {competitor.lastname}</p>
+			))}
 		</EntryCard>
 	);
 };

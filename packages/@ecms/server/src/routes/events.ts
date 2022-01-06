@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 import { data_units, event_only_settings, matches } from "@ecms/models";
-import { ReqEditMatchScores, ResEventInfo } from "@ecms/api/events";
+import { ReqCompetitors, ReqEditMatchScores, ResEventInfo } from "@ecms/api/events";
 import { Router } from "express";
 import connectToDB, { connectToDBKnex } from "../utils/db";
 import { ECMSResponse, RequestWithBody } from "../utils/interfaces";
