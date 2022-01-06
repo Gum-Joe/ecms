@@ -1,0 +1,47 @@
+/**
+Styles for tables
+*/
+@import "variables";
+
+.ecms-table {
+	// From figma
+	background: rgba(255, 255, 255, 0.0605);
+	border: 0.7875px solid rgba(255, 255, 255, 0.36);
+	box-sizing: border-box;
+	border-radius: 6.3px;
+
+	border-collapse: separate;
+	border-spacing: 0;
+	width: 100%;
+
+	// From https://stackoverflow.com/questions/628301/css3s-border-radius-property-and-border-collapsecollapse-dont-mix-how-can-i?rq=1
+	tr:last-child td:first-child {
+		border-bottom-left-radius: 6.3px;
+	}
+
+	tr:last-child td:last-child {
+		border-bottom-right-radius: 6.3px;
+	}
+	tr, th, td {
+		min-height: 35px;
+		height: 35px;
+		padding-top: 10.5px;
+		padding-bottom: 10.5px;
+		border-top: 0.79px solid #C2C9D1;
+		box-sizing: border-box;
+	}
+
+	thead {
+		tr, th {
+			border: none;
+		}
+	}
+
+	td:first-child, th:first-child {
+		padding-left: $table-cell-pad;
+		max-width: 176px;
+	}
+}
+
+
+

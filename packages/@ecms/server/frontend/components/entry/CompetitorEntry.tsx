@@ -4,7 +4,9 @@ import React, { useEffect, useState } from "react";
 import { DataEntryBase } from "./DataEntryBase";
 import EntryCard from "./EntryCard";
 import { EntryComponentProps } from "./interfaces";
+import SaveButton from "./SaveButton";
 import { fetchEventOnlyInfo, fetchJSONfromRoute, fetchTeams } from "./util";
+import Form from "../common/Form";
 
 interface TableProps {
 	teamInfo: teams;
@@ -32,13 +34,51 @@ const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 				<h3>{props.teamInfo.name}</h3>
 				<h4>Tap a row to edit</h4>
 			</div>
-			{competitors.map((competitor, index) => (
-				<p key={index}>{competitor.firstname} {competitor.lastname}</p>
-			))}
+			<table className="ecms-table">
+				<thead>
+					<tr>
+						<th>Student</th>
+						<th>{props.unitInfo.unit_name}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{competitors.map((competitor, index) => (
+						<tr key={index}>
+							<td>{competitor.firstname} {competitor.lastname}</td>
+							<td>{competitor.stored_data ? competitor.stored_data + props.unitInfo.unit : "--"}</td>
+						</tr>
+					))}
+				</tbody>
+			</table>
+			
 		</EntryCard>
 	);
 };
 
+const CompetitorEntrySlideUp: React.FC = (props) => {
+	return (
+		<div className="competitor-entry-slide-up">
+			<div className="slide-up-cover"></div>
+			<div className="slide-up-body">
+				<div className="slide-up-header">
+					<h3>Enter Details</h3>
+					<SaveButton>Save</SaveButton>
+				</div>
+				<Form>
+					<div className="slide-up-student">
+						<p>Student</p>
+						<p>Kishan Sambhi</p>
+					</div>
+					<div>
+						<label>Distance (m)</label>
+						<input name="competitor-unit" id="competitor-unit" />
+					</div>
+				</Form>
+				<p className="slide-up-note">Type &quot;DNF&quot; if the competitor did not finish</p>
+			</div>
+		</div>
+	);
+};
 
 const CompetitorEntry: React.FC<EntryComponentProps> = (props) => {
 
@@ -77,9 +117,11 @@ const CompetitorEntry: React.FC<EntryComponentProps> = (props) => {
 				</div>*/}
 			</EntryCard>
 			{
-				teams?.map((team, index) => <CompetitorTeamTable key={index} teamInfo={team} eventId={props.eventId} unitInfo={eventOnlyInfo?.unit}/>)
+				eventOnlyInfo?.unit && teams?.map((team, index) => <CompetitorTeamTable key={index} teamInfo={team} eventId={props.eventId} unitInfo={eventOnlyInfo?.unit}/>)
 			}
-			
+
+			{/** This is the thing that lets us enter details! */}
+			<CompetitorEntrySlideUp />
 		</DataEntryBase>
 	);
 };
