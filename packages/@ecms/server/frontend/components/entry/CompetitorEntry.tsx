@@ -1,6 +1,6 @@
 import { ResCompetitors, ResEventInfo } from "@ecms/api/events";
-import { data_units, events_and_groups, teams } from "@ecms/models";
-import React, { useEffect, useState } from "react";
+import { competitorsId, competitor_data, data_units, events_and_groups, teams } from "@ecms/models";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { DataEntryBase } from "./DataEntryBase";
 import EntryCard from "./EntryCard";
 import { EntryComponentProps } from "./interfaces";
@@ -12,6 +12,7 @@ interface TableProps {
 	teamInfo: teams;
 	eventId: string;
 	unitInfo: data_units;
+	openSlideUp: (data: SlideUpContext) => void
 }
 
 const CompetitorTeamTable: React.FC<TableProps> = (props) => {
@@ -25,6 +26,20 @@ const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 				console.error(err);
 			});
 	}, [props.eventId, props.teamInfo.team_id]);
+
+	const handleRowClick = useCallback(
+		(competitor: ResCompetitors[0]) => () => {
+			props.openSlideUp({
+				show: true,
+				unit: props.unitInfo,
+				student: competitor.firstname + " " + competitor.lastname,
+				competitorId: competitor.competitor_id,
+				eventId: props.eventId,
+				currentData: competitor.stored_data,
+			});
+		},
+		[props],
+	);
 
 	return (
 		<EntryCard className="competitor-table" style={{
@@ -44,8 +59,8 @@ const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 				<tbody>
 					{competitors.map((competitor, index) => (
 						<tr key={index}>
-							<td>{competitor.firstname} {competitor.lastname}</td>
-							<td>{competitor.stored_data ? competitor.stored_data + props.unitInfo.unit : "--"}</td>
+							<td onClick={handleRowClick(competitor)}>{competitor.firstname} {competitor.lastname}</td>
+							<td onClick={handleRowClick(competitor)}>{competitor.stored_data ? competitor.stored_data + props.unitInfo.unit : "--"}</td>
 						</tr>
 					))}
 				</tbody>
@@ -55,29 +70,48 @@ const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 	);
 };
 
+interface SlideUpContext {
+	unit: data_units;
+	student: string;
+	competitorId: competitorsId;
+	eventId: string;
+	show: boolean;
+	currentData?: competitor_data["stored_data"];
+}
+
+const EntrySlideUpContext = React.createContext<Partial<SlideUpContext>>({ show: false });
+
 const CompetitorEntrySlideUp: React.FC = (props) => {
-	return (
-		<div className="competitor-entry-slide-up">
-			<div className="slide-up-cover"></div>
-			<div className="slide-up-body">
-				<div className="slide-up-header">
-					<h3>Enter Details</h3>
-					<SaveButton>Save</SaveButton>
+
+	const state = useContext(EntrySlideUpContext);
+	const [dataValue, setdataValue] = useState(state.currentData);
+	if (state.show) {
+		return (
+			<div className="competitor-entry-slide-up">
+				<div className="slide-up-cover"></div>
+				<div className="slide-up-body">
+					<div className="slide-up-header">
+						<h3>Enter Details</h3>
+						<SaveButton>Save</SaveButton>
+					</div>
+					<Form>
+						<div className="slide-up-student">
+							<p>Student</p>
+							<p>{state.student}</p>
+						</div>
+						<div>
+							<label>{state.unit?.unit_name} ({state.unit?.unit})</label>
+							<input name="competitor-unit" id="competitor-unit" value={dataValue || ""} placeholder="--" onChange={(event) => {event.preventDefault(); setdataValue(event.target.value);}} />
+						</div>
+					</Form>
+					<p className="slide-up-note">Type &quot;DNF&quot; if the competitor did not finish</p>
 				</div>
-				<Form>
-					<div className="slide-up-student">
-						<p>Student</p>
-						<p>Kishan Sambhi</p>
-					</div>
-					<div>
-						<label>Distance (m)</label>
-						<input name="competitor-unit" id="competitor-unit" />
-					</div>
-				</Form>
-				<p className="slide-up-note">Type &quot;DNF&quot; if the competitor did not finish</p>
 			</div>
-		</div>
-	);
+		);
+	} else {
+		return null;
+	}
+	
 };
 
 const CompetitorEntry: React.FC<EntryComponentProps> = (props) => {
@@ -86,6 +120,7 @@ const CompetitorEntry: React.FC<EntryComponentProps> = (props) => {
 	const [eventInfo, setEventInfo] = useState<events_and_groups>();
 	const [teams, setteams] = useState<teams[]>();
 	const [eventOnlyInfo, seteventOnlyInfo] = useState<ResEventInfo>();
+	const [slideUp, setslideUp] = useState<Partial<SlideUpContext>>({ show: false });
 
 
 	useEffect(() => {
@@ -101,27 +136,38 @@ const CompetitorEntry: React.FC<EntryComponentProps> = (props) => {
 		
 	}, [props.eventId]);
 
+	const openSlideUp = useCallback(
+		(data: SlideUpContext) => {
+			setslideUp(data);
+		},
+		[],
+	);
+
+
+
 	return (
 		<DataEntryBase name="Data Entry" className={"entry-competitors"} subtitle={eventInfo?.name}>
-			<EntryCard  className="entry-jump-team">
-				<div>
-					<h3>Jump to</h3>
-					<div className="jump-buttons">
-						{
-							teams?.map((team, index) => <button key={index} style={{ backgroundColor: team.colour }}>{team.name}</button>)
-						}
+			<EntrySlideUpContext.Provider value={slideUp}>
+				<EntryCard  className="entry-jump-team">
+					<div>
+						<h3>Jump to</h3>
+						<div className="jump-buttons">
+							{
+								teams?.map((team, index) => <button key={index} style={{ backgroundColor: team.colour }}>{team.name}</button>)
+							}
+						</div>
 					</div>
-				</div>
-				{/*<div>
+					{/*<div>
 					<h3>Search</h3>
 				</div>*/}
-			</EntryCard>
-			{
-				eventOnlyInfo?.unit && teams?.map((team, index) => <CompetitorTeamTable key={index} teamInfo={team} eventId={props.eventId} unitInfo={eventOnlyInfo?.unit}/>)
-			}
+				</EntryCard>
+				{
+					eventOnlyInfo?.unit && teams?.map((team, index) => <CompetitorTeamTable key={index} teamInfo={team} eventId={props.eventId} unitInfo={eventOnlyInfo?.unit} openSlideUp={openSlideUp}/>)
+				}
 
-			{/** This is the thing that lets us enter details! */}
-			<CompetitorEntrySlideUp />
+				{/** This is the thing that lets us enter details! */}
+				<CompetitorEntrySlideUp />
+			</EntrySlideUpContext.Provider>
 		</DataEntryBase>
 	);
 };
