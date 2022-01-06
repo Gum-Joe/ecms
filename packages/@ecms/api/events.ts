@@ -15,4 +15,4 @@ export type ResEventInfo = event_only_settings & {
 export interface ReqCompetitors {
 	team_id?: teamsId;
 }
-export type ResCompetitors = Array<competitors & competitor_data>;
+export type ResCompetitors = Array<Omit<competitors, "competitor_id"> & competitor_data>;

@@ -7,6 +7,20 @@ import { EntryComponentProps } from "./interfaces";
 import SaveButton from "./SaveButton";
 import { fetchEventOnlyInfo, fetchJSONfromRoute, fetchTeams } from "./util";
 import Form from "../common/Form";
+import axios from "axios";
+
+interface SlideUpContext {
+	unit: data_units;
+	student: string;
+	competitorId: string;
+	eventId: string;
+	show: boolean;
+	currentData?: competitor_data["stored_data"];
+}
+
+// TODO: Handle DNF
+
+const EntrySlideUpContext = React.createContext<Partial<SlideUpContext>>({ show: false });
 
 interface TableProps {
 	teamInfo: teams;
@@ -18,6 +32,7 @@ interface TableProps {
 const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 
 	const [competitors, setcompetitors] = useState<ResCompetitors>([]);
+	const slideUpState = useContext(EntrySlideUpContext);
 
 	useEffect(() => {
 		fetchJSONfromRoute<ResCompetitors>(`/api/common/${props.eventId}/competitors?team_id=${props.teamInfo.team_id}`)
@@ -25,7 +40,7 @@ const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 			.catch((err) => {
 				console.error(err);
 			});
-	}, [props.eventId, props.teamInfo.team_id]);
+	}, [props.eventId, props.teamInfo.team_id, slideUpState.show]);
 
 	const handleRowClick = useCallback(
 		(competitor: ResCompetitors[0]) => () => {
@@ -33,7 +48,7 @@ const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 				show: true,
 				unit: props.unitInfo,
 				student: competitor.firstname + " " + competitor.lastname,
-				competitorId: competitor.competitor_id,
+				competitorId: competitor.id,
 				eventId: props.eventId,
 				currentData: competitor.stored_data,
 			});
@@ -70,21 +85,33 @@ const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 	);
 };
 
-interface SlideUpContext {
-	unit: data_units;
-	student: string;
-	competitorId: competitorsId;
-	eventId: string;
-	show: boolean;
-	currentData?: competitor_data["stored_data"];
-}
 
-const EntrySlideUpContext = React.createContext<Partial<SlideUpContext>>({ show: false });
 
-const CompetitorEntrySlideUp: React.FC = (props) => {
+const CompetitorEntrySlideUp: React.FC<{ setSlideUp: (data: Partial<SlideUpContext>) => void }> = (props) => {
 
 	const state = useContext(EntrySlideUpContext);
-	const [dataValue, setdataValue] = useState(state.currentData);
+
+	const handleSubmit = useCallback(() => {
+		// Validate
+		const parsedData = parseFloat((state.currentData) || "-1");
+		if ((state.currentData !== "dnf" && isNaN(parsedData)) || parsedData < 0) {
+			return alert("Please enter a number greater than or equal to 0, or \"DNF\" for did not finish.");
+		} else {
+			axios.post(`/api/events/${state.eventId}/competitors/performance`, {
+				competitorID: state.competitorId,
+				stored_data: state.currentData,
+			})
+				.then(() => {
+					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+					// @ts-ignore
+					props.setSlideUp({
+						show: false,
+					});
+				})
+				.catch((err) => console.error(err));
+		}
+	}, [props, state.competitorId, state.currentData, state.eventId]);
+
 	if (state.show) {
 		return (
 			<div className="competitor-entry-slide-up">
@@ -92,7 +119,7 @@ const CompetitorEntrySlideUp: React.FC = (props) => {
 				<div className="slide-up-body">
 					<div className="slide-up-header">
 						<h3>Enter Details</h3>
-						<SaveButton>Save</SaveButton>
+						<SaveButton onClick={handleSubmit}>Save</SaveButton>
 					</div>
 					<Form>
 						<div className="slide-up-student">
@@ -101,10 +128,10 @@ const CompetitorEntrySlideUp: React.FC = (props) => {
 						</div>
 						<div>
 							<label>{state.unit?.unit_name} ({state.unit?.unit})</label>
-							<input name="competitor-unit" id="competitor-unit" value={dataValue || ""} placeholder="--" onChange={(event) => {event.preventDefault(); setdataValue(event.target.value);}} />
+							<input name="competitor-unit" id="competitor-unit" value={state.currentData || ""} placeholder="--" onChange={(event) => {event.preventDefault(); props.setSlideUp({ ...state, currentData: event.target.value });}} />
 						</div>
 					</Form>
-					<p className="slide-up-note">Type &quot;DNF&quot; if the competitor did not finish</p>
+					<p className="slide-up-note">Type &quot;dnf&quot; if the competitor did not finish</p>
 				</div>
 			</div>
 		);
@@ -137,7 +164,7 @@ const CompetitorEntry: React.FC<EntryComponentProps> = (props) => {
 	}, [props.eventId]);
 
 	const openSlideUp = useCallback(
-		(data: SlideUpContext) => {
+		(data: Partial<SlideUpContext>) => {
 			setslideUp(data);
 		},
 		[],
@@ -166,7 +193,7 @@ const CompetitorEntry: React.FC<EntryComponentProps> = (props) => {
 				}
 
 				{/** This is the thing that lets us enter details! */}
-				<CompetitorEntrySlideUp />
+				<CompetitorEntrySlideUp setSlideUp={openSlideUp} />
 			</EntrySlideUpContext.Provider>
 		</DataEntryBase>
 	);
