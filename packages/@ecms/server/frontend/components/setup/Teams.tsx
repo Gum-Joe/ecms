@@ -21,6 +21,21 @@ import SetupContainer from "./SetupContainer";
 
 const SETUP_TEAMS_FORM = "setup-teams-form";
 
+const MAX_HEX_VALUE = 0xFFFFFF;
+
+/**
+ * Generated a random hex colour (6 digits).
+ * Returns black if generated number beyond max hex value (`#FFFFFF`).
+ */
+const getRandomHex = () => {
+	const theNumber = Math.floor(Math.random() * 16777215);
+	if (theNumber > MAX_HEX_VALUE) {
+		// Return black
+		return 0x000000.toString(16).padStart(6, "0");
+	} else {
+		return theNumber.toString(16).padStart(6, "0");
+	}
+};
 
 // TODO: Load Teams in
 const Teams: React.FC = () => {
@@ -65,7 +80,7 @@ const Teams: React.FC = () => {
 					name: "",
 					// From https://css-tricks.com/snippets/javascript/random-hex-color/
 					// Randomly generate a colour
-					colour: "#" + Math.floor(Math.random() * 16777215).toString(16),
+					colour: "#" + getRandomHex(),
 				} as StagingTeam)
 			];
 		});
