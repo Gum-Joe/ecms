@@ -117,7 +117,26 @@ const Units: React.FC = (props) => {
 						</div>
 						<div>
 							<label htmlFor="places">Decimal Places</label>
-							<input autoComplete="off" required={true} defaultValue={1} name="places" id="basic-places" min="0" type="number" placeholder="" onChange={(event) => setdecimalPlaces(parseInt(event.target.value >= 0 ? event.target.value : 0 , 10))} />
+							<input
+								autoComplete="off"
+								required={true}
+								defaultValue={1}
+								name="places"
+								id="basic-places"
+								min={0}
+								max={20}
+								type="number"
+								placeholder=""
+								onChange={(event) => {
+									const parsedValue = parseInt(event.target.value, 10) || 0; 
+									if (parsedValue >= 0 && parsedValue <= 20) {
+										setdecimalPlaces(parsedValue);
+									} else {
+										alert("Please enter a value between 0 and 20");
+									}
+									
+								}}
+							/>
 						</div>
 						<div className="unit-example">
 							<label htmlFor="name">Example</label>
