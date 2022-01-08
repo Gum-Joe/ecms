@@ -75,7 +75,7 @@ const CompetitorTeamTable: React.FC<TableProps> = (props) => {
 					{competitors.map((competitor, index) => (
 						<tr key={index}>
 							<td onClick={handleRowClick(competitor)}>{competitor.firstname} {competitor.lastname}</td>
-							<td onClick={handleRowClick(competitor)}>{competitor.stored_data ? competitor.stored_data + props.unitInfo.unit : "--"}</td>
+							<td onClick={handleRowClick(competitor)}>{competitor.stored_data ? parseFloat(competitor.stored_data).toFixed(props.unitInfo.decimal_places) + props.unitInfo.unit : "--"}</td>
 						</tr>
 					))}
 				</tbody>

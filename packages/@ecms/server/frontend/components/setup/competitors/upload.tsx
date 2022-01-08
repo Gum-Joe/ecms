@@ -46,7 +46,11 @@ const TeamMapper: React.FC<{ mapTeams: string[] }> = ({ mapTeams }) => {
 							placeholder="Select a Team"
 							required={true}
 							getA11ySelectionMessage={{
-								onAdd: (selectedTeam) => { dispatch(setupAction(SetupActions.CSV_MAP_TEAM, [team, index])); return `Selected ${selectedTeam}`;  }
+								onAdd: (selectedTeam: string) => {
+									const teamIndex = teams?.findIndex(userTeam => userTeam.name === selectedTeam) || 0;
+									dispatch(setupAction(SetupActions.CSV_MAP_TEAM, [team, teamIndex < 0 ? 0 : teamIndex])); // Last bit handles case of teamIndex being -1
+									return `Selected ${selectedTeam}`; 
+								}
 							}}
 							fluid
 						/>
