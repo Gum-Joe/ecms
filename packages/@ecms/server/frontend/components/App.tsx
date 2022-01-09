@@ -55,6 +55,10 @@ const App: React.FC = () =>  {
 		<ThemeProvider theme={darkTheme}>
 			<Router>
 				<Route exact path="/">
+					<Redirect to={"/view/root"} />
+				</Route>
+
+				<Route path="/view/:id">
 					<ProtectedHomePage />
 				</Route>
 

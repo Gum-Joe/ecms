@@ -1,16 +1,20 @@
 import { faCalendarAlt, faObjectGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
+import { Link, useParams, useRouteMatch } from "react-router-dom";
 import { ButtonIconContainer, ButtonRow, ButtonWithIcons } from "../common/Button";
-import HomepageEventGroupID from "./context/HomepageEventGroupID";
 
 /**
  * The actual body of the homepage with the event/group specific content
  */
 export const HomepageBody: React.FC = (props) => {
 
-	const eventGroupID = useContext(HomepageEventGroupID);
+	const { id: rawEventGroupID } = useParams<{
+		id?: string | "root";
+	}>();
+
+	const eventGroupID = (!rawEventGroupID || rawEventGroupID === "root") ? undefined : rawEventGroupID;
+	const { path, url } = useRouteMatch();
 
 	return (
 		<>
@@ -32,7 +36,7 @@ export const HomepageBody: React.FC = (props) => {
 							<FontAwesomeIcon icon={faPlus} />
 							<FontAwesomeIcon icon={faCalendarAlt} />
 						</ButtonIconContainer>
-						Add event
+					Add event
 					</ButtonWithIcons>
 				</Link>
 
@@ -42,7 +46,7 @@ export const HomepageBody: React.FC = (props) => {
 							<FontAwesomeIcon icon={faPlus} />
 							<FontAwesomeIcon icon={faObjectGroup} />
 						</ButtonIconContainer>
-						Add group
+					Add group
 					</ButtonWithIcons>
 				</Link>
 			</ButtonRow>

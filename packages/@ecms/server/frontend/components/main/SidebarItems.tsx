@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 import { FluentTreeItem } from "../fluent";
 import { ResEventsGroupsList } from "@ecms/api/common";
 import { SidebarProps } from "./SidebarProps";
@@ -28,14 +28,14 @@ export const SidebarItems: React.FC<SidebarProps> = (props) => {
 			{eventAndGroupsList.map((eventOrGroup, index) => {
 				if (eventOrGroup.type === "group") {
 					return (
-						<FluentTreeItem onClick={() => props.setEventGroupId(eventOrGroup.event_group_id)}>
+						<FluentTreeItem onClick={() => history.push(`/view/${eventOrGroup.event_group_id}`)}>
 							{eventOrGroup.name}
-							<SidebarItems setEventGroupId={props.setEventGroupId} eventGroupId={eventOrGroup.event_group_id} />
+							<SidebarItems eventGroupId={eventOrGroup.event_group_id} />
 						</FluentTreeItem>
 					);
 				} else {
 					return (
-						<FluentTreeItem onClick={() => props.setEventGroupId(eventOrGroup.event_group_id)} key={index}>
+						<FluentTreeItem onClick={() => history.push(`/view/${eventOrGroup.event_group_id}`)} key={index}>
 							{eventOrGroup.name}
 						</FluentTreeItem>
 					);

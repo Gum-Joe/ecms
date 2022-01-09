@@ -17,7 +17,7 @@ export const Sidebar: React.FC<SidebarProps> = (props) => {
 
 	return (
 		<FluentTreeView id="sidebar-tree-view">
-			<SidebarItems setEventGroupId={props.setEventGroupId} />
+			<SidebarItems />
 		</FluentTreeView>
 	);
 };
