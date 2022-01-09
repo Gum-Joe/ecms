@@ -19,9 +19,14 @@ const knex = connectToDBKnex();
 
 /**
  * Returns a list of events/groups, by default those not in a group
+ * Accept a parameter fromId to get events/groups that have a `parent_id` of the provided value
  */
 router.get("/list", async (req, res: ECMSResponse<ResEventsGroupsList>) => {
 	try {
+		let idParam = null;
+		if (req.query.fromId && req.query.fromId !== "null" && req.query.fromId !== "undefined") {
+			idParam = req.query.fromId as string;
+		}
 		logger.info("Getting list of events and group...");
 		const theList = await knex
 			.select("name")
@@ -32,7 +37,7 @@ router.get("/list", async (req, res: ECMSResponse<ResEventsGroupsList>) => {
 			.select("complete")
 			.select("archived")
 			.from("events_and_groups")
-			.where("parent_id", null);
+			.where("parent_id", idParam);
 		res.json(theList);
 	} catch (err) {
 		logger.error("Error getting list of events!");

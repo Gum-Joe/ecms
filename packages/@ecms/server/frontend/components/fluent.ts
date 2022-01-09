@@ -19,11 +19,11 @@ export const FluentTreeItem = wrapFluent(fluentTreeItem());
 
 // also register tabs:
 // From https://docs.microsoft.com/en-us/fluent-ui/web-components/components/tabs
-provideFluentDesignSystem()
+/*provideFluentDesignSystem()
 	.register(
 		fluentTab(),
 		fluentTabPanel(),
 		fluentTabs(),
 		fluentTreeView(),
 		fluentTreeItem(),
-	);
+	);*/

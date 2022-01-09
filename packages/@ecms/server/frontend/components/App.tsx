@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch, useHistory, useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import LoginPage from "./login/Login";
 import PostLogin from "./login/PostLogin";
@@ -26,6 +26,7 @@ const ProtectedHomePage: React.FC = (props) => {
 				});
 			});
 	}, []);
+	
 	return (
 		isAuthenticated === null ?
 			null :
@@ -54,6 +55,10 @@ const App: React.FC = () =>  {
 		<ThemeProvider theme={darkTheme}>
 			<Router>
 				<Route exact path="/">
+					<ProtectedHomePage />
+				</Route>
+
+				<Route exact path="/home">
 					<ProtectedHomePage />
 				</Route>
 
