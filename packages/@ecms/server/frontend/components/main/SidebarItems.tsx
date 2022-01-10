@@ -19,7 +19,7 @@ export const SidebarItems: React.FC<SidebarProps> = (props) => {
 			.catch((err) => {
 				console.error(err);
 			});
-	});
+	}, [props.eventGroupId]);
 
 	const history = useHistory();
 

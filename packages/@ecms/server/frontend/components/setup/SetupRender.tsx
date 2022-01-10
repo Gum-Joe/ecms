@@ -29,12 +29,16 @@ const SetupRenderer: React.FC = (props) => {
 
 	useEffect(() => {
 		const typeToSetup: "event" | "group" = query.get("type") as any;
+		const parentId: string | undefined = query.get("parentId") as any;
 		if (!typeToSetup) {
 			seterrorState(
 				new Error("No type provided!")
 			);
 		} else {
 			dispatch(startSetup(typeToSetup));
+			if (parentId && parentId !== "undefined") {
+				dispatch(updateSetup({ parent_id: parentId }));
+			}
 		}
 	}, [dispatch, query]); // We don't want this to run on every render
 	

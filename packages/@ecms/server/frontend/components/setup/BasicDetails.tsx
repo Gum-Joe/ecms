@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { Dropdown } from "@fluentui/react-northstar";
 import { trackable_data } from "@ecms/models";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
@@ -8,6 +8,7 @@ import SetupForm from "./SetupForm";
 import updateSetup from "../../actions/setup/updateSetup";
 import { useSetupRedirector, getDataFromDropDown } from "./util";
 import SetupContainer from "./SetupContainer";
+import { useParams } from "react-router-dom";
 
 
 /**
@@ -27,6 +28,7 @@ const BasicDetails: FunctionComponent = () => {
 	// Grab our Setup Context
 	const setupType = useAppSelector(state => state.setup.type);
 	const parent_id = useAppSelector(state => state.setup.parent_id);
+	const [doesInherit, setdoesInherit] = useState(false);
 	const dispatch = useAppDispatch();
 
 	const setupPage = useSetupRedirector();
@@ -112,9 +114,9 @@ const BasicDetails: FunctionComponent = () => {
 					<h2>Data Settings</h2>
 					<section>
 						<div>
-							<FluentCheckbox name="enableTeams" defaultChecked>Enable Teams <p className="secondary-input">- specify teams competing</p></FluentCheckbox>
+							<FluentCheckbox disabled={doesInherit} name="enableTeams" defaultChecked>Enable Teams <p className="secondary-input">- specify teams competing</p></FluentCheckbox>
 							<FluentCheckbox name="enableCharity">Enable Charity features <p className="secondary-input">- bring data in from different sources, etc</p></FluentCheckbox>
-							<FluentCheckbox disabled={!parent_id ? true : false} name="enableInherit">Inherit teams &amp; competitors from parent group <p className="secondary-input">- set teams &amp; competitiors from the group this event is in</p></FluentCheckbox>
+							<FluentCheckbox disabled={!parent_id ? true : false} name="enableInherit" onClick={(event: any) => setdoesInherit(event.target._checked)}>Inherit teams &amp; competitors from parent group <p className="secondary-input">- set teams &amp; competitiors from the group this event is in</p></FluentCheckbox>
 						</div>
 						{
 							setupType === "event" ? // the below is only relevant to events, not groups
