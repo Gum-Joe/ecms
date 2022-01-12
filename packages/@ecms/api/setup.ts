@@ -119,9 +119,10 @@ export default interface SetupEventOrGroup extends
 	}
 
 	/**
-	 * Teams to create in the event/group IF enable_teams is true
+	 * Teams to create in the event/group IF enable_teams is true.
+	 * OR if inheritance is on, the teams and their IDs to use.
 	 */
-	teams?: OmitIDKeys<teamsInitializer>[];
+	teams?: teamsInitializer[];
 
 	/**
 	 * Matches to create between teams IF enable_teams is true AND event_settings.data_tracked is "matches".

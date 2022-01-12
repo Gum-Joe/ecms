@@ -12,18 +12,17 @@ const { wrap: wrapFluent } = provideReactWrapper(React, provideFluentDesignSyste
 export default wrap;
 
 export const FluentCheckbox = wrap(fastCheckbox());
-// @ts-expect-error: Bad typings!
 export const FluentTreeView = wrapFluent(fluentTreeView());
-// @ts-expect-error: Bad typings!
 export const FluentTreeItem = wrapFluent(fluentTreeItem());
 
 // also register tabs:
 // From https://docs.microsoft.com/en-us/fluent-ui/web-components/components/tabs
-/*provideFluentDesignSystem()
+// DO NOT REMOVE - some parts of the code use web components directly!
+provideFluentDesignSystem()
 	.register(
 		fluentTab(),
 		fluentTabPanel(),
 		fluentTabs(),
 		fluentTreeView(),
 		fluentTreeItem(),
-	);*/
+	);

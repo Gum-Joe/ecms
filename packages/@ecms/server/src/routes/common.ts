@@ -51,12 +51,12 @@ router.get("/list", async (req, res: ECMSResponse<ResEventsGroupsList>) => {
 /**
  * Retrieve teams associated with an event/group
  */
-router.get("/:id/teams", async (req, res: ECMSResponse<teams>, next) => {
+router.get("/:id/teams", async (req, res: ECMSResponse<teams[]>, next) => {
 	const eventID = req.params.id;
 	logger.info(`Retrieving teams for ${eventID}...`);
 	try {
 		const teams = await knex
-			.select<teams>("*")
+			.select<teams[]>("*")
 			.from("join_events_groups_teams")
 			.where("event_group_id", eventID)
 			.join("teams", "join_events_groups_teams.team_id", "teams.team_id");

@@ -8,6 +8,7 @@ import Finalise from "./Finalise";
 import Units from "./Units";
 import { useAppSelector } from "../../util/hooks";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
+import Inherit from "./Inherit";
 
  
 const SetupRouter: FunctionComponent = () => {
@@ -24,6 +25,7 @@ const SetupRouter: FunctionComponent = () => {
 				<SetupHeader>
 					<h1>An error was encountered</h1>
 					<h3>{isError.message || isError}</h3>
+					<h3>You may need to return to the homepage &amp; refresh to escape this error.</h3>
 				</SetupHeader>
 			</SetupFrame>
 		);
@@ -49,6 +51,9 @@ const SetupRouter: FunctionComponent = () => {
 			</Route>
 			<Route exact path={`${path}/end`}>
 				<Finalise />
+			</Route>
+			<Route exact path={`${path}/inherit`}>
+				<Inherit />
 			</Route>
 		</Switch>
 		

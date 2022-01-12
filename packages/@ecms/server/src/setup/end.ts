@@ -1,17 +1,19 @@
 import { TaskStatus } from "@ecms/api/common";
 import SetupEventOrGroup, { ImportCompetitors, ReqUploadCompetitorsCSV, SetupStates } from "@ecms/api/setup";
-import { competitorsInitializer, events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, teamsInitializer } from "@ecms/models";
+import { competitorsInitializer, events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, join_events_groups_teams, teams, teamsInitializer } from "@ecms/models";
 import type { Pool, PoolClient } from "pg";
 import postgresPromise from "pg-promise";
 import * as uuid from "uuid";
 import { COMPETITOR_IMPORT_REDIS_KEY_PREFIX, SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
 import type connectToDB from "../utils/db";
+import { connectToDBKnex } from "../utils/db";
 import { PartialSetup, RedisCompetitorImport } from "../utils/interfaces";
 import createLogger from "../utils/logger";
 import type connectToRedis from "../utils/redis";
 
 //const logger = createLogger("setup:end");
 const pgp = postgresPromise();
+const knex = connectToDBKnex();
 
 
 /**
@@ -106,6 +108,9 @@ export default class SetupHandler extends RedisStateHandler {
 		if (!this.setupInfo.name || !this.setupInfo.type) {
 			this.logger.error("Name or type properties missing in setup!");
 			throw new Error("E_INVALID_SETUP: Name or type properties missing in setup!");
+		}
+		if (this.setupInfo.inheritance && !this.setupInfo.parent_id) {
+			throw new Error("E_INVALID_SETUP: Parent ID missing but inheritance set!");
 		}
 		// 2b: insert into event_and_groups
 		this.logger.debug("Getting DB client...");
@@ -218,32 +223,62 @@ export default class SetupHandler extends RedisStateHandler {
 	 * Inserts teams into the database. Will check if this needs to be done.
 	 */
 	protected async checkTeams() {
-		if (this.setupInfo.enable_teams && !(this.setupInfo.inheritance === true)) {
-			this.logger.debug("Preparing teams to create...");
+		if (this.setupInfo.enable_teams) {
+			this.logger.info("Preparing teams to create...");
 			if (!Array.isArray(this.setupInfo.teams)) {
 				this.logger.error("Bad type provided for teams array in setup info.");
 				throw new Error("E_INVALID_SETUP: Bad type provided for teams array in setup info!");
 			}
-			// Generate ids of teams and map to their info, so we can refer back to the IDs 
-			this.teamIdMaps = this.setupInfo.teams?.map(teamInfo => {
-				if (typeof teamInfo.name !== "string" || typeof teamInfo.colour !== "string") {
-					throw new Error(`E_INVALID_SETUP: Type of name or colour incorrect! Expected string, got ${teamInfo.name} and ${teamInfo.colour}`); 
-				}
-				return [uuid.v4(), teamInfo];
-			});
-
+			// Generate ids of teams and map to their info, so we can refer back to the IDs
+			if (!this.setupInfo.inheritance) {
+				this.logger.debug("No teams to inherit. Preparing teams with new IDs...");
+				this.teamIdMaps = this.setupInfo.teams?.map(teamInfo => {
+					if (typeof teamInfo.name !== "string" || typeof teamInfo.colour !== "string") {
+						throw new Error(`E_INVALID_SETUP: Type of name or colour incorrect! Expected string, got ${teamInfo.name} and ${teamInfo.colour}`); 
+					}
+					return [uuid.v4(), teamInfo];
+				});
+			} else {
+				this.logger.debug("Using teams from parent event. Retrieving these manually.");
+				const teamIDs = await knex
+					.select<join_events_groups_teams[]>("*")
+					.from("join_events_groups_teams")
+					.where("event_group_id", this.setupInfo.parent_id);
+				const teamIDFetches = this.setupInfo.teams?.map(async (teamInfo): Promise<[string, teamsInitializer]> => {
+					// For inheritance, expecting team IDs
+					if (typeof teamInfo.team_id !== "string") {
+						throw new Error(`E_INVALID_SETUP: Team ID for an inherited team not provided in teams entry! Expected string, got ${teamInfo.team_id}`); 
+					}
+					const teamInfoDB = (await knex.select<teamsInitializer[]>("*").from("teams").where("team_id", teamInfo.team_id))[0];
+					if (!teamInfoDB) {
+						throw new Error("ENONENT: Team ID provided does not exist in database!");
+					}
+					// Else, return its ID and info
+					return [teamInfo.team_id as string, teamInfoDB];
+				});
+				this.logger.debug("Waiting for DB fetches to finish...");
+				this.teamIdMaps = await Promise.all(teamIDFetches);
+			}
+			
 			// Insert!
 			for (const team of this.teamIdMaps) {
-				this.logger.debug(`Inserting team with ID ${team[0]}, name ${team[1].name}`);
-				await this.client.query(`
-					INSERT INTO teams(team_id, name, colour) VALUES ($1, $2, $3);
-				`, [team[0], team[1].name, team[1].colour]);
+				
+				// We only need to insert if it doesn't exist, i.e. no inheritance
+				if (!this.setupInfo.inheritance) {
+					this.logger.info(`Inserting team with ID ${team[0]}, name ${team[1].name}`);
+					await this.client.query(`
+						INSERT INTO teams(team_id, name, colour) VALUES ($1, $2, $3);
+					`, [team[0], team[1].name, team[1].colour]);
+				}
+				
+				// Add the join.
+				this.logger.info(`Joining team ${team[0]} to this event/group`);
 				await this.client.query(`
 					INSERT INTO join_events_groups_teams(event_group_id, team_id) VALUES ($1, $2)
 				`, [ this.setupID,  team[0] ]);
 			}
 
-			this.logger.debug("Teams processed.");
+			this.logger.info("Teams processed.");
 			this.hasTeams = true;
 		}
 	}
@@ -258,7 +293,6 @@ export default class SetupHandler extends RedisStateHandler {
 			if (!this.hasTeams) {
 				// TODO: Could be inheritance
 				this.logger.error("Error: no teams in this event! Skipping matches processing...");
-				this.logger.warn("Could be inheritance.");
 				return;
 			}
 			if (!Array.isArray(this.setupInfo.matches) || this.setupInfo.matches.length === 0) {
@@ -397,7 +431,7 @@ export default class SetupHandler extends RedisStateHandler {
 		
 		try {
 			for (const [compIndex, competitor] of processedList.entries()) {
-				this.logger.debug(`Importing ID ${competitor.id} (${compIndex + 1}/${numberCompetitors})`);
+				this.logger.info(`Importing ID ${competitor.id} (${compIndex + 1}/${numberCompetitors})`);
 				// We also need to handle jopining, hence the query
 				await this.client.query(`
 				WITH competitor AS (

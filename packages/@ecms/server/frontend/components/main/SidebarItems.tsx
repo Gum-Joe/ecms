@@ -27,8 +27,9 @@ export const SidebarItems: React.FC<SidebarProps> = (props) => {
 		<>
 			{eventAndGroupsList.map((eventOrGroup, index) => {
 				if (eventOrGroup.type === "group") {
+					// FIXME: Make it so it just focuses on the first slot
 					return (
-						<FluentTreeItem onClick={() => history.push(`/view/${eventOrGroup.event_group_id}`)}>
+						<FluentTreeItem onClick={() => history.push(`/view/${eventOrGroup.event_group_id}`)} key={index}>
 							{eventOrGroup.name}
 							<SidebarItems eventGroupId={eventOrGroup.event_group_id} />
 						</FluentTreeItem>

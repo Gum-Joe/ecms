@@ -1,6 +1,15 @@
-#setup-end {
+.setup-end-container {
     div {
         height: 100%;
     }
     
+    h2 {
+        margin-top: 0;
+        font-weight: 400;
+        font-size: 1.4em;
+    }
+
+    h1 {
+        margin-bottom: 0;
+    }
 }

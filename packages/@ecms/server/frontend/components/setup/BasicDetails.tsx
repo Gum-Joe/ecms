@@ -9,6 +9,8 @@ import updateSetup from "../../actions/setup/updateSetup";
 import { useSetupRedirector, getDataFromDropDown } from "./util";
 import SetupContainer from "./SetupContainer";
 import { useParams } from "react-router-dom";
+import setupInitalRedirect from "./redirector";
+import SetupActionsList, { setupAction } from "../../actions/setup";
 
 
 /**
@@ -42,7 +44,7 @@ const BasicDetails: FunctionComponent = () => {
 			// TODO: Use a banner
 			return alert("Please select data to track");
 		}
-		dispatch(updateSetup({
+		const setupObject = {
 			name: formObject.name,
 			description: formObject.description,
 			enable_teams: formObject.enableTeams === "on" ? true : false,
@@ -53,42 +55,15 @@ const BasicDetails: FunctionComponent = () => {
 					getDataFromDropDown("data-settings-dropdown") || "none",
 				) as trackable_data,
 			},
-		}));
-
-
-		// Routing time!
-		// Decide redirects
-
-		// 1: if teams need to be set, let that occurs (unless inheritance from parent is selected, in which case copy in parent's teams?)
-		if (formObject.enableTeams === "on") {
-			setupPage("/teams");
-			return;
-		}
-		
-		// 2: Check event type info if an event - if the setting of matches is on, go to matches page
-		// 2a: if the event type is individual performance, go to competitors
-		// 2b: if neither of the above, go to finalising page (no other things to set)
-		if (setupType === "event") {
-			const dataTracked = dataToTrack.get(
-				getDataFromDropDown("data-settings-dropdown") || "none",
-			) as trackable_data;
-			
-			if (dataTracked === "matches") {
-				// INVALID STATE - Teams need to be set to use matches!
-				alert("Invalid parameters - teams need to be enabled to use matches.");
-				return;
-			} else if (dataTracked === "individual") {
-				setupPage("/competitors");
-				return;
-			} else {
-				setupPage("/end");
-				return;
+		};
+		dispatch(updateSetup(setupObject)).then(() => {
+			// 0: If inheritance set, need to redirect so we can set things in state we need from inheritance
+			if (setupObject.inheritance) {
+				return setupPage("/inherit");
 			}
-		}
-
-		// 3: Finally, if this is a group or event and there are no teams to add allow competitors to be added 
-		setupPage("/competitors");
 		
+			return setupInitalRedirect(setupObject, setupPage, setupType);		
+		});
 	};
 	
 	return ( 

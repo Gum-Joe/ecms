@@ -48,6 +48,7 @@ const SetupRenderer: React.FC = (props) => {
 				<SetupHeader>
 					<h1>An error was encountered</h1>
 					<h3>{isError.message || isError}</h3>
+					<h3>You may need to refresh to escape this error.</h3>
 				</SetupHeader>
 			</SetupFrame>
 		);
