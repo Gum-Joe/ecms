@@ -93,6 +93,10 @@ interface ExplicitCompetitorList extends BaseSetupCompetitor {
 		}
 	>;
 }
+/** Competitors defined by inherited ALL from the parent */
+interface InheritCompetitors extends BaseSetupCompetitor {
+	type: "inherit";
+}
 
 /**
  * Represents a event or group currently being setup.
@@ -145,7 +149,7 @@ export default interface SetupEventOrGroup extends
 	/**
 	 * Settings for competitors in this event/group, IF we are adding them 
 	 */
-	competitor_settings?: FilterCompetitors | ImportCompetitors | ExplicitCompetitorList;
+	competitor_settings?: FilterCompetitors | ImportCompetitors | ExplicitCompetitorList | InheritCompetitors;
 
 	/**
 	 * Groups ONLY setting: setup any restrictions on competitors and how manu sub-events they can take part in

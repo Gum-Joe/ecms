@@ -13,6 +13,8 @@ import axios, { AxiosResponse } from "axios";
 import { ReqUploadCompetitorsCSV } from "@ecms/api/setup";
 import { useSetupRedirector } from "../util";
 import updateSetup from "../../../actions/setup/updateSetup";
+import { events_and_groups, event_only_settings } from "@ecms/models";
+import { handleCompetitorsRedirect } from "./handleCompetitorsRedirect";
 
 interface UploadProps {
 	/** Metadata about columns in the CSV and how they correspond to required ECMS values */
@@ -117,12 +119,7 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 					console.log("Storing metadata...");
 					
 					// Route
-					if (eventOrGroup === "event" && eventType === "individual") {
-						// Need to set units
-						setupPage("/units");
-					} else {
-						setupPage("/end");
-					}
+					handleCompetitorsRedirect(eventOrGroup, eventType, setupPage);
 					
 					// Redirect
 				}).catch((error) => {
@@ -137,7 +134,7 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 			}
 			
 		}
-	}, [setupID, canProceed, props.forceUpload, props.csvMetaData, props.csvData]);
+	}, [setupID, canProceed, props.forceUpload, props.csvMetaData, props.csvData, eventOrGroup, eventType, setupPage, dispatch]);
 	return (
 		<div className="competitor-csv-upload central-progress-box">
 			{
@@ -155,3 +152,5 @@ const ServerUpload: React.FC<UploadProps> = (props) => {
 };
 
 export default ServerUpload;
+
+

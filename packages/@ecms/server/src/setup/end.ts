@@ -337,6 +337,10 @@ export default class SetupHandler extends RedisStateHandler {
 					} else {
 						this.logger.warn("Explicitly set competitors not yet supported. Skipping...");
 					}
+				} else if (this.setupInfo.competitor_settings.type === "inherit")  {
+					this.logger.info("Asked to inherit competitors from parent.");
+					this.logger.warn("Not doing anything as expected to generate competitor lists on the fly.");
+
 				} else {
 					this.logger.warn("No other competitor import types currently supported. Skipping...");
 				}

@@ -87,3 +87,15 @@ fluent-tab-panel {
 		}
 	}
 }
+
+#inheritCompPanel {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 250px;
+	p {
+		margin: auto;
+		font-size: 16px;
+	}
+}

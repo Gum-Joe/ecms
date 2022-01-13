@@ -12,8 +12,12 @@ import SetupFrame, { SetupHeader } from "../SetupFrame";
 import { useDropzone } from "react-dropzone";
 import Button from "../../common/Button";
 import ServerUpload from "./upload";
-import { useAppSelector } from "../../../util/hooks";
+import { useAppDispatch, useAppSelector } from "../../../util/hooks";
 import { CSVResult, ColumnsToGet, ColumnsToGetRecord } from "./util";
+import updateSetup from "../../../actions/setup/updateSetup";
+import { useHistory } from "react-router-dom";
+import { handleCompetitorsRedirect } from "./handleCompetitorsRedirect";
+import { useSetupRedirector } from "../util";
 
 
 /**
@@ -29,6 +33,13 @@ const parseCSV = (csvResult: string): CSVResult => {
 		data: mappedCSV.slice(1),
 	};
 };
+
+// Constants to ID tabs
+enum Tabs {
+	CSV_IMPORT = "CSV_IMPORT",
+	PARENT_INHERIT = "PARENT_INHERIT",
+	MANUAL = "MANUAL",
+}
 
 
 /** Maps columns to get to their state values */
@@ -57,7 +68,15 @@ const Competitors: React.FC = () => {
 		/** Index of the CSV Column for year group */
 		yearGroupIndex: -1,
 	});
+	const [activeTab, setActiveTab] = useState<Tabs>(Tabs.CSV_IMPORT);
+
 	const teamsToMap = useAppSelector(state => state.setup.competitor_settings?.teamsMap || {});
+	const parent_id = useAppSelector(state => state.setup.parent_id);
+	const eventOrGroup = useAppSelector(state => state.setup.type);
+	const eventType = useAppSelector(state => state.setup.event_settings?.data_tracked);
+
+	const dispatch = useAppDispatch();
+	const setupPage = useSetupRedirector();
 
 	// Used to store key last set so we can undo it
 	const [lastSetColumn, setlastSetColumn] = useState<ColumnsToGet | "error">("error");
@@ -83,12 +102,25 @@ const Competitors: React.FC = () => {
 	// Handle next button correctly - if teams still to map, DON'T move on
 	const [canGoNext, setcanGoNext] = useState(false);
 	const onNextHandler = useCallback(() => {
-		if (!Object.values(teamsToMap as Record<any, any>).includes(-1)) {
-			// All set!
-			setcanGoNext(true);
-		} else {
-			alert("Please map all teams before continuing");
+		if (activeTab === Tabs.CSV_IMPORT) {
+			if (!Object.values(teamsToMap as Record<any, any>).includes(-1)) {
+				// All set!
+				setcanGoNext(true);
+			} else {
+				alert("Please map all teams before continuing");
+			}
+		} else if (activeTab === Tabs.PARENT_INHERIT) {
+			// Inheritance? Set in state and redirect!
+			dispatch(updateSetup({
+				competitor_settings: {
+					type: "inherit",
+				}
+			})).then(() => {
+				// Route
+				handleCompetitorsRedirect(eventOrGroup, eventType, setupPage);
+			});
 		}
+		
 	}, [teamsToMap]);
 
 	const {
@@ -110,8 +142,9 @@ const Competitors: React.FC = () => {
 			</SetupHeader>
 			<SetupContainer id="setup-competitors" className="setup-competitors-container">
 				<fluent-tabs activeid="import-csv">
-					<fluent-tab id="importCsv">Import from CSV</fluent-tab>
-					<fluent-tab id="manualEntry">Manual Entry</fluent-tab>
+					<fluent-tab onClick={() => setActiveTab(Tabs.CSV_IMPORT)} id="importCsv">Import from CSV</fluent-tab>
+					{ parent_id && 	<fluent-tab onClick={() => setActiveTab(Tabs.PARENT_INHERIT)} id="inheritParentCompetitors">Use parent group competitors</fluent-tab> }
+					<fluent-tab onClick={() => setActiveTab(Tabs.MANUAL)} id="manualEntry">Manual Entry</fluent-tab>
 					{
 						typeof csvData === "undefined" ?
 							<fluent-tab-panel key={0} id="importCsvPanel">
@@ -187,7 +220,10 @@ const Competitors: React.FC = () => {
 								
 							</fluent-tab-panel>
 					}	
-					<fluent-tab-panel key={1} id="manualEntryPanel">
+					{parent_id && <fluent-tab-panel key={1} id="inheritCompPanel">
+						<p>Please press next to proceed. Competitors from the parent group will be used.</p>
+					</fluent-tab-panel>}
+					<fluent-tab-panel key={parent_id ? 2 : 1} id="manualEntryPanel">
 						
 					</fluent-tab-panel>
 				</fluent-tabs>
