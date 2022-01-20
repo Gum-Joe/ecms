@@ -97,6 +97,55 @@ router.get("/:id/info", async (req, res: ECMSResponse<events_and_groups>, next) 
 });
 
 /**
+ * Retrieves competitor from a group/event.
+ * 
+ * DOES NOT handle inheritance
+ * 
+ * @param event_group_id ID of event/group to fetch from
+ */
+function fetchCompetitors(event_group_id: string) {
+  logger.info(`Getting competitor from ${event_group_id}`);
+  const eventSettingsArr = await knex
+				.select("competitor_settings_id")
+        .select("parent_id")
+				.from("events_and_groups")
+				.where("event_group_id", event_group_id);
+			if (eventSettingsArr.length === 0) {
+				return res.status(403).json({
+					message: "No competitor settings found for this event! Please check competitors have been set.",
+				});
+			}
+  const dbres = await knex
+				.select("competitors.id")
+				.select("competitors.lastname")
+				.select("competitors.firstname")
+				.select("competitors.data")
+				.select("competitors.team_id")
+				.select("competitor_data.competitor_data_id")
+				.select("competitor_data.stored_data")
+				.select("competitor_data.points")
+				.select("competitor_data.additional_data")
+				.select("competitor_data.overriden")
+				.select("competitor_data.dnf")
+				.from("competitors")
+				// TODO: Order messed up!
+				.where("competitors.team_id", teamID)
+				// Get any prestored data using the competitor_settings_id
+				.andWhere(function () {
+					this.where("competitor_data.competitor_settings_id",
+						eventSettingsArr[0].competitor_settings_id
+					)
+						// and if non exists, resturn it (hence the OR, we allow through a NULL value for competitor_settings_id)
+						.orWhere("competitor_data.competitor_settings_id", null);
+				})
+				// anything beyond the above for competitor_settings_id may result in data for a different event being returned!
+				.leftJoin("competitor_data", "competitors.competitor_id", "competitor_data.competitor_id")
+				.orderBy("competitors.firstname", "asc")
+				.orderBy("competitors.lastname", "asc");
+        
+}
+
+/**
  * Retrieve competitors - currently just by team
  * Also gets data for the competitor
  * 
@@ -107,18 +156,50 @@ router.get("/:id/competitors", async (req, res, next) => {
 	const teamID = req.query.team_id as string;
 	if (req.query.team_id) {
 		logger.info(`Fetching competitor from event/group ${req.params.id} for team ${teamID}...`);
+    
 		try {
 			// TODO: Apply competitor_additions, etc!
 			logger.debug("Getting competitor settings ID...");
-			const eventSettingsID = await knex
+			const eventSettingsArr = await knex
 				.select("competitor_settings_id")
+        .select("parent_id")
 				.from("events_and_groups")
 				.where("event_group_id", eventID);
-			if (eventSettingsID.length === 0) {
+			if (eventSettingsArr.length === 0) {
 				return res.status(403).json({
 					message: "No competitor settings found for this event! Please check competitors have been set.",
 				});
 			}
+
+      // Check inheritance
+      logger.info("Checking inheritance..")
+      const competitorSettingsArr = await knex
+        .select<competitor_settings[]>("*")
+        .from("competitor_settings")
+        .where("competitor_settings_id", eventSettingsArr[0].competitor_settings_id)
+      if (competitorSettingsArr.length === 0) {
+        res.status(500);
+        return res.json({
+          message: "No competitor settings found!"
+        })
+      }
+      const competitorSettings = competitorSettingsArr[0];
+      if (competitorSettings.type === "inherit") {
+        logger.info("Fetching data from parent as 'inherit' set as competitor_settings type...");
+        if (!eventSettingsArr[0].parent_id) {
+          res.status(500);
+          return res.json({
+            message: "Inheritance of competitors set for an event with no parent_id!"
+          });
+        }
+
+        // Get the competitors
+        const competitors = await fetchCompetitors(eventSettingsArr[0].parent_id);
+        res.json(competitors);
+        logger.info("Done.");
+        return;
+
+      }
 			const dbres = await knex
 				.select("competitors.id")
 				.select("competitors.lastname")
@@ -137,7 +218,7 @@ router.get("/:id/competitors", async (req, res, next) => {
 				// Get any prestored data using the competitor_settings_id
 				.andWhere(function () {
 					this.where("competitor_data.competitor_settings_id",
-						eventSettingsID[0].competitor_settings_id
+						eventSettingsArr[0].competitor_settings_id
 					)
 						// and if non exists, resturn it (hence the OR, we allow through a NULL value for competitor_settings_id)
 						.orWhere("competitor_data.competitor_settings_id", null);
