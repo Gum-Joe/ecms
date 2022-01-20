@@ -240,20 +240,26 @@ export default class SetupHandler extends RedisStateHandler {
 				});
 			} else {
 				this.logger.debug("Using teams from parent event. Retrieving these manually.");
-				const teamIDs = await knex
-					.select<join_events_groups_teams[]>("*")
-					.from("join_events_groups_teams")
-					.where("event_group_id", this.setupInfo.parent_id);
-				const teamIDFetches = this.setupInfo.teams?.map(async (teamInfo): Promise<[string, teamsInitializer]> => {
-					// For inheritance, expecting team IDs
+				// NOTE: Expecting team IDs provided to be the in the parent.
+				const teamIDFetches = this.setupInfo.teams?.map(async (teamInfo): Promise<[string, teams]> => {
+					// For inheritance, expecting team IDs from the client of the teams to use.
 					if (typeof teamInfo.team_id !== "string") {
 						throw new Error(`E_INVALID_SETUP: Team ID for an inherited team not provided in teams entry! Expected string, got ${teamInfo.team_id}`); 
 					}
-					const teamInfoDB = (await knex.select<teamsInitializer[]>("*").from("teams").where("team_id", teamInfo.team_id))[0];
+					const teamInfoDB = (await knex.select<teams[]>("*").from("teams").where("team_id", teamInfo.team_id))[0];
 					if (!teamInfoDB) {
 						throw new Error("ENONENT: Team ID provided does not exist in database!");
 					}
-					// Else, return its ID and info
+					// Validate team to make sure it is in the parent
+					this.logger.debug(`Validating team with ID ${teamInfo.team_id} is in parent of ID ${this.setupInfo.parent_id}`);
+					const isInParent = await knex
+						.select("*")
+						.from("join_events_groups_teams")
+						.where("event_group_id", this.setupInfo.parent_id);
+					if (isInParent.length === 0) {
+						throw new Error(`EINVALID: Team provided of ID ${teamInfo.team_id} is not in parent of ID ${this.setupInfo.parent_id}!`);
+					}
+					// Else if no errors, return its ID and info
 					return [teamInfo.team_id as string, teamInfoDB];
 				});
 				this.logger.debug("Waiting for DB fetches to finish...");

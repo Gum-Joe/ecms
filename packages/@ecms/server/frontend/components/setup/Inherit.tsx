@@ -37,14 +37,15 @@ const Inherit: React.FC = (props) => {
 		// 2: Get teams
 		if (parent?.enable_teams) {
 			const teams = (await axios.get<teams[]>(`/api/common/${parent_id}/teams`)).data;
-			// Set teams
-			await dispatch(updateSetup({
+			const newState = {
 				teams: teams,
 				enable_teams: true,
-			}));
+			};
+			// Set teams
+			await dispatch(updateSetup(newState));
 
 			// Redirect
-			return setupInitalRedirect(fullState, setupPage, fullState.type);
+			return setupInitalRedirect({ ...fullState, ...newState }, setupPage, fullState.type);
 
 		}
 		
