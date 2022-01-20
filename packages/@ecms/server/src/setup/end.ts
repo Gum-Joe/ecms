@@ -321,41 +321,39 @@ export default class SetupHandler extends RedisStateHandler {
 	 */
 	protected async processCompetitors(): Promise<void> {
 		try {
-			if (this.setupInfoRedis.hasImportedCompetitors) {
-				this.logger.info("Processing competitors to import...");
-				// Validate info present
-				if (!this.setupInfo.competitor_settings) {
-					throw new Error("No competitor settings found in setup info!");
-				}
+			this.logger.info("Processing competitors to import...");
+			// Validate info present
+			if (!this.setupInfo.competitor_settings) {
+				throw new Error("No competitor settings found in setup info!");
+			}
 
-        const settingsID = uuid.v4();
-				if (this.setupInfo.competitor_settings.type === "discrete") {
-					this.logger.info("Using discretely set competitors, either import or list");
-					if ("competitor_import_id" in this.setupInfo.competitor_settings) {
-						this.logger.info("Setting competitor metatdata in the DB...");
-						await this.client.query(`
+			const settingsID = uuid.v4();
+			if (this.setupInfo.competitor_settings.type === "discrete") {
+				this.logger.info("Using discretely set competitors, either import or list");
+				if ("competitor_import_id" in this.setupInfo.competitor_settings) {
+					this.logger.info("Setting competitor metatdata in the DB...");
+					await this.client.query(`
 							INSERT INTO competitor_settings(competitor_settings_id, type) VALUES ($1, 'discrete');
 						`, [settingsID]);
-						await this.client.query(`
+					await this.client.query(`
 							UPDATE events_and_groups SET competitor_settings_id = $1 WHERE event_group_id = $2;
 						`, [settingsID, this.setupID]);
-						await this.importCompetitors(this.setupInfo.competitor_settings, settingsID);
-					} else {
-						this.logger.warn("Explicitly set competitors not yet supported. Skipping...");
-					}
-				} else if (this.setupInfo.competitor_settings.type === "inherit")  {
-					this.logger.info("Asked to inherit competitors from parent.");
-					this.logger.debug("Setting the type to \"inherit\"");
-          await this.client.query(`
+					await this.importCompetitors(this.setupInfo.competitor_settings, settingsID);
+				} else {
+					this.logger.warn("Explicitly set competitors not yet supported. Skipping...");
+				}
+			} else if (this.setupInfo.competitor_settings.type === "inherit")  {
+				this.logger.info("Asked to inherit competitors from parent.");
+				this.logger.debug("Setting the type to \"inherit\"");
+				await this.client.query(`
 							INSERT INTO competitor_settings(competitor_settings_id, type) VALUES ($1, 'inherit');
 						`, [settingsID]);
-						await this.client.query(`
+				await this.client.query(`
 							UPDATE events_and_groups SET competitor_settings_id = $1 WHERE event_group_id = $2;
 						`, [settingsID, this.setupID]);
 
-				} else {
-					this.logger.warn("No other competitor import types currently supported. Skipping...");
-				}
+			} else {
+				this.logger.warn("No other competitor import types currently supported. Skipping...");
 			}
 		} catch (err) {
 			this.logger.error("Error importing competitors!");
