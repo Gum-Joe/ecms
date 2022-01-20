@@ -327,12 +327,12 @@ export default class SetupHandler extends RedisStateHandler {
 				if (!this.setupInfo.competitor_settings) {
 					throw new Error("No competitor settings found in setup info!");
 				}
-	
+
+        const settingsID = uuid.v4();
 				if (this.setupInfo.competitor_settings.type === "discrete") {
 					this.logger.info("Using discretely set competitors, either import or list");
 					if ("competitor_import_id" in this.setupInfo.competitor_settings) {
 						this.logger.info("Setting competitor metatdata in the DB...");
-						const settingsID = uuid.v4();
 						await this.client.query(`
 							INSERT INTO competitor_settings(competitor_settings_id, type) VALUES ($1, 'discrete');
 						`, [settingsID]);
@@ -345,7 +345,13 @@ export default class SetupHandler extends RedisStateHandler {
 					}
 				} else if (this.setupInfo.competitor_settings.type === "inherit")  {
 					this.logger.info("Asked to inherit competitors from parent.");
-					this.logger.warn("Not doing anything as expected to generate competitor lists on the fly.");
+					this.logger.debug("Setting the type to \"inherit\"");
+          await this.client.query(`
+							INSERT INTO competitor_settings(competitor_settings_id, type) VALUES ($1, 'inherit');
+						`, [settingsID]);
+						await this.client.query(`
+							UPDATE events_and_groups SET competitor_settings_id = $1 WHERE event_group_id = $2;
+						`, [settingsID, this.setupID]);
 
 				} else {
 					this.logger.warn("No other competitor import types currently supported. Skipping...");
