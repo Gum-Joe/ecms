@@ -2,7 +2,7 @@
  * Common API routes for events and group
  * @packageDocumentation
  */
-import { ResEventsGroupsList } from "@ecms/api/common";
+import { ResCompetitorFields, ResEventsGroupsList } from "@ecms/api/common";
 import { ReqCompetitors } from "@ecms/api/events";
 import { competitor_settings, competitor_settingsId, events_and_groups, teams } from "@ecms/models";
 import { Router } from "express";
@@ -142,6 +142,24 @@ async function fetchCompetitors(event_group_id: string, team_id: string, inherit
 }
 
 /**
+ * Checks if competitors are in use for a specific event
+ * @returns Competitor settings if found, null if none found
+ */
+async function hasCompetitors(event_group_id: string): Promise<competitor_settings | null> {
+	const competitorSettingsArr = await knex
+		.select("competitor_settings.*")
+		.select("events_and_groups.competitor_settings_id")
+		.from("events_and_groups")
+		.where("events_and_groups.event_group_id", event_group_id)
+		.leftJoin("competitor_settings", "events_and_groups.competitor_settings_id", "competitor_settings.competitor_settings_id");
+	if (competitorSettingsArr.length === 0) {
+		return null;
+	} else {
+		return competitorSettingsArr[0];
+	}
+}
+
+/**
  * Retrieve competitors - currently just by team
  * Also gets data for the competitor
  * 
@@ -208,6 +226,28 @@ router.get("/:id/competitors", async (req, res, next) => {
 			});
 		}
 	}
+});
+
+router.get("/:id/competitors/fields", async (req, res: ECMSResponse<ResCompetitorFields>, next) => {
+	const eventID = req.params.id;
+	logger.info(`Fetching fields from event/group ${eventID}`);
+	// 1: Check we can do this
+	const competitorSettings = await hasCompetitors(eventID);
+	if (!competitorSettings) {
+		logger.info("No competitor settings found!");
+		return res.status(400).json({
+			message: "No competitor settings found!"
+		});
+	}
+
+	// 2: retrieve keys - Postgres does this for us! - https://stackoverflow.com/questions/36141388/how-can-i-get-all-keys-from-a-json-column-in-postgres/57174042
+	const keys = await knex.raw(`
+		SELECT DISTINCT jsonb_each(data)
+		FROM competitors
+		INNER JOIN join_competitor_events_group
+			ON join_competitor_events_group.competitor_id = competitors.competitor_id;`, competitorSettings.competitor_settings_id);
+	res.json(keys.rows);
+
 });
 
 export default router;

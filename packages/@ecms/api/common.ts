@@ -56,3 +56,24 @@ export type TaskStatus<AdditionalStatus extends string = "pending"> = GeneralTas
  * Response when requesting a list of event and groups
  */
 export type ResEventsGroupsList = Pick<events_and_groups, "name" | "description" | "type" | "event_group_id" | "parent_id" | "complete" | "archived">[];
+
+/**
+ * Defines descriptions of fields in competitors
+ * @template ValidFields Union type of valid fields
+ */
+interface FieldDescriptor<ValidFields extends string = string>{
+	name: ValidFields;
+	values: string[];
+}
+
+/**
+ * Returns fields of competitor for a particular event
+ */
+export interface ResCompetitorFields {
+	/** These are fields provided by the database directly, that we are able to use */
+	defaults: FieldDescriptor<"team">[];
+	/** These are fields extracted from data */
+	fields: FieldDescriptor[];
+	/** Simple list of fields in {@link ResCompetitorFields.fields} so you don't have to loop through the long list. Indexes should match. */
+	flattenedList: string[];
+}
