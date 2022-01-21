@@ -244,6 +244,7 @@ router.get("/:id/competitors/fields", async (req, res: ECMSResponse<ResCompetito
 	const keys = await knex.raw(`
 		SELECT DISTINCT jsonb_each(data)
 		FROM competitors
+		WHERE join_competitor_events_group.competitor_settings_id = ?
 		INNER JOIN join_competitor_events_group
 			ON join_competitor_events_group.competitor_id = competitors.competitor_id;`, competitorSettings.competitor_settings_id);
 	res.json(keys.rows);
