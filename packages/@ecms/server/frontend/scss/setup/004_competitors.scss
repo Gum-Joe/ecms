@@ -126,6 +126,18 @@ fluent-tab-panel {
 			display: flex;
 			flex-direction: row;
 			gap: 19px;
+
+			align-items: center;
+
+			// Font Awesome icon!
+			svg {
+				font-size: 16px;
+
+				&:hover {
+					opacity: 0.7;
+					cursor: pointer;
+				}
+			}
 			
 			.ui-dropdown {
 				flex: 1;

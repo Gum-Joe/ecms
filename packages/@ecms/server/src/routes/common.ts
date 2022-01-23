@@ -288,7 +288,7 @@ router.get("/:id/competitors/fields", async (req, res: ECMSResponse<ResCompetito
 			fields: mapped,
 			flattenedList: keys.rows.map((r: { jsonb_object_keys: string }) => r.jsonb_object_keys),
 			defaults: [{
-				name: "team",
+				name: "Team",
 				values: teamsList ?? []
 			}],
 		});

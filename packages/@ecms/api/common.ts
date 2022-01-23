@@ -71,7 +71,7 @@ export interface FieldDescriptor<ValidFields extends string = string>{
  */
 export interface ResCompetitorFields {
 	/** These are fields provided by the database directly, that we are able to use */
-	defaults: FieldDescriptor<"team">[];
+	defaults: FieldDescriptor<"Team">[];
 	/** These are fields extracted from data */
 	fields: FieldDescriptor[];
 	/** Simple list of fields in {@link ResCompetitorFields.fields} so you don't have to loop through the long list. Indexes should match. */
