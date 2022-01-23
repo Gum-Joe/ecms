@@ -61,7 +61,7 @@ export type ResEventsGroupsList = Pick<events_and_groups, "name" | "description"
  * Defines descriptions of fields in competitors
  * @template ValidFields Union type of valid fields
  */
-interface FieldDescriptor<ValidFields extends string = string>{
+export interface FieldDescriptor<ValidFields extends string = string>{
 	name: ValidFields;
 	values: string[];
 }

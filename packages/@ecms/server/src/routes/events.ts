@@ -231,6 +231,7 @@ router.post("/:id/competitors/performance", async (req, res, next) => {
 					await client.query("COMMIT");
 				} catch (err) {
 					await client.query("ROLLBACK");
+					await client.release();
 					throw err;
 				}
 			} else {
@@ -258,6 +259,7 @@ router.post("/:id/competitors/performance", async (req, res, next) => {
 					await client.query("COMMIT");
 				} catch (err) {
 					await client.query("ROLLBACK");
+					await client.release();
 					throw err;
 				}
 				
@@ -266,6 +268,7 @@ router.post("/:id/competitors/performance", async (req, res, next) => {
 			res.json({
 				message: "Done"
 			});
+			await client.release();
 		}
 	} catch (err) {
 		logger.error(`Error updating competitor ${req.body?.competitorID} for event ${req.params.id}!`);

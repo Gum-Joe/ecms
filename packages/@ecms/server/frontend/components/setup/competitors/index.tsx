@@ -18,6 +18,7 @@ import updateSetup from "../../../actions/setup/updateSetup";
 import { useHistory } from "react-router-dom";
 import { handleCompetitorsRedirect } from "./handleCompetitorsRedirect";
 import { useSetupRedirector } from "../util";
+import FilterParentContent from "./filterParent";
 
 
 /**
@@ -39,6 +40,7 @@ enum Tabs {
 	CSV_IMPORT = "CSV_IMPORT",
 	PARENT_INHERIT = "PARENT_INHERIT",
 	MANUAL = "MANUAL",
+	FILTER_PARENT = "FILTER_PARENT"
 }
 
 
@@ -144,6 +146,7 @@ const Competitors: React.FC = () => {
 				<fluent-tabs activeid="import-csv">
 					<fluent-tab onClick={() => setActiveTab(Tabs.CSV_IMPORT)} id="importCsv">Import from CSV</fluent-tab>
 					{ parent_id && 	<fluent-tab onClick={() => setActiveTab(Tabs.PARENT_INHERIT)} id="inheritParentCompetitors">Use parent group competitors</fluent-tab> }
+					{ parent_id && 	<fluent-tab onClick={() => setActiveTab(Tabs.FILTER_PARENT)} id="filterParentCompetitors">Filter from parent</fluent-tab> }
 					<fluent-tab onClick={() => setActiveTab(Tabs.MANUAL)} id="manualEntry">Manual Entry</fluent-tab>
 					{
 						typeof csvData === "undefined" ?
@@ -223,7 +226,10 @@ const Competitors: React.FC = () => {
 					{parent_id && <fluent-tab-panel key={1} id="inheritCompPanel">
 						<p>Please press next to proceed. Competitors from the parent group will be used.</p>
 					</fluent-tab-panel>}
-					<fluent-tab-panel key={parent_id ? 2 : 1} id="manualEntryPanel">
+					{
+						parent_id && <FilterParentContent key={2} id="filterParentCompPanel" />
+					}
+					<fluent-tab-panel key={parent_id ? 3 : 1} id="manualEntryPanel">
 						
 					</fluent-tab-panel>
 				</fluent-tabs>

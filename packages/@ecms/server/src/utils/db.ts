@@ -40,11 +40,12 @@ export function getDBParams() {
  */
  export function connectToDBKnex(): ReturnType<typeof makeKnex> {
 	const logger = createLogger("db");
-	logger.info("Creating new DB connection with knex...");
+	
 	if (typeof theKnexPool !== "undefined") {
-		logger.info("Reusing already created Knex object...");
+		logger.info("Asked for a DB connection: Reusing already created Knex object...");
 		return theKnexPool;
 	}
+	logger.info("Creating new DB connection with knex...");
 	theKnexPool = makeKnex({
 		connection: getDBParams(),
 		client: "pg",
@@ -65,11 +66,12 @@ export function getDBParams() {
  */
 export default function connectToDB(): Pool {
 	const logger = createLogger("db");
-	logger.info("Creating new DB connection...");
+	
 	if (typeof thePool !== "undefined") {
-		logger.info("Reusing already created Postgres Pool...");
+		logger.info("Asked for new DB connection: reusing already created Postgres Pool...");
 		return thePool;
 	}
+	logger.info("Creating new DB connection...");
 	thePool = new Pool(getDBParams());
 	
 	// Setup error handling

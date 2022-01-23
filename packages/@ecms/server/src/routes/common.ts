@@ -2,7 +2,7 @@
  * Common API routes for events and group
  * @packageDocumentation
  */
-import { ResCompetitorFields, ResEventsGroupsList } from "@ecms/api/common";
+import { FieldDescriptor, ResCompetitorFields, ResEventsGroupsList } from "@ecms/api/common";
 import { ReqCompetitors } from "@ecms/api/events";
 import { competitor_settings, competitor_settingsId, events_and_groups, teams } from "@ecms/models";
 import { Router } from "express";
@@ -231,23 +231,75 @@ router.get("/:id/competitors", async (req, res, next) => {
 router.get("/:id/competitors/fields", async (req, res: ECMSResponse<ResCompetitorFields>, next) => {
 	const eventID = req.params.id;
 	logger.info(`Fetching fields from event/group ${eventID}`);
-	// 1: Check we can do this
-	const competitorSettings = await hasCompetitors(eventID);
-	if (!competitorSettings) {
-		logger.info("No competitor settings found!");
-		return res.status(400).json({
-			message: "No competitor settings found!"
+	try {
+		// 1: Check we can do this
+		const competitorSettings = await hasCompetitors(eventID);
+		if (!competitorSettings) {
+			logger.info("No competitor settings found!");
+			return res.status(400).json({
+				message: "No competitor settings found!"
+			});
+		}
+
+		// 2: retrieve keys - Postgres does this for us! - https://stackoverflow.com/questions/36141388/how-can-i-get-all-keys-from-a-json-column-in-postgres/57174042
+		const keys = await knex.raw(`
+			SELECT DISTINCT jsonb_object_keys(data)
+			FROM competitors
+			INNER JOIN join_competitor_events_group
+				ON join_competitor_events_group.competitor_id = competitors.competitor_id
+			WHERE join_competitor_events_group.competitor_settings_id = ?
+			;`, competitorSettings.competitor_settings_id);
+		
+		// 3: get values
+		logger.debug("Fields fetched. Getting values..." );
+		const mapped: FieldDescriptor[] = await Promise.all(keys.rows.map(async (row: { jsonb_object_keys: string }): Promise<FieldDescriptor> => {
+			const values = await knex.raw(`
+				SELECT DISTINCT data->? AS retrieved
+				FROM competitors
+				INNER JOIN join_competitor_events_group
+					ON join_competitor_events_group.competitor_id = competitors.competitor_id
+				WHERE join_competitor_events_group.competitor_settings_id = ?
+				ORDER BY retrieved ASC
+			`, [row.jsonb_object_keys, competitorSettings.competitor_settings_id]);
+			return {
+				name: row.jsonb_object_keys,
+				values: values.rows.map((r: { "retrieved": string }) => r["retrieved"]),
+			};
+		}));
+
+		// 4: get teams
+		logger.debug("Getting default column of team...");
+		const teamsListArr = await knex.raw(`
+		WITH competitor_team AS (
+			SELECT DISTINCT team_id
+			FROM competitors
+			INNER JOIN join_competitor_events_group
+							ON join_competitor_events_group.competitor_id = competitors.competitor_id
+						WHERE join_competitor_events_group.competitor_settings_id = ?
+		) 
+		SELECT array_agg(teams.name) FROM competitor_team
+		INNER JOIN teams
+			ON teams.team_id = competitor_team.team_id;
+		`, competitorSettings.competitor_settings_id);
+
+		const teamsList = teamsListArr.rows?.[0]["array_agg"];
+
+		res.json({
+			fields: mapped,
+			flattenedList: keys.rows.map((r: { jsonb_object_keys: string }) => r.jsonb_object_keys),
+			defaults: [{
+				name: "team",
+				values: teamsList ?? []
+			}],
+		});
+	} catch (err) {
+		logger.error(`Error getting fields of competitors for event/group ${eventID}!`);
+		logger.error((err as Error)?.message);
+		res.status(500).json({
+			message: `Internal Server Error - ${(err as Error)?.message}`,
 		});
 	}
 
-	// 2: retrieve keys - Postgres does this for us! - https://stackoverflow.com/questions/36141388/how-can-i-get-all-keys-from-a-json-column-in-postgres/57174042
-	const keys = await knex.raw(`
-		SELECT DISTINCT jsonb_each(data)
-		FROM competitors
-		WHERE join_competitor_events_group.competitor_settings_id = ?
-		INNER JOIN join_competitor_events_group
-			ON join_competitor_events_group.competitor_id = competitors.competitor_id;`, competitorSettings.competitor_settings_id);
-	res.json(keys.rows);
 
 });
 
