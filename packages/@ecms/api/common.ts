@@ -4,6 +4,7 @@
  */
 
 import { events_and_groups } from "@ecms/models";
+import type { competitor_reserved_fields } from "@ecms/models/src/competitor_filters";
 
 /**
  * Basic API Response
@@ -71,7 +72,7 @@ export interface FieldDescriptor<ValidFields extends string = string>{
  */
 export interface ResCompetitorFields {
 	/** These are fields provided by the database directly, that we are able to use */
-	defaults: FieldDescriptor<"Team">[];
+	defaults: FieldDescriptor<competitor_reserved_fields>[];
 	/** These are fields extracted from data */
 	fields: FieldDescriptor[];
 	/** Simple list of fields in {@link ResCompetitorFields.fields} so you don't have to loop through the long list. Indexes should match. */

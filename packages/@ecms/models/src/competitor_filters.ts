@@ -7,6 +7,13 @@ import filter_matchers from './filter_matchers';
 
 export type competitor_filtersId = string & { " __flavor"?: 'competitor_filters' };
 
+/** Fields reserved for use by ECMS */
+export type competitor_reserved_fields = "Team";
+export const COMPETITOR_RESERVED_FIELDS: Record<string, competitor_reserved_fields & string> = {
+  teams: "Team",
+};
+
+
 /**
  * Contains the actual filters used on competitors.
 ENUM the type field and matcher field.
