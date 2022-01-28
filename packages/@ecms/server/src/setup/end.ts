@@ -10,6 +10,7 @@ import { connectToDBKnex } from "../utils/db";
 import { PartialSetup, RedisCompetitorImport } from "../utils/interfaces";
 import createLogger from "../utils/logger";
 import type connectToRedis from "../utils/redis";
+import filterCompetitorFrom from "./filter";
 
 //const logger = createLogger("setup:end");
 const pgp = postgresPromise();
@@ -351,6 +352,35 @@ export default class SetupHandler extends RedisStateHandler {
 				await this.client.query(`
 							UPDATE events_and_groups SET competitor_settings_id = $1 WHERE event_group_id = $2;
 						`, [settingsID, this.setupID]);
+
+			} else if (this.setupInfo.competitor_settings.type === "filter_parent") {
+				this.logger.info(`Filtering competitors from ID ${this.setupInfo.parent_id}`);
+				if (!this.setupInfo.parent_id) {
+					this.logger.error("parent_id not found!");
+					throw new Error("Parent ID not provided!");
+				}
+
+				if (!this.setupInfo.competitor_settings.filters) {
+					this.logger.error("No filters provided!");
+					throw new Error("No filters provided!");
+				}
+
+				// Run it
+				// TODO: Team Map
+				const IDs = await filterCompetitorFrom(this.setupInfo.parent_id, this.setupInfo.competitor_settings.filters, knex);
+
+				// JOIN!
+				this.logger.info("Processing competitors into join table...");
+				for (const competitor of IDs) {
+					this.logger.debug(`Processing competitor with ID ${competitor}`);
+					await this.client.query(`
+						INSERT INTO join_competitor_events_group(competitor_id, competitor_settings_id) VALUES (
+						$1,
+						$2
+					);`, [competitor, settingsID]);
+				}
+
+				this.logger.info("Done.");
 
 			} else {
 				this.logger.warn("No other competitor import types currently supported. Skipping...");

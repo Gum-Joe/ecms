@@ -71,3 +71,5 @@ async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: 
 		
 
 }
+
+export default filterCompetitorFrom;
