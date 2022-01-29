@@ -58,7 +58,7 @@ interface SetupUseOldRecord {
 /**
  * Competitors defined by filtering from a parent group
  */
-interface FilterCompetitors extends BaseSetupCompetitor {
+export interface FilterCompetitors extends BaseSetupCompetitor {
 	type: "filter_parent";
 	filters: OmitIDKeys<competitor_filtersInitializer>[];
 }
@@ -83,7 +83,7 @@ export interface ImportCompetitors extends BaseSetupCompetitor {
 /**
  * Competitor defined by explicitly listing them
  */
-interface ExplicitCompetitorList extends BaseSetupCompetitor {
+export interface ExplicitCompetitorList extends BaseSetupCompetitor {
 	type: "discrete";
 	set_competitors: Array<
 		Omit<OmitIDKeys<competitorsInitializer>, "id"> & {
@@ -94,7 +94,7 @@ interface ExplicitCompetitorList extends BaseSetupCompetitor {
 	>;
 }
 /** Competitors defined by inherited ALL from the parent */
-interface InheritCompetitors extends BaseSetupCompetitor {
+export interface InheritCompetitors extends BaseSetupCompetitor {
 	type: "inherit";
 }
 

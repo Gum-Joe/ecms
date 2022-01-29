@@ -1,7 +1,7 @@
-import { competitorsId, competitor_filters, events_and_groups, events_and_groupsId, filter_types, teamsId } from "@ecms/models";
+import { competitors, competitorsId, competitor_filters, events_and_groups, events_and_groupsId, filter_types, teamsId } from "@ecms/models";
 import createLogger from "../utils/logger";
 import type makeKnex from "knex";
-import { COMPETITOR_RESERVED_FIELDS } from "@ecms/models/lib/competitor_filters";
+import { competitor_filtersInitializer, COMPETITOR_RESERVED_FIELDS } from "@ecms/models/lib/competitor_filters";
 
 const logger = createLogger("competitors:filter");
 
@@ -17,7 +17,12 @@ const logger = createLogger("competitors:filter");
  * @returns List of competitor IDs that match the filters, which can then be linked to the event/group being setup.
  */
 // TODO: Follow inheritance
-async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: competitor_filters[], knex: ReturnType<typeof makeKnex>, teamMap: Map<string, teamsId>): Promise<competitorsId[]> {
+async function filterCompetitorFrom(
+	eventGroupID: events_and_groupsId,
+	filters: Omit<competitor_filtersInitializer, "competitor_settings_id">[],
+	knex: ReturnType<typeof makeKnex>,
+	teamMap: Map<string, teamsId>
+): Promise<Pick<competitors, "competitor_id">[]> {
 	logger.info(`Filtering competitors from ${eventGroupID}...`);
 	logger.debug("Getting settings for parent event/group...");
 	const competitorSettings = (await knex
@@ -35,7 +40,7 @@ async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: 
 	// Construct the SQL query
 	logger.debug("Running query...");
 	const query = await knex
-		.select<competitorsId[]>("competitors.competitor_id")
+		.select<Pick<competitors, "competitor_id">[]>("competitors.competitor_id")
 		.from("competitors")
 		.leftJoin("join_competitor_events_group", "competitors.competitor_id", "join_competitor_events_group.competitor_id")
 		.where("join_competitor_events_group.competitor_settings_id", competitorSettings.competitor_settings_id)
@@ -60,7 +65,8 @@ async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: 
 				}
 				// Handle special case of teams
 				if (filter.field === COMPETITOR_RESERVED_FIELDS.teams) {
-					return this[functionRef]("competitors.team_id", teamMap.get(filter.value));
+					logger.debug("Detected teams filter!");
+					return this.where("competitors.team_id", teamMap.get(filter.value));
 				}
 				// Else, just use the normal filter from the json data
 				this[functionRef](`competitors.data ->> ? ${operator} ?`, [filter.field, filter.value]);

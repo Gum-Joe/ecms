@@ -123,6 +123,15 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 					unit: action.payload,
 				}
 			};
+		case Actions.UPDATE_COMPETITOR_FILTERS:
+			return {
+				...state,
+				competitor_settings: {
+					...state.competitor_settings,
+					type: "filter_parent",
+					filters: action.payload,
+				}
+			};
 		default:
 			console.warn("INVALID ACTION RECEIVED TO SETUP CONTEXT.");
 			return state;

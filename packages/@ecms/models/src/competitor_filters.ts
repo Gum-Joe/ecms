@@ -47,7 +47,7 @@ ENUM the type field and matcher field.
  */
 export interface competitor_filtersInitializer {
   /** Primary key. Index: pk_competitor_filters */
-  filter_id: competitor_filtersId;
+  filter_id?: competitor_filtersId;
 
   /** "base" - means first condition applied
 "or" - mean "or this condition applies"

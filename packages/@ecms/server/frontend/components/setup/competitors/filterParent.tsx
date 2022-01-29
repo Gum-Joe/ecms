@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { ResCompetitorFields, ResCompetitorFilter } from "@ecms/api/common";
 import { faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useAppSelector } from "../../../util/hooks";
+import { useAppDispatch, useAppSelector } from "../../../util/hooks";
 import useAsyncEffect from "use-async-effect";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown } from "@fluentui/react-northstar";
 import AddButton from "../../common/AddButton";
 import { competitor_filters, competitor_filtersInitializer, filter_types } from "@ecms/models";
 import axios from "axios";
+import { FilterCompetitors } from "@ecms/api/setup";
+import SetupActionsList, { setupAction } from "../../../actions/setup";
+import validateFilters from "../../../util/validateFilters";
+import updateSetup from "../../../actions/setup/updateSetup";
 
 /**
  * We transform API provided fields into this format for easier transformating in the UI
@@ -43,6 +47,8 @@ const FilterParentContent: React.FC = (props) => {
 
 	// Fetch fields
 	const [fields, setFields] = useState<ResCompetitorFields | null>();
+	// Update state when fields updated
+	const dispatch = useAppDispatch();
 	const [fieldsParsed, setfieldsParsed] = useState<UIField[]>([]);
 	const [filters, setfilters] = useState<UIFilter[]>([{
 		type: "base",
@@ -61,11 +67,11 @@ const FilterParentContent: React.FC = (props) => {
 	// Updates the filters state
 	useAsyncEffect(async (isActive) => {
 		// Validate - only send to server if filters has no nulls!
-		for (const filter of filters) {
-			if (!filter.field || !filter.type || !filter.matcher || !filter.value) {
-				// Filter incomplete!
-				return;
-			}
+		// @ts-expect-error: We check below fields were defined, and check if valid before next is allowd!
+		dispatch(setupAction(SetupActionsList.UPDATE_COMPETITOR_FILTERS, filters));
+		dispatch(updateSetup({}));
+		if (!validateFilters(filters)) {
+			return;
 		}
 		// ask
 		if (isActive()) {
@@ -74,11 +80,14 @@ const FilterParentContent: React.FC = (props) => {
 			});
 			if (req.status === 200) {
 				setfiltered(() => req.data);
+				
 			}
 			
 		}
 		
 	}, [filters]);
+
+
 	
 	if (fields) {
 		return (

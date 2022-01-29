@@ -19,6 +19,8 @@ import { useHistory } from "react-router-dom";
 import { handleCompetitorsRedirect } from "./handleCompetitorsRedirect";
 import { useSetupRedirector } from "../util";
 import FilterParentContent from "./filterParent";
+import validateFilters from "../../../util/validateFilters";
+import { FilterCompetitors } from "@ecms/api/setup";
 
 
 /**
@@ -103,6 +105,7 @@ const Competitors: React.FC = () => {
 
 	// Handle next button correctly - if teams still to map, DON'T move on
 	const [canGoNext, setcanGoNext] = useState(false);
+	const filters = useAppSelector(state => (state.setup.competitor_settings as FilterCompetitors)?.filters);
 	const onNextHandler = useCallback(() => {
 		if (activeTab === Tabs.CSV_IMPORT) {
 			if (!Object.values(teamsToMap as Record<any, any>).includes(-1)) {
@@ -121,6 +124,15 @@ const Competitors: React.FC = () => {
 				// Route
 				handleCompetitorsRedirect(eventOrGroup, eventType, setupPage);
 			});
+		} else if (activeTab === Tabs.FILTER_PARENT) {
+			console.log(filters);
+			if (!filters || filters.length === 0) {
+				alert("No filters set.");
+			} else if (!validateFilters(filters)) {
+				alert("Please specify all filter options.");
+			} else {
+				handleCompetitorsRedirect(eventOrGroup, eventType, setupPage);
+			}
 		}
 		
 	}, [teamsToMap]);

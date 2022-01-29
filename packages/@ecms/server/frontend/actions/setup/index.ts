@@ -6,7 +6,7 @@
  * @packageDocumentation
  */
 import { ResStartSetup } from "@ecms/api/setup";
-import { competitor_setting_types, data_units, data_unitsInitializer } from "@ecms/models";
+import { competitor_filtersInitializer, competitor_setting_types, data_units, data_unitsInitializer } from "@ecms/models";
 import { StagingTeam } from "../../components/setup/util";
 import { SetupState } from "../../constants/interfaces";
 import { createGeneralAction } from "../createGeneralAction";
@@ -33,6 +33,8 @@ export enum SetupActionsList {
 	SET_DATA_UNIT = "SET_DATA_UNIT",
 	/** Set competitor upload type */
 	SET_COMPETITOR_IMPORT_TYPE = "SET_COMPETITOR_IMPORT_TYPE",
+	/** Update filters (please provide list of all filters, not just ones to add!) */
+	UPDATE_COMPETITOR_FILTERS = "UPDATE_COMPETITOR_FILTERS",
 }
 
 /**
@@ -76,6 +78,7 @@ export type SetupActionPayloads = {
 	[SetupActionsList.CSV_MAP_TEAM]: [string, number];
 	[SetupActionsList.SET_DATA_UNIT]: data_unitsInitializer;
 	[SetupActionsList.SET_COMPETITOR_IMPORT_TYPE]: competitor_setting_types,
+	[SetupActionsList.UPDATE_COMPETITOR_FILTERS]: Omit<competitor_filtersInitializer, "competitor_settings_id" | "filter_id">[];
 
 }
 

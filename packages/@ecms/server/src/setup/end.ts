@@ -1,12 +1,13 @@
 import { TaskStatus } from "@ecms/api/common";
 import SetupEventOrGroup, { ImportCompetitors, ReqUploadCompetitorsCSV, SetupStates } from "@ecms/api/setup";
-import { competitorsInitializer, events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, join_events_groups_teams, teams, teamsInitializer } from "@ecms/models";
+import { competitorsInitializer, events_and_groupsInitializer, event_only_settings, event_only_settingsInitializer, join_events_groups_teams, teams, teamsId, teamsInitializer } from "@ecms/models";
 import type { Pool, PoolClient } from "pg";
 import postgresPromise from "pg-promise";
 import * as uuid from "uuid";
 import { COMPETITOR_IMPORT_REDIS_KEY_PREFIX, SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
 import type connectToDB from "../utils/db";
 import { connectToDBKnex } from "../utils/db";
+import { getTeamsMapForEventGroup } from "../utils/getTeamsMapForEventGroup";
 import { PartialSetup, RedisCompetitorImport } from "../utils/interfaces";
 import createLogger from "../utils/logger";
 import type connectToRedis from "../utils/redis";
@@ -365,19 +366,55 @@ export default class SetupHandler extends RedisStateHandler {
 					throw new Error("No filters provided!");
 				}
 
+				this.logger.debug("Setting the type to \"filter_parent\"");
+				await this.client.query(`
+							INSERT INTO competitor_settings(competitor_settings_id, type) VALUES ($1, 'filter_parent');
+						`, [settingsID]);
+				await this.client.query(`
+							UPDATE events_and_groups SET competitor_settings_id = $1 WHERE event_group_id = $2;
+						`, [settingsID, this.setupID]);
+
+				this.logger.info("Inserting filters...");
+				for (const filter of this.setupInfo.competitor_settings.filters) {
+					await this.client.query(`
+						INSERT INTO competitor_filters(
+							type,
+							field,
+							matcher,
+							value,
+							competitor_settings_id
+						)	VALUES (
+							$1,
+							$2,
+							$3,
+							$4,
+							$5
+						);
+					`, [
+						filter.type,
+						filter.field,
+						filter.matcher,
+						filter.value,
+						settingsID
+					]);
+				}
+				
+
 				// Run it
 				// TODO: Team Map
-				const IDs = await filterCompetitorFrom(this.setupInfo.parent_id, this.setupInfo.competitor_settings.filters, knex);
+				this.logger.debug("Generating teams map...");
+				const teamsMap = await getTeamsMapForEventGroup(this.setupInfo.parent_id, knex);
+				const IDs = await filterCompetitorFrom(this.setupInfo.parent_id, this.setupInfo.competitor_settings.filters, knex, teamsMap);
 
 				// JOIN!
 				this.logger.info("Processing competitors into join table...");
 				for (const competitor of IDs) {
-					this.logger.debug(`Processing competitor with ID ${competitor}`);
+					this.logger.debug(`Processing competitor with ID ${competitor.competitor_id}`);
 					await this.client.query(`
 						INSERT INTO join_competitor_events_group(competitor_id, competitor_settings_id) VALUES (
 						$1,
 						$2
-					);`, [competitor, settingsID]);
+					);`, [competitor.competitor_id, settingsID]);
 				}
 
 				this.logger.info("Done.");
