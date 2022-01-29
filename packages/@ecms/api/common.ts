@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { events_and_groups } from "@ecms/models";
+import { competitorsId, events_and_groups } from "@ecms/models";
 import type { competitor_reserved_fields } from "@ecms/models/src/competitor_filters";
 
 /**
@@ -78,3 +78,8 @@ export interface ResCompetitorFields {
 	/** Simple list of fields in {@link ResCompetitorFields.fields} so you don't have to loop through the long list. Indexes should match. */
 	flattenedList: string[];
 }
+
+/**
+ * Response when asked to filter competitor from an event
+ */
+export type ResCompetitorFilter = Array<competitorsId>;

@@ -2,10 +2,11 @@
  * Common API routes for events and group
  * @packageDocumentation
  */
-import { FieldDescriptor, ResCompetitorFields, ResEventsGroupsList } from "@ecms/api/common";
+import { FieldDescriptor, ResCompetitorFields, ResCompetitorFilter, ResEventsGroupsList } from "@ecms/api/common";
 import { ReqCompetitors } from "@ecms/api/events";
-import { competitor_settings, competitor_settingsId, events_and_groups, teams } from "@ecms/models";
+import { competitorsId, competitor_filters, competitor_settings, competitor_settingsId, events_and_groups, teams, teamsId } from "@ecms/models";
 import { Router } from "express";
+import filterCompetitorFrom from "../setup/filter";
 import { connectToDBKnex } from "../utils/db";
 import { ECMSResponse, RequestWithBody } from "../utils/interfaces";
 import createLogger from "../utils/logger";
@@ -301,6 +302,45 @@ router.get("/:id/competitors/fields", async (req, res: ECMSResponse<ResCompetito
 	}
 
 
+});
+
+/**
+ * Get list of competitor IDs from filters
+ */
+router.post("/:id/competitors/filter", async (req: RequestWithBody<{ filters: competitor_filters[] }>, res: ECMSResponse<ResCompetitorFilter>, next) => {
+	const eventID = req.params.id;
+	if (!Array.isArray(req.body.filters)) {
+		return res.status(400).json({
+			message: "No filters provided!"
+		});
+	}
+	try {
+		logger.debug("Getting teams map...");
+		const teams = await knex
+			.select("teams.team_id")
+			.select<Pick<teams, "name" | "team_id">[]>("teams.name")
+			.from("join_events_groups_teams")
+			.where("join_events_groups_teams.event_group_id", eventID)
+			.leftJoin("teams", "teams.team_id", "join_events_groups_teams.team_id");
+		const teamsMap = new Map<string, teamsId>();
+		teams.forEach((team) => teamsMap.set(team.name, team.team_id));
+		const competitorIds = await filterCompetitorFrom(
+			eventID,
+			req.body.filters,
+			knex,
+			teamsMap
+		);
+
+		return res.json(competitorIds);
+	
+	} catch (err) {
+		logger.error(`Error filtering competitors for event/group ${eventID}!`);
+		logger.error((err as Error)?.message);
+		res.status(500).json({
+			message: `Internal Server Error - ${(err as Error)?.message}`,
+		});
+	}
+	
 });
 
 export default router;

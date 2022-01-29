@@ -22,7 +22,8 @@ async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: 
 	logger.debug("Getting settings for parent event/group...");
 	const competitorSettings = (await knex
 		.select<events_and_groups[]>("competitor_settings_id")
-		.from("events_and_groups"))?.[0];
+		.from("events_and_groups")
+		.where("events_and_groups.event_group_id", eventGroupID))?.[0];
 	if (!competitorSettings) {
 		throw new Error(`Event/group ${eventGroupID} not found!`);
 	} else if (!competitorSettings.competitor_settings_id) {
@@ -43,14 +44,16 @@ async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: 
 			filters.forEach((filter, index) => {
 				logger.debug(`Processing filter ${index}/${filters.length}...`);
 				let functionRef: keyof typeof builder;
+				let operator = "=";
 				if (filter.type === "base") {
-					functionRef = "where";
+					functionRef = "whereRaw";
 				} else if (filter.type === "or") {
-					functionRef = "orWhere";
+					functionRef = "orWhereRaw";
 				} else if (filter.type === "and") {
-					functionRef = "andWhere";
+					functionRef = "andWhereRaw";
 				} else if (filter.type === "not") {
-					functionRef = "whereNot";
+					functionRef = "andWhereRaw";
+					operator = "!=";
 				} else {
 					logger.warn(`Skipping filter of type ${filter.type} as unsupported!`);
 					return;
@@ -60,7 +63,7 @@ async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: 
 					return this[functionRef]("competitors.team_id", teamMap.get(filter.value));
 				}
 				// Else, just use the normal filter from the json data
-				this[functionRef]("competitors.data->? = ?", [filter.field, filter.value]);
+				this[functionRef](`competitors.data->? ${operator} ?`, [filter.field, filter.value]);
 			});
 		});
 	
@@ -71,3 +74,5 @@ async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: 
 		
 
 }
+
+export default filterCompetitorFrom;

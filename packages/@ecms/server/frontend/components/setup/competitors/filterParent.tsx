@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ResCompetitorFields } from "@ecms/api/common";
+import { ResCompetitorFields, ResCompetitorFilter } from "@ecms/api/common";
 import { faCircleNotch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useAppSelector } from "../../../util/hooks";
 import useAsyncEffect from "use-async-effect";
@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Dropdown } from "@fluentui/react-northstar";
 import AddButton from "../../common/AddButton";
 import { competitor_filters, competitor_filtersInitializer, filter_types } from "@ecms/models";
+import axios from "axios";
 
 /**
  * We transform API provided fields into this format for easier transformating in the UI
@@ -46,6 +47,7 @@ const FilterParentContent: React.FC = (props) => {
 	const [filters, setfilters] = useState<UIFilter[]>([{
 		type: "base",
 	}]);
+	const [filtered, setfiltered] = useState<ResCompetitorFilter>([]);
 	useAsyncEffect(async (isActive) => {
 		console.debug("Fetching fields...");
 		const res = await fetch(`/api/common/${parent_id}/competitors/fields`);
@@ -55,6 +57,28 @@ const FilterParentContent: React.FC = (props) => {
 		const parsedFields: UIField[] = resJson.fields.map((field, index) => ({ for: "fields", index, name: field.name, values: field.values }));
 		setfieldsParsed([...parsedFields, ...parsedDefaults]);
 	}, []);
+
+	// Updates the filters state
+	useAsyncEffect(async (isActive) => {
+		// Validate - only send to server if filters has no nulls!
+		for (const filter of filters) {
+			if (!filter.field || !filter.type || !filter.matcher || !filter.value) {
+				// Filter incomplete!
+				return;
+			}
+		}
+		// ask
+		if (isActive()) {
+			const req = await axios.post<ResCompetitorFilter>(`/api/common/${parent_id}/competitors/filter`, {
+				filters: filters,
+			});
+			if (req.status === 200) {
+				setfiltered(() => req.data);
+			}
+			
+		}
+		
+	}, [filters]);
 	
 	if (fields) {
 		return (
@@ -142,7 +166,7 @@ const FilterParentContent: React.FC = (props) => {
 				</AddButton>
 				<div className="filter-trial">
 					<p>
-						<strong>120 competitors found.</strong><br />
+						<strong>{filtered.length} competitors found.</strong><br />
 						Filters can not be changed after event setup.
 					</p>
 				</div>
