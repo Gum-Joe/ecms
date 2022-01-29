@@ -63,7 +63,7 @@ async function filterCompetitorFrom(eventGroupID: events_and_groupsId, filters: 
 					return this[functionRef]("competitors.team_id", teamMap.get(filter.value));
 				}
 				// Else, just use the normal filter from the json data
-				this[functionRef](`competitors.data->? ${operator} ?`, [filter.field, filter.value]);
+				this[functionRef](`competitors.data ->> ? ${operator} ?`, [filter.field, filter.value]);
 			});
 		});
 	
