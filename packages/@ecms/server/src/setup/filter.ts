@@ -2,7 +2,7 @@ import { competitors, competitorsId, competitor_filters, competitor_settings, ev
 import createLogger from "../utils/logger";
 import type makeKnex from "knex";
 import { competitor_filtersInitializer, COMPETITOR_RESERVED_FIELDS } from "@ecms/models/lib/competitor_filters";
-import { EventLinkedList, followInheritanceCompetitors } from "../utils/followInheritance";
+import { EventGroupsLinkedList, followInheritanceCompetitors } from "../utils/followInheritance";
 import { FilterCompetitors } from "@ecms/api/setup";
 import { Knex } from "knex";
 
@@ -10,6 +10,19 @@ const logger = createLogger("competitors:filter");
 
 /**
  * Logic to handle filtering of competitors!
+ * 
+ * To generate our SQL query:
+ * 1. Run an algorithm to backtrack to the last event in the tree with "discrete" set for its competitors.
+ * 	This is the ID we want to use in the join table when joining the lists of competitors with the join table that links competitors to events/groups
+ *  - only the event/group with "discrete" should have entires in the competitors-events-groups join table (join table is `join_competitor_events_group`)
+ * 2. Extract information about the competitor_settings at each event/group in the tree
+ * 3. From that events in the tree, we walk the tree until we get to filters. We apply filters in the order of the tree, so e.g. :
+ * 	- We filter events based on setting for group B from those set at group A
+ * 	- Say group B has a child C with filters on it as well. C's filters are then applied after B
+ * 	- Say group C has an event D with filters on it as well. D's filters are then applied after C.
+ * 	- D is an event so nothing left to transverse
+ * 	- We then apply any filters provided to our parameters (to support the filter routes which input the parent event/group of the new event/group as the `eventGroupID` param)
+ * 4. Return list of competitor IDs from the filters
  * @param eventGroupID ID of event/group to filter from 
  * @param filters Array of filters to apply to the event/group's competitors, in the order to apply them.
  * 	I.e. this assumes the first filter has the `base` property set for its {@link competitor_filters.type}
@@ -22,7 +35,7 @@ const logger = createLogger("competitors:filter");
 // TODO: Follow inheritance
 async function filterCompetitorFrom(
 	eventGroupID: events_and_groupsId,
-	filters: Omit<competitor_filtersInitializer, "competitor_settings_id">[],
+	filters: Omit<competitor_filtersInitializer, "competitor_settings_id">[] | null,
 	knex: ReturnType<typeof makeKnex>,
 	teamMap: Map<string, teamsId>
 ): Promise<Pick<competitors, "competitor_id">[]> {
@@ -40,23 +53,15 @@ async function filterCompetitorFrom(
 
 	// Ok so we're good!
 
-	// Construct the SQL query
-	/**
-	 * To generate it we:
-	 * 1. Run an algorithm to backtrack to the last event in the tree with "discrete" set for its competitors. This is the ID we want to use in the join table
-	 * 2. From the other events in the tree, we walk the tree until we get a filter. We apply that filter first, in tree order with an AND
-	 * 3. We then apply the filters in the order they were given to us for this event
-	 * 4. Return list of competitor IDs
-	 */
+	// Get a linked list of events, with root this event, with their competitor settings of their parents nested
 	const eventLinkedList = await followInheritanceCompetitors(eventGroupID, knex);
-	// We stepped through it one by one, noting each time we come accross a filter in the above list
-	// If we hit a "inherit" we skip it, and if we hit a "discrete" we stop as that's where we need to starty filtering from
 	/**
-	 * 
+	 * We step through the linked list one by one, noting each time we come accross a filter in the above list
+	 * If we hit a "inherit" we skip it, and if we hit a "discrete" we stop as that's where we need to starty filtering from
 	 * @param settings 
 	 * @returns Array of filters to apply - the first item is what to apply to, and then listed in order of application
 	 */
-	function examineSettings(settings: EventLinkedList): Array<FilterCompetitors["filters"] | competitor_settings> {
+	function examineSettings(settings: EventGroupsLinkedList): Array<FilterCompetitors["filters"] | competitor_settings> {
 		logger.debug(`Examining settings for ${settings.event_group_id}`);
 		if (!settings.competitor_settings) {
 			// If no competitor settings, have hit root!
@@ -119,8 +124,8 @@ async function filterCompetitorFrom(
 					logger.warn(`Skipping filter application of index ${index} as it is not an array.`);
 				}
 			});
-		})
-		.andWhere(buildFilters(filters, teamMap));
+		});
+		
 	
 	// Run it!
 	logger.info("Done.");

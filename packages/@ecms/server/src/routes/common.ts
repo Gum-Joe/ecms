@@ -4,13 +4,14 @@
  */
 import { FieldDescriptor, ResCompetitorFields, ResCompetitorFilter, ResEventsGroupsList } from "@ecms/api/common";
 import { ReqCompetitors } from "@ecms/api/events";
-import { competitorsId, competitor_filters, competitor_settings, competitor_settingsId, events_and_groups, teams } from "@ecms/models";
+import { competitorsId, competitor_filters, competitor_settings, competitor_settingsId, competitor_setting_types, events_and_groups, events_and_groupsId, teams } from "@ecms/models";
 import { Router } from "express";
 import filterCompetitorFrom from "../setup/filter";
 import { connectToDBKnex } from "../utils/db";
 import { ECMSResponse, RequestWithBody } from "../utils/interfaces";
 import createLogger from "../utils/logger";
 import { getTeamsMapForEventGroup } from "../utils/getTeamsMapForEventGroup";
+import followInheritance from "../utils/followInheritance";
 
 const router = Router();
 const logger = createLogger("api:setup");
@@ -52,11 +53,14 @@ router.get("/list", async (req, res: ECMSResponse<ResEventsGroupsList>) => {
 
 /**
  * Retrieve teams associated with an event/group
+ * TODO: Follow inheritance
  */
 router.get("/:id/teams", async (req, res: ECMSResponse<teams[]>, next) => {
-	const eventID = req.params.id;
-	logger.info(`Retrieving teams for ${eventID}...`);
+	const queryeventID = req.params.id;
+	logger.info(`Retrieving teams for ${queryeventID} using inheritance...`);
+	
 	try {
+		const { event_group_id: eventID } = await followInheritance(queryeventID, knex);
 		const teams = await knex
 			.select<teams[]>("*")
 			.from("join_events_groups_teams")
@@ -65,7 +69,7 @@ router.get("/:id/teams", async (req, res: ECMSResponse<teams[]>, next) => {
 
 		res.json(teams);
 	} catch (err) {
-		logger.error(`Error getting matches for event ${eventID}!`);
+		logger.error(`Error getting teams for event ${queryeventID}!`);
 		logger.error((err as Error)?.message);
 		res.status(500).json({
 			message: `Internal Server Error - ${(err as Error)?.message}`,
@@ -98,48 +102,114 @@ router.get("/:id/info", async (req, res: ECMSResponse<events_and_groups>, next) 
 	
 });
 
+interface CombineEventsAndGroups extends competitor_settings {
+	parent_id: events_and_groups["parent_id"];
+	event_group_id: events_and_groups["event_group_id"];
+}
+
 /**
  * Retrieves competitor from a group/event.
  * 
- * DOES NOT handle inheritance
+ * How it works:
+ * 1. If the competitor type is discrete, query it directly
+ * 2. If copy, run this algorithm again on the parent
+ * 3. If filter_parent, run the filter alogirthm!
  * 
  * @param event_group_id ID of event/group to fetch from
  * @param inheritedChildID Optional ID of a child event/group to use for the data columns of the fetched competitors. Please specify the `competitor_settings_id` of the child event in question.
  */
 async function fetchCompetitors(event_group_id: string, team_id: string, inheritedChildID?: competitor_settingsId): Promise<ReqCompetitors[]> {
-	logger.info(`Getting competitor from ${event_group_id}`);
-	const eventSettingsArr = await knex
-		.select("competitor_settings_id")
-		.select("parent_id")
+	logger.info(`Getting competitors from ${event_group_id}`);
+	// Check settings
+	const eventSettings = await knex
+		.select("events_and_groups.competitor_settings_id")
+		.select("events_and_groups.parent_id")
+		.select<CombineEventsAndGroups>("competitor_settings.*")
 		.from("events_and_groups")
-		.where("event_group_id", event_group_id);
-	if (eventSettingsArr.length === 0) {
+		.where("events_and_groups.event_group_id", event_group_id)
+		.join("competitor_settings", "events_and_groups.competitor_settings_id", "competitor_settings.competitor_settings_id")
+		.first();
+	if (!eventSettings) {
 		throw new Error("No competitor settings found for this event! Please check competitors have been set.");
 	}
-	const dbres = await knex
-		.select("competitors.id")
-		.select("competitors.lastname")
-		.select("competitors.firstname")
-		.select("competitors.data")
-		.select("competitors.team_id")
-		.select("competitor_data.competitor_data_id")
-		.select("competitor_data.stored_data")
-		.select("competitor_data.points")
-		.select("competitor_data.additional_data")
-		.select("competitor_data.overriden")
-		.select("competitor_data.dnf")
-		.from("competitors")
-	// TODO: Order messed up!
-		.where("competitors.team_id", team_id)
-	// Get any prestored data using the competitor_settings_id
-	// anything beyond the above for competitor_settings_id may result in data for a different event being returned!
-		.leftJoin("competitor_data", function () {
-			this.on("competitors.competitor_id", "=", "competitor_data.competitor_id")
-				.andOnVal("competitor_data.competitor_settings_id", inheritedChildID ?? eventSettingsArr[0].competitor_settings_id);
-		})
-		.orderBy("competitors.firstname", "asc")
-		.orderBy("competitors.lastname", "asc");
-	return dbres;
+
+	// Now check type
+	if (eventSettings.type === "discrete") {
+		logger.info("Querying directly as of type discrete...");
+		// Retrieve 
+		const dbres = await knex
+			.select("competitors.id")
+			.select("competitors.lastname")
+			.select("competitors.firstname")
+			.select("competitors.data")
+			.select("competitors.team_id")
+			.select("competitor_data.competitor_data_id")
+			.select("competitor_data.stored_data")
+			.select("competitor_data.points")
+			.select("competitor_data.additional_data")
+			.select("competitor_data.overriden")
+			.select("competitor_data.dnf")
+			.from("competitors")
+		// TODO: Order messed up!
+			.where("competitors.team_id", team_id)
+		// Get any prestored data using the competitor_settings_id
+		// anything beyond the above for competitor_settings_id may result in data for a different event being returned!
+			.leftJoin("competitor_data", function () {
+				this.on("competitors.competitor_id", "=", "competitor_data.competitor_id")
+					.andOnVal("competitor_data.competitor_settings_id", inheritedChildID ?? eventSettings.competitor_settings_id);
+			})
+			.orderBy("competitors.firstname", "asc")
+			.orderBy("competitors.lastname", "asc");
+		logger.info("Done.");
+		return dbres;
+		
+	} else if (eventSettings.type === "inherit") {
+		logger.debug("Inherited competitors detected. Calling recursivly...");
+		if (!eventSettings.parent_id) {
+			logger.error("No parent_id found!");
+			throw new Error("Asked to inherit competitors but no parent_id found!");
+		}
+		return fetchCompetitors(eventSettings.parent_id, team_id, inheritedChildID);
+	} else if (eventSettings.type === "filter_parent") {
+		// Filters
+		logger.debug("Getting filtered IDs of competitors...");
+		const filteredIDs = await filterCompetitorFrom(event_group_id, null, knex, await getTeamsMapForEventGroup(event_group_id, knex));
+		// Transform
+		const IDsList = filteredIDs.map(x => x.competitor_id);
+		// Now query based on it!
+		logger.debug(`Querying records for ${IDsList.length} competitors...`);
+		const dbres = await knex
+			.select("competitors.id")
+			.select("competitors.lastname")
+			.select("competitors.firstname")
+			.select("competitors.data")
+			.select("competitors.team_id")
+			.select("competitor_data.competitor_data_id")
+			.select("competitor_data.stored_data")
+			.select("competitor_data.points")
+			.select("competitor_data.additional_data")
+			.select("competitor_data.overriden")
+			.select("competitor_data.dnf")
+			.from("competitors")
+		// TODO: Order messed up!
+			.where("competitors.team_id", team_id)
+			.whereIn("competitors.competitor_id", IDsList)
+			// Get any prestored data using the competitor_settings_id
+			// anything beyond the above for competitor_settings_id may result in data for a different event being returned!
+			.leftJoin("competitor_data", function () {
+				this.on("competitors.competitor_id", "=", "competitor_data.competitor_id")
+					.andOnVal("competitor_data.competitor_settings_id", inheritedChildID ?? eventSettings.competitor_settings_id);
+			})
+			.orderBy("competitors.firstname", "asc")
+			.orderBy("competitors.lastname", "asc");
+		logger.info("Done.");
+		return dbres;
+	} else {
+		logger.error(`Unreognised competitor_settings type: ${eventSettings.type}`);
+		throw new Error(`Unrecognised competitor_settings type: ${eventSettings.type}`);
+	}
+
+	
         
 }
 
@@ -200,7 +270,12 @@ router.get("/:id/competitors", async (req, res, next) => {
 				});
 			}
 			const competitorSettings = competitorSettingsArr[0];
-			if (competitorSettings.type === "inherit") {
+
+			const competitors = await fetchCompetitors(eventID, teamID); // Handles inheritance for us!
+			res.json(competitors);
+			return;
+
+			/*if (competitorSettings.type === "inherit") {
 				logger.info("Fetching data from parent as 'inherit' set as competitor_settings type...");
 				if (!eventSettingsArr[0].parent_id) {
 					res.status(500);
@@ -218,7 +293,7 @@ router.get("/:id/competitors", async (req, res, next) => {
 			} else {
 				const competitors = await fetchCompetitors(eventID, teamID);
 				res.json(competitors);
-			}
+			}*/
 			
 		} catch (err) {
 			logger.error(`Error getting competitors for event/group ${eventID}!`);
@@ -309,14 +384,14 @@ router.get("/:id/competitors/fields", async (req, res: ECMSResponse<ResCompetito
  * Get list of competitor IDs from filters
  */
 router.post("/:id/competitors/filter", async (req: RequestWithBody<{ filters: competitor_filters[] }>, res: ECMSResponse<ResCompetitorFilter>, next) => {
-	const eventID = req.params.id;
+	const eventID: events_and_groupsId = req.params.id;
 	if (!Array.isArray(req.body.filters)) {
 		return res.status(400).json({
 			message: "No filters provided!"
 		});
 	}
 	try {
-		const teamsMap = await getTeamsMapForEventGroup(eventID, knex);
+		const teamsMap = await getTeamsMapForEventGroup((await followInheritance(eventID, knex)).event_group_id, knex);
 		const competitorIds = await filterCompetitorFrom(
 			eventID,
 			req.body.filters,

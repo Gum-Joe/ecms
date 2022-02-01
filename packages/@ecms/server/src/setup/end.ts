@@ -7,6 +7,7 @@ import * as uuid from "uuid";
 import { COMPETITOR_IMPORT_REDIS_KEY_PREFIX, SETUP_REDIS_KEY_PREFIX } from "../utils/constants";
 import type connectToDB from "../utils/db";
 import { connectToDBKnex } from "../utils/db";
+import followInheritance from "../utils/followInheritance";
 import { getTeamsMapForEventGroup } from "../utils/getTeamsMapForEventGroup";
 import { PartialSetup, RedisCompetitorImport } from "../utils/interfaces";
 import createLogger from "../utils/logger";
@@ -403,7 +404,7 @@ export default class SetupHandler extends RedisStateHandler {
 				// Run it
 				// TODO: Team Map
 				this.logger.debug("Generating teams map...");
-				const teamsMap = await getTeamsMapForEventGroup(this.setupInfo.parent_id, knex);
+				const teamsMap = await getTeamsMapForEventGroup((await followInheritance(this.setupInfo.parent_id, knex)).event_group_id, knex);
 				const IDs = await filterCompetitorFrom(this.setupInfo.parent_id, this.setupInfo.competitor_settings.filters, knex, teamsMap);
 
 				// JOIN!
