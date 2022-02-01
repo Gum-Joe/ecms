@@ -14,7 +14,7 @@ const logger = createLogger("competitors:filter");
  * To generate our SQL query:
  * 1. Run an algorithm to backtrack to the last event in the tree with "discrete" set for its competitors.
  * 	This is the ID we want to use in the join table when joining the lists of competitors with the join table that links competitors to events/groups
- *  - only the event/group with "discrete" should have entires in the competitors-events-groups join table (join table is `join_competitor_events_group`)
+ * 	- only the event/group with "discrete" should have entires in the competitors-events-groups join table (join table is `join_competitor_events_group`)
  * 2. Extract information about the competitor_settings at each event/group in the tree
  * 3. From that events in the tree, we walk the tree until we get to filters. We apply filters in the order of the tree, so e.g. :
  * 	- We filter events based on setting for group B from those set at group A
@@ -32,7 +32,6 @@ const logger = createLogger("competitors:filter");
  * @see filter_types
  * @returns List of competitor IDs that match the filters, which can then be linked to the event/group being setup.
  */
-// TODO: Follow inheritance
 async function filterCompetitorFrom(
 	eventGroupID: events_and_groupsId,
 	filters: Omit<competitor_filtersInitializer, "competitor_settings_id">[] | null,
