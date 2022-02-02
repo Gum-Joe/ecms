@@ -39,7 +39,13 @@ export default function setupInitalRedirect(
 			setupRedirect("/competitors");
 			return;
 		} else {
-			setupRedirect("/end");
+			// Broadly, every event will want a points section
+			if (dataTracked !== "none") {
+				setupRedirect("/points");
+			} else {
+				setupRedirect("/end");
+			}
+			
 			return;
 		}
 	}

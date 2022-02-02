@@ -11,6 +11,7 @@ export function handleCompetitorsRedirect(eventOrGroup: event_or_group | undefin
 		// Need to set units
 		setupPage("/units");
 	} else {
-		setupPage("/end");
+		// If we have competitors, we probably want to score them....
+		setupPage("/points");
 	}
 }

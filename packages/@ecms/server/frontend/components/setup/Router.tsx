@@ -9,6 +9,7 @@ import Units from "./Units";
 import { useAppSelector } from "../../util/hooks";
 import SetupFrame, { SetupHeader } from "./SetupFrame";
 import Inherit from "./Inherit";
+import PointsRoot from "./points/PointsRoot";
 
  
 const SetupRouter: FunctionComponent = () => {
@@ -54,6 +55,9 @@ const SetupRouter: FunctionComponent = () => {
 			</Route>
 			<Route exact path={`${path}/inherit`}>
 				<Inherit />
+			</Route>
+			<Route exact path={`${path}/points`}>
+				<PointsRoot />
 			</Route>
 		</Switch>
 		

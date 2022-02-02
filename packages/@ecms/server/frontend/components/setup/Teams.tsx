@@ -131,8 +131,10 @@ const Teams: React.FC = () => {
 				setupPage("/matches");
 			} else if (eventSettings?.data_tracked === "individual") {
 				setupPage("/competitors");
-			} else {
+			} else if (eventSettings?.data_tracked === "none") {
 				setupPage("/end");
+			} else {
+				setupPage("/points");
 			}
 			return;
 		} else {
