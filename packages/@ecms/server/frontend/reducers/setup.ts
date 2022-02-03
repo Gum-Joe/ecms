@@ -132,6 +132,14 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 					filters: action.payload,
 				}
 			};
+		case Actions.SET_POINTS_SYSTEM:
+			return {
+				...state,
+				points: {
+					...state.points,
+					module_id: action.payload,
+				}
+			};
 		default:
 			console.warn("INVALID ACTION RECEIVED TO SETUP CONTEXT.");
 			return state;

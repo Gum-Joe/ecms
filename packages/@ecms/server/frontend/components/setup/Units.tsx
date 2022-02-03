@@ -61,7 +61,7 @@ const Units: React.FC = (props) => {
 			}));
 		}
 
-		setupPage("/end");
+		setupPage("/points");
 		
 
 	}, [currrentUnit.unit, decimalPlaces, dispatch, setupPage, theCustomUnit]);

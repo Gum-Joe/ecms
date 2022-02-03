@@ -3,6 +3,8 @@
  * @packageDocumentation
  */
 
+import { events_and_groups, event_only_settings } from "@ecms/models";
+
 export enum OrderingOptions {
 	/** Lower results are better (e.g. time to do a length) */
 	LOWER = "LOWER",
@@ -71,8 +73,110 @@ export interface PointsAmalgamator {
 	points: number[];
 }
 
+
 /**
  * Output the running total of points for a group.
  * No settings.
  */
 export type PointsRunningTotal = Record<never, string>;
+
+/** List of points systems */
+export enum PointsSystems {
+	THRESHOLDS = "thresholds",
+	RANKED = "ranked",
+	MATCHES = "matches",
+	AMALGAMATOR = "amalgamator",
+	RUNNING_TOTAL = "runningTotal"
+}
+
+export interface PointsSystemSpec {
+	name: PointsSystems;
+	displayName: string,
+	description: string,
+	/** A mask of setting to compare with. Set the values of setting that need to be set (e.g. enable_teams) to use this points system */
+	validOn: {
+		event_group_settings: Partial<events_and_groups>;
+		event_only_settings?: Partial<event_only_settings>;
+	}
+}
+
+/** List of points systems, display names and descriptions */
+export const PointsSystemsDisplay: Array<PointsSystemSpec> = [
+	{
+		name: PointsSystems.THRESHOLDS,
+		displayName: "Thresholds",
+		description: "Awards & outputs points based on whether competitors' performance is above or below certain levels/values, with each level awarding some number of points",
+		validOn: {
+			event_group_settings: {
+				type: "event",
+				enable_teams: true,
+			},
+			event_only_settings: {
+				data_tracked: "individual",
+			}
+		}
+	},
+	{
+		name: PointsSystems.RANKED,
+		displayName: "Ranks",
+		description: "Awards & outputs points based on the ranking of competitors' performance",
+		validOn: {
+			event_group_settings: {
+				type: "event",
+				enable_teams: true,
+			},
+			event_only_settings: {
+				data_tracked: "individual",
+			}
+		}
+	},
+	{
+		name: PointsSystems.MATCHES,
+		displayName: "Match Scoring",
+		description: "Awards & outputs points based on the results of matches",
+		validOn: {
+			event_group_settings: {
+				type: "event",
+				enable_teams: true,
+			},
+			event_only_settings: {
+				data_tracked: "matches",
+			}
+		}
+	},
+	{
+		name: PointsSystems.AMALGAMATOR,
+		displayName: "Point Amalgamator",
+		description: "Awards & outputs points based on the ranking of teams' total points in all sub-events",
+		validOn: {
+			event_group_settings: {
+				type: "group",
+				enable_teams: true,
+			}
+		}
+	},
+	{
+		name: PointsSystems.RUNNING_TOTAL,
+		displayName: "Running Total",
+		description: "Outputs the total points collected by each team in all sub-events - use for e.g. per year group competitions",
+		validOn: {
+			event_group_settings: {
+				type: "group",
+				enable_teams: true,
+			}
+		}
+	},
+];
+
+/**
+ * Map of Points systems to settings
+ * @example ```ts
+ * const pointsSettings: PointsSettingsFor[PointsSystems.THRESHOLDS] = { ...data }
+ */
+export interface PointsSettingsFor {
+	[PointsSystems.THRESHOLDS]: PointsThresholds;
+	[PointsSystems.RANKED]: PointsRanked;
+	[PointsSystems.MATCHES]: PointsMatches;
+	[PointsSystems.AMALGAMATOR]: PointsAmalgamator;
+	[PointsSystems.RUNNING_TOTAL]: PointsRunningTotal;
+}

@@ -6,6 +6,7 @@
  * @packageDocumentation
  */
 import { ResStartSetup } from "@ecms/api/setup";
+import { PointsSystems } from "@ecms/api/points";
 import { competitor_filtersInitializer, competitor_setting_types, data_units, data_unitsInitializer } from "@ecms/models";
 import { StagingTeam } from "../../components/setup/util";
 import { SetupState } from "../../constants/interfaces";
@@ -35,6 +36,8 @@ export enum SetupActionsList {
 	SET_COMPETITOR_IMPORT_TYPE = "SET_COMPETITOR_IMPORT_TYPE",
 	/** Update filters (please provide list of all filters, not just ones to add!) */
 	UPDATE_COMPETITOR_FILTERS = "UPDATE_COMPETITOR_FILTERS",
+	/** Set points system - just set it */
+	SET_POINTS_SYSTEM = "SET_POINTS_SYSTEM",
 }
 
 /**
@@ -79,6 +82,7 @@ export type SetupActionPayloads = {
 	[SetupActionsList.SET_DATA_UNIT]: data_unitsInitializer;
 	[SetupActionsList.SET_COMPETITOR_IMPORT_TYPE]: competitor_setting_types,
 	[SetupActionsList.UPDATE_COMPETITOR_FILTERS]: Omit<competitor_filtersInitializer, "competitor_settings_id" | "filter_id">[];
+	[SetupActionsList.SET_POINTS_SYSTEM]: typeof PointsSystems;
 
 }
 
