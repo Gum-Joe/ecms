@@ -2,10 +2,12 @@ import { PointsSystems, PointsSystemsDisplay, PointsSystemSpec } from "@ecms/api
 import { events_and_groups, event_only_settings } from "@ecms/models";
 import { Dropdown } from "@fluentui/react-northstar";
 import React, { useEffect, useState } from "react";
+import SetupActionsList, { setupAction } from "../../../actions/setup";
 import { SetupState } from "../../../constants/interfaces";
-import { useAppSelector } from "../../../util/hooks";
+import { useAppDispatch, useAppSelector } from "../../../util/hooks";
 import SetupContainer from "../SetupContainer";
 import SetupFrame, { SetupHeader } from "../SetupFrame";
+import PointsSettings from "./PointsSettings";
 
 /**
  * Root setup frame to hold points systems
@@ -14,6 +16,7 @@ const PointsRoot: React.FC = (props) => {
 	// Store a list of valid points systems
 	const [validSystems, setvalidSystems] = useState<PointsSystemSpec[]>([]);
 	const setup = useAppSelector(state => state.setup);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		// Apply masks
@@ -38,7 +41,7 @@ const PointsRoot: React.FC = (props) => {
 
 			return true;
 		}));
-	}, [setup])
+	}, [setup]);
 	return (
 		<SetupFrame nextPage="/end" id="set-points">
 			<SetupHeader>
@@ -54,12 +57,23 @@ const PointsRoot: React.FC = (props) => {
 							placeholder="Select a scoring system"
 							name="scoring-system"
 							required={true}
+							getA11ySelectionMessage={{
+								onAdd: (item: string) => {
+									const system = validSystems.find(system => system.displayName === item);
+									if (typeof system === "undefined") {
+										console.debug(`System ${item} not found.`);
+										return;
+									}
+									dispatch(setupAction(SetupActionsList.SET_POINTS_SYSTEM, system.name));
+								}
+							}}
 						/>
 						<p>Description</p>
 					</div>
 				</div>
 				<div className="system-settings">
 					<h3>Settings</h3>
+					<PointsSettings system={setup.points?.module_id} />
 				</div>
 				<footer>
 					<p>NB: We also automatically track the running total of points for each team accross all sub-events</p>
