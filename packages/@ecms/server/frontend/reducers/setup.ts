@@ -138,6 +138,15 @@ export const setupReducer: Reducer<SetupState, SetupActions> = (state = initialS
 				points: {
 					...state.points,
 					module_id: action.payload,
+					config: {},
+				}
+			};
+		case Actions.SET_POINTS_CONFIG:
+			return {
+				...state,
+				points: {
+					...state.points,
+					config: action.payload,
 				}
 			};
 		default:

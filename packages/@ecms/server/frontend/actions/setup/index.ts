@@ -38,6 +38,8 @@ export enum SetupActionsList {
 	UPDATE_COMPETITOR_FILTERS = "UPDATE_COMPETITOR_FILTERS",
 	/** Set points system - just set it */
 	SET_POINTS_SYSTEM = "SET_POINTS_SYSTEM",
+	/** Set a new config for the points system */
+	SET_POINTS_CONFIG = "SET_POINTS_CONFIG",
 }
 
 /**
@@ -83,6 +85,7 @@ export type SetupActionPayloads = {
 	[SetupActionsList.SET_COMPETITOR_IMPORT_TYPE]: competitor_setting_types,
 	[SetupActionsList.UPDATE_COMPETITOR_FILTERS]: Omit<competitor_filtersInitializer, "competitor_settings_id" | "filter_id">[];
 	[SetupActionsList.SET_POINTS_SYSTEM]: typeof PointsSystems;
+	[SetupActionsList.SET_POINTS_CONFIG]: Record<string, unknown>;
 
 }
 
