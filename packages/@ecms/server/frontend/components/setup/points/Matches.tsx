@@ -13,13 +13,13 @@ const MatchesPoints: React.FC = (props) => {
 		event.preventDefault();
 		const newConfig = Object.assign({}, points);
 		/// @ts-expect-error: TS doesn't know about the type of the value
-		newConfig[prop] = event.target.value;
+		newConfig[prop] = isNaN(parseFloat(event.target.value)) ? undefined : parseFloat(event.target.value);
 		dispatch(setupAction(SetupActionsList.SET_POINTS_CONFIG, newConfig));
 
 	}, [dispatch, points]);
 	
 	return (
-		<div className="points-settings-matches">
+		<div className="points-settings-matches points-settings-container">
 			<table className="ecms-table">
 				<thead>
 					<tr>
@@ -33,7 +33,7 @@ const MatchesPoints: React.FC = (props) => {
 								Win
 						</td>
 						<td>
-							<input type="text" value={points.win} onChange={handleChange("win")} />
+							<input type="number" value={points.win} onChange={handleChange("win")} />
 						</td>
 					</tr>
 					<tr>
@@ -41,7 +41,7 @@ const MatchesPoints: React.FC = (props) => {
 								Loss
 						</td>
 						<td>
-							<input type="text" value={points.loss} onChange={handleChange("loss")} />
+							<input type="number" value={points.loss} onChange={handleChange("loss")} />
 						</td>
 					</tr>
 					<tr>
@@ -49,7 +49,7 @@ const MatchesPoints: React.FC = (props) => {
 								Draw
 						</td>
 						<td>
-							<input type="text" value={points.draw} onChange={handleChange("draw")} />
+							<input type="number" value={points.draw} onChange={handleChange("draw")} />
 						</td>
 					</tr>
 				</tbody>

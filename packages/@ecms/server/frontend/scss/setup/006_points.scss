@@ -1,0 +1,32 @@
+@import "../mixins";
+.scoring-system-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	p, .ui-dropdown {
+		width: fit-content;
+	}
+
+	p {
+		margin-left: 20px;
+		margin: 0 20px;
+	}
+}
+
+.points-settings-container {
+	> * {
+		margin-bottom: 22px;
+	}
+
+	table input {
+		@include input-like;
+		height: 35px;
+		padding: 10px;
+		color: $text-color;
+		width: 100%;
+	}
+
+	table td, table th {
+		padding: 10.5px;
+	}
+}

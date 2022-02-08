@@ -5,7 +5,7 @@ import AddButton from "../../common/AddButton";
 import { useAppDispatch, useAppSelector } from "../../../util/hooks";
 import SetupActionsList, { setupAction } from "../../../actions/setup";
 
-const SETTINGS_OPTIONS = [
+const SETTINGS_OPTIONS: [string, OrderingOptions][] = [
 	["Lower is better", OrderingOptions.LOWER],
 	["Higher is better", OrderingOptions.HIGHER]
 ];
@@ -18,6 +18,9 @@ const Thresholds: React.FC = (props) => {
 
 	const handleChange = useCallback((index: number, prop: keyof PointsThresholds["thresholds"][0]) => (event: ChangeEvent) => {
 		event.preventDefault();
+		if (prop !== "grade" && isNaN(parseFloat(event.target.value))) {
+			return;
+		}
 		const newConfig = Object.assign({}, points);
 		if (!newConfig?.thresholds?.[index]) {
 			return;
@@ -29,7 +32,17 @@ const Thresholds: React.FC = (props) => {
 	}, [dispatch, points]);
 	return (
 		<div className="points-settings-container">
-			<Dropdown items={SETTINGS_OPTIONS.map(option => option[0])} />
+			<Dropdown
+				items={SETTINGS_OPTIONS.map(option => option[0])}
+				getA11ySelectionMessage={{
+					onAdd: (item) => {
+						const newConfig: Partial<PointsThresholds> = Object.assign({}, points);
+						// @ts-expect-errpr: The list is made from SETTINGS_OPTIONS
+						newConfig.setting = SETTINGS_OPTIONS.find(entry => entry[0] === item)?.[1];
+						dispatch(setupAction(SetupActionsList.SET_POINTS_CONFIG, newConfig));
+					},
+				}}
+			/>
 			<table className="ecms-table">
 				<thead>
 					<tr>
@@ -45,10 +58,10 @@ const Thresholds: React.FC = (props) => {
 								<input type="number" value={threshold.result || ""} onChange={handleChange(index, "result")} />
 							</td>
 							<td>
-								<input type="number" value={threshold.points || ""} />
+								<input type="number" value={threshold.points || ""} onChange={handleChange(index, "points")} />
 							</td>
 							<td>
-								<input type="text" value={threshold.grade || ""} />
+								<input type="text" value={threshold.grade || ""} onChange={handleChange(index, "grade")} />
 							</td>
 						</tr>
 					))}
@@ -56,8 +69,14 @@ const Thresholds: React.FC = (props) => {
 			</table>
 			<AddButton onClick={() => {
 				const newConfig = Object.assign({}, points);
+				
+				if (!newConfig.thresholds) {
+					newConfig.thresholds = [];
+				}
 				/// @ts-expect-error - We want this so blank boxes are displayed
 				newConfig?.thresholds?.push({});
+				console.log(newConfig);
+				dispatch(setupAction(SetupActionsList.SET_POINTS_CONFIG, newConfig));
 			}}>
 				Add Theshold
 			</AddButton>

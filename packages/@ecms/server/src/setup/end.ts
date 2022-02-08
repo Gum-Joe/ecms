@@ -176,6 +176,9 @@ export default class SetupHandler extends RedisStateHandler {
 	
 			}
 
+			// Add points if necessary
+			const pointsID = await this.setPoints();
+
 			this.logger.info("Creating event_and_groups entry...");
 			// Use setupID as the ID so we know it
 			const event_and_groups: events_and_groupsInitializer = {
@@ -188,13 +191,14 @@ export default class SetupHandler extends RedisStateHandler {
 				type: this.setupInfo.type,
 				parent_id: this.setupInfo.parent_id || null,
 				event_settings_id: settingsID,
+				points_settings_id: pointsID,
 			};
 			// From https://stackoverflow.com/questions/37313571/omiting-column-names-inserting-objects-directly-into-node-postgres
 			const queryTxt = pgp.helpers.insert(event_and_groups, null, "events_and_groups");
 			await this.client.query(queryTxt);
 	
 			
-
+			
 
 			// Next: check teams
 			await this.checkTeams();
@@ -214,6 +218,31 @@ export default class SetupHandler extends RedisStateHandler {
 			throw castError;
 		}
 	} 
+
+	/**
+	 * Adds points settings
+	 */
+	protected async setPoints(): Promise<null | string> {
+		if (!this.setupInfo.points) {
+			this.logger.warn("No points settings found, so skipping adding points settings...");
+			return null;
+		} else {
+			this.logger.info(`Adding points settings for system ${this.setupInfo.points.module_id}...`);
+			const pointsID = uuid.v4();
+			await this.client.query(`
+				INSERT INTO points_settings(
+					config,
+					module_id,
+					points_settings_id
+				) VALUES (
+					$1,
+					$2,
+					$3
+				)
+			`, [this.setupInfo.points.config, this.setupInfo.points.module_id, pointsID]);
+			return pointsID;
+		}
+	}
 
 	public async endSetup(): Promise<void> {
 		await this.client.query("COMMIT");
@@ -327,7 +356,8 @@ export default class SetupHandler extends RedisStateHandler {
 			this.logger.info("Processing competitors to import...");
 			// Validate info present
 			if (!this.setupInfo.competitor_settings) {
-				throw new Error("No competitor settings found in setup info!");
+				this.logger.warn("No competitor settings found in setup info! Skipping....");
+				return;
 			}
 
 			const settingsID = uuid.v4();

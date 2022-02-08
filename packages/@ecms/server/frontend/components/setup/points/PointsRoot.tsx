@@ -1,12 +1,13 @@
-import { PointsSystems, PointsSystemsDisplay, PointsSystemSpec } from "@ecms/api/points";
+import { OrderingOptions, PointsMatches, PointsSystems, PointsSystemsDisplay, PointsSystemSpec, PointsThresholds } from "@ecms/api/points";
 import { events_and_groups, event_only_settings } from "@ecms/models";
 import { Dropdown } from "@fluentui/react-northstar";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import SetupActionsList, { setupAction } from "../../../actions/setup";
 import { SetupState } from "../../../constants/interfaces";
 import { useAppDispatch, useAppSelector } from "../../../util/hooks";
 import SetupContainer from "../SetupContainer";
 import SetupFrame, { SetupHeader } from "../SetupFrame";
+import { useSetupRedirector } from "../util";
 import PointsSettings from "./PointsSettings";
 
 /**
@@ -17,6 +18,7 @@ const PointsRoot: React.FC = (props) => {
 	const [validSystems, setvalidSystems] = useState<PointsSystemSpec[]>([]);
 	const setup = useAppSelector(state => state.setup);
 	const dispatch = useAppDispatch();
+	const setupRedirect = useSetupRedirector();
 
 	useEffect(() => {
 		// Apply masks
@@ -42,8 +44,40 @@ const PointsRoot: React.FC = (props) => {
 			return true;
 		}));
 	}, [setup]);
+
+	/** Handles validation of forms! */
+	const handleNext = useCallback(() => {
+		switch (setup.points?.module_id) {
+			case PointsSystems.THRESHOLDS:
+				// Check fields 
+				const config = setup.points.config as Partial<PointsThresholds>;
+				if (config.setting !== OrderingOptions.LOWER && config.setting !== OrderingOptions.HIGHER) {
+					return alert("Please set an ordering option (lower or higher)");
+				}
+				if (!config.thresholds || config.thresholds.length <= 0) {
+					return alert("Please set at least one threshold");
+				}
+				for (const threshold of config.thresholds) {
+					if (!threshold.grade || !threshold.points || !threshold.result) {
+						return alert("Please set all options for each threshold.");
+					}
+				}
+
+				// All fine!
+				return setupRedirect("/end");
+			case PointsSystems.MATCHES:
+				const configHere = setup.points.config as Partial<PointsMatches>;
+				if (typeof configHere.draw !== "number" || typeof configHere.loss !== "number" || typeof configHere.win !== "number") {
+					return alert("Please set points for all options.");
+				} else {
+					return setupRedirect("/end");
+				}
+
+		}
+	}, [setup?.points?.config, setup.points?.module_id, setupRedirect]);
+
 	return (
-		<SetupFrame nextPage="/end" id="set-points">
+		<SetupFrame id="set-points" onNext={handleNext}>
 			<SetupHeader>
 				<h1>Set Points System</h1>
 				<h3>How do you want to score this event/group?</h3>
@@ -68,7 +102,7 @@ const PointsRoot: React.FC = (props) => {
 								}
 							}}
 						/>
-						<p>Description</p>
+						<p>{validSystems.find(system => system.name === setup?.points?.module_id)?.description || "Description"}</p>
 					</div>
 				</div>
 				<div className="system-settings">
