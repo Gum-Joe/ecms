@@ -1,6 +1,4 @@
-/**
- * Calculates points for a event/group
- */
+
 
 import { LoggerFactory } from "@ecms/core";
 import { events_and_groupsId, points_settings } from "@ecms/models";
@@ -9,6 +7,10 @@ import createLogger from "./logger";
 
 const logger = createLogger("points");
 
+/**
+ * Calculates points for a event/group
+ * TODO: Use PG client instead!
+ */
 export default async function calculatePoints(event_group_id: events_and_groupsId, knex: ReturnType<typeof connectToDBKnex>): Promise<void> {
 	logger.info(`Calculating points for event_group_id: ${event_group_id}`);
 	logger.debug("Getting points settings...");
