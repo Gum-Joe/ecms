@@ -18,7 +18,8 @@ export default interface points_settings {
 
   /** The module that is the points system to use.
 CONSTRAIN to type: "pointsSystem" in the installed_modules record */
-  module_id: installed_modulesId;
+  //module_id: installed_modulesId;
+  module_id: string;
 }
 
 /**
@@ -37,5 +38,6 @@ export interface points_settingsInitializer {
 
   /** The module that is the points system to use.
 CONSTRAIN to type: "pointsSystem" in the installed_modules record */
-  module_id: installed_modulesId;
+  //module_id: installed_modulesId;
+  module_id: string;
 }
