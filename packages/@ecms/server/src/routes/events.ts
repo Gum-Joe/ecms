@@ -8,6 +8,7 @@ import { Router } from "express";
 import connectToDB, { connectToDBKnex } from "../utils/db";
 import { ECMSResponse, RequestWithBody } from "../utils/interfaces";
 import createLogger from "../utils/logger";
+import calculatePoints from "../utils/points";
  
 const router = Router();
 const logger = createLogger("api:events");
@@ -257,6 +258,9 @@ router.post("/:id/competitors/performance", async (req, res, next) => {
 					]);
 
 					await client.query("COMMIT");
+
+					logger.debug("Moving on to points...");
+					await calculatePoints(req.params.id, knex);
 				} catch (err) {
 					await client.query("ROLLBACK");
 					await client.release();
