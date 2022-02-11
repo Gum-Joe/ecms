@@ -1,7 +1,11 @@
+/* eslint-disable no-case-declarations */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
+import { PointsMatches } from "@ecms/api/points";
 import { LoggerFactory } from "@ecms/core";
 import { events_and_groupsId, points_settings } from "@ecms/models";
+import scoreMatches from "../points/matches";
 import { connectToDBKnex } from "./db";
 import createLogger from "./logger";
 
@@ -28,5 +32,34 @@ export default async function calculatePoints(event_group_id: events_and_groupsI
 	switch (settings.module_id) {
 		case "thresholds":
 			logger.debug("Using thresholds points system...");
+			break;
+		case "matches":
+			logger.debug("Using matches scoring system...");
+			const points = await scoreMatches(event_group_id, knex, settings.config as PointsMatches);
+			// From https://stackoverflow.com/questions/22957032/knex-transaction-with-promises
+			await knex.transaction(async function (t) {
+				// Now for each team, record points!
+				for (const team in points) {
+					logger.debug(`Inserting points for ${team}...`);
+					const pointsForTeam = points.get("team");
+					await knex("store_overall_points")
+						.transacting(t)
+						.insert({
+							points_settings_id: settings.points_settings_id,
+							team_id: team,
+							points: pointsForTeam,
+							sum_points: pointsForTeam
+						})
+						.catch(function (e) {
+							t.rollback();
+							throw e;
+						});
+
+				}
+				return await t.commit();
+			});
+			logger.debug("Done.");
+			break;
+
 	}
 }
