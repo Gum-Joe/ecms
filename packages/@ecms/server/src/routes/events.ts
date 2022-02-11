@@ -84,6 +84,9 @@ router.patch("/:id/matches/edit/score", async (req: RequestWithBody<ReqEditMatch
 			logger.info(`Committing changes to ${updated} matches...`);
 			await client.query("COMMIT");
 
+			logger.debug("Moving on to points...");
+			await calculatePoints(req.params.id, knex);
+
 			res.json({
 				message: `Successfully updated ${updated} matches`,
 			});

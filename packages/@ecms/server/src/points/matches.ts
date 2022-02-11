@@ -10,7 +10,7 @@ const logger = createLogger("points:matches");
  * Matches scoring system
  * @returns `Map<string, number` of team UUIDs to points
  */
-export default async function scoreMatches(event_id: events_and_groupsId, knex: ReturnType<typeof connectToDBKnex>, settings: PointsMatches) {
+export default async function scoreMatches(event_id: events_and_groupsId, knex: ReturnType<typeof connectToDBKnex>, settings: PointsMatches): Promise<Map<string, number>> {
 	logger.info(`Calculating match points for event ${event_id}`);
 
 	// 1: Query matches
