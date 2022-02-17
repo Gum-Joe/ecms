@@ -1,7 +1,9 @@
+import { events_and_groups } from "@ecms/models";
 import { faCalendarAlt, faObjectGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useParams, useRouteMatch } from "react-router-dom";
+import useAsyncEffect from "use-async-effect";
 import { ButtonIconContainer, ButtonRow, ButtonWithIcons } from "../common/Button";
 
 /**
@@ -16,6 +18,16 @@ export const HomepageBody: React.FC = (props) => {
 	const eventGroupID = (!rawEventGroupID || rawEventGroupID === "root") ? undefined : rawEventGroupID;
 	const { path, url } = useRouteMatch();
 
+	const [info, setInfo] = useState<events_and_groups>();
+
+	useAsyncEffect(async () => {
+		if (eventGroupID) {
+			const res = await fetch(`/api/common/${eventGroupID}/info`);
+			setInfo(await res.json());
+		}
+		
+	}, []);
+
 	return (
 		<>
 			{!eventGroupID ?
@@ -25,7 +37,7 @@ export const HomepageBody: React.FC = (props) => {
 				</div>
 				:
 				<div className="homepage-header">
-					<h1 className="sub-header">Event {eventGroupID}</h1>
+					<h1 className="sub-header">{info?.name || "Loading"}</h1>
 					<h3 className="header-3">Use the sidebar to the left to quickly jump to an event</h3>
 				</div>}
 
