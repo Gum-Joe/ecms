@@ -29,15 +29,15 @@ export const SidebarItems: React.FC<SidebarProps> = (props) => {
 				if (eventOrGroup.type === "group") {
 					// FIXME: Make it so it just focuses on the first slot
 					return (
-						<FluentTreeItem onClick={() => history.push(`/view/${eventOrGroup.event_group_id}`)} key={index}>
-							{eventOrGroup.name}
+						<FluentTreeItem key={index}>
+							<span onClick={() => history.push(`/view/${eventOrGroup.event_group_id}`)}>{eventOrGroup.name}</span>
 							<SidebarItems eventGroupId={eventOrGroup.event_group_id} />
 						</FluentTreeItem>
 					);
 				} else {
 					return (
-						<FluentTreeItem onClick={() => history.push(`/view/${eventOrGroup.event_group_id}`)} key={index}>
-							{eventOrGroup.name}
+						<FluentTreeItem>
+							<span onClick={() => history.push(`/view/${eventOrGroup.event_group_id}`)}>{eventOrGroup.name}</span>
 						</FluentTreeItem>
 					);
 				}

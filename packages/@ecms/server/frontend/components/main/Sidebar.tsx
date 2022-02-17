@@ -11,6 +11,7 @@ import { SidebarItems } from "./SidebarItems";
 export const Sidebar: React.FC<SidebarProps> = (props) => {
 
 	useEffect(() => {
+		// Likely from the docs
 		baseLayerLuminance.setValueFor(document.getElementById("sidebar-tree-view") as HTMLElement, StandardLuminance.DarkMode);
 		fillColor.setValueFor(document.getElementById("sidebar-tree-view") as HTMLElement, SwatchRGB.from(parseColorHexRGB("#202020")!));
 	}, []);

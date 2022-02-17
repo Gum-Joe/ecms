@@ -72,6 +72,8 @@ const PointsRoot: React.FC = (props) => {
 				} else {
 					return setupRedirect("/end");
 				}
+			default:
+				return setupRedirect("/end");
 
 		}
 	}, [setup?.points?.config, setup.points?.module_id, setupRedirect]);
