@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 import { FieldDescriptor, ResCompetitorFields, ResCompetitorFilter, ResEventsGroupsList } from "@ecms/api/common";
-import { competitorsId, competitor_filters, competitor_settings, competitor_setting_types, events_and_groups, events_and_groupsId, teams } from "@ecms/models";
+import { competitorsId, competitor_filters, competitor_settings, competitor_setting_types, events_and_groups, events_and_groupsId, store_overall_points, teams } from "@ecms/models";
 import { Router } from "express";
 import filterCompetitorFrom from "../setup/filter";
 import { connectToDBKnex } from "../utils/db";
@@ -303,6 +303,36 @@ router.post("/:id/competitors/filter", async (req: RequestWithBody<{ filters: co
 		});
 	}
 	
+});
+
+/**
+ * Retrieve points
+ */
+router.get("/:id/common/points", async (req, res) => {
+	// Load!
+	const eventID: events_and_groupsId = req.params.id;
+	try {
+
+		logger.debug(`Getting points from event ${eventID}`);
+
+		const points = await knex
+			.select<Array<store_overall_points & teams>>("*")
+			.from("store_overall_points")
+			.join("events_and_groups", "store_overall_points.points_settings_id", "events_and_groups.points_settings_id")
+			.join("teams", "team.team_id", "store_overall_points.team_id")
+			.where("events_and_groups.event_group_id", eventID);
+		
+		res.json(points);
+		return;
+		
+
+	} catch (err) {
+		logger.error(`Error getting points for ${eventID}!`);
+		logger.error((err as Error)?.message);
+		res.status(500).json({
+			message: `Internal Server Error - ${(err as Error)?.message}`,
+		});
+	}
 });
 
 export default router;

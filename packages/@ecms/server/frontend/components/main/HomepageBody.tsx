@@ -1,4 +1,4 @@
-import { events_and_groups } from "@ecms/models";
+import { events_and_groups, store_overall_points, teams } from "@ecms/models";
 import { faCalendarAlt, faObjectGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
@@ -19,11 +19,15 @@ export const HomepageBody: React.FC = (props) => {
 	const { path, url } = useRouteMatch();
 
 	const [info, setInfo] = useState<events_and_groups>();
+	const [points, setpoints] = useState<(store_overall_points & teams)[]>([] as store_overall_points[]);
 
 	useAsyncEffect(async () => {
 		if (eventGroupID) {
 			const res = await fetch(`/api/common/${eventGroupID}/info`);
 			setInfo(await res.json());
+
+			const res2 = await fetch(`/api/common/${eventGroupID}/points`);
+			setpoints(await res2.json());
 		}
 		
 	}, []);
@@ -62,6 +66,31 @@ export const HomepageBody: React.FC = (props) => {
 					</ButtonWithIcons>
 				</Link>
 			</ButtonRow>
+
+			<div>
+				<h3>Points</h3>
+				<table className="ecms-table">
+					<thead>
+						<tr>
+							<th>Team</th>
+							<th>Wins</th>
+							<th>Draws</th>
+							<th>Loss</th>
+							<th>Points</th>
+						</tr>
+					</thead>
+					<tbody>
+						{
+							points.map((point, index) => (
+								<tr key={index}>
+									<td>{point.name}</td>
+									<td>{point.points}</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+			</div>
 		</>
 	);
 };
