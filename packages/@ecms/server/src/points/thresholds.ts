@@ -37,7 +37,7 @@ export default async function scoreThresholds(event_id: events_and_groupsId, kne
 	logger.info(`Calculating threshold scoring for ${event_id}`);
 
 	// 1: Get teams
-	logger.debug("Getting teams...")
+	logger.debug("Getting teams...");
 	const teams = Array.from((await getTeamsMapForEventGroup(event_id, knex)).values());
 
 	// 1: Begin by fetching competitors for all teams
@@ -70,7 +70,7 @@ export default async function scoreThresholds(event_id: events_and_groupsId, kne
 					if (passesThreshold(parseFloat(competitor.stored_data), threshold.points, settings.setting)) {
 						// Passed!
 						if (maxPoints < threshold.points) { // If we have a new max, assign it
-							maxPoints = threshold.points;
+							maxPoints = parseFloat(threshold.points as unknown as string);
 							grade = threshold.grade;
 						}
 						
@@ -92,7 +92,9 @@ export default async function scoreThresholds(event_id: events_and_groupsId, kne
 					.where("competitor_id", competitor.competitor_id)
 					.andWhere("competitor_settings_id", competitor.competitor_settings_id)
 					.catch(function (e) {
-						trx.rollback();
+						logger.error("ERROR!");
+						logger.error(JSON.stringify(e));
+						//trx.rollback();
 						throw e;
 					});
 			}
@@ -107,14 +109,18 @@ export default async function scoreThresholds(event_id: events_and_groupsId, kne
 					points: runningTotalHere,
 					sum_points: runningTotalHere
 				})
+				.onConflict(["points_settings_id", "team_id"])
+				.merge()
 				.catch(function (e) {
-					trx.rollback();
+					logger.error("ERROR!");
+					logger.error(JSON.stringify(e));
+					//trx.rollback();
 					throw e;
 				});
 		}
 
 		logger.debug("Done!");
-		trx.commit();
+		//trx.commit();
 	});
 
 	return;

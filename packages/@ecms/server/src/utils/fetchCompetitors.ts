@@ -68,7 +68,7 @@ export async function fetchCompetitors(event_group_id: string, team_id: string, 
 			logger.error("No parent_id found!");
 			throw new Error("Asked to inherit competitors but no parent_id found!");
 		}
-		return fetchCompetitors(eventSettings.parent_id, team_id, inheritedChildID, allowInternalIDs);
+		return fetchCompetitors(eventSettings.parent_id, team_id, inheritedChildID ?? eventSettings.competitor_settings_id, allowInternalIDs);
 	} else if (eventSettings.type === "filter_parent") {
 		// Filters
 		logger.debug("Getting filtered IDs of competitors...");

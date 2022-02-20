@@ -3,7 +3,7 @@
  * @packageDocumentation
  */
 
-import { events_and_groups, event_only_settings } from "@ecms/models";
+import { events_and_groups, event_only_settings, store_overall_points } from "@ecms/models";
 
 export enum OrderingOptions {
 	/** Lower results are better (e.g. time to do a length) */
@@ -54,6 +54,14 @@ export interface PointsMatches {
 	loss: number;
 	/** Points to a team for a draw */
 	draw: number;
+}
+
+/** Data stored in the DB for matches scoring system under {@link store_overall_points.data} */
+export interface TeamPoints {
+	wins?: number;
+	losses?: number;
+	draws?: number;
+	points?: number;
 }
 
 /**

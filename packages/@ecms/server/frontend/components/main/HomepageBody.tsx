@@ -1,10 +1,16 @@
-import { events_and_groups, store_overall_points, teams } from "@ecms/models";
+import { PointsSystems, TeamPoints } from "@ecms/api/points";
+import { events_and_groups, points_settings, store_overall_points, teams } from "@ecms/models";
 import { faCalendarAlt, faObjectGroup, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import { Link, useParams, useRouteMatch } from "react-router-dom";
 import useAsyncEffect from "use-async-effect";
 import { ButtonIconContainer, ButtonRow, ButtonWithIcons } from "../common/Button";
+
+interface PointState {
+	points_settings: points_settings;
+	points: (store_overall_points & teams)[];
+}
 
 /**
  * The actual body of the homepage with the event/group specific content
@@ -19,7 +25,7 @@ export const HomepageBody: React.FC = (props) => {
 	const { path, url } = useRouteMatch();
 
 	const [info, setInfo] = useState<events_and_groups>();
-	const [points, setpoints] = useState<(store_overall_points & teams)[]>([] as store_overall_points[]);
+	const [points, setpoints] = useState<PointState>();
 
 	useAsyncEffect(async () => {
 		if (eventGroupID) {
@@ -30,7 +36,7 @@ export const HomepageBody: React.FC = (props) => {
 			setpoints(await res2.json());
 		}
 		
-	}, []);
+	}, [eventGroupID]);
 
 	return (
 		<>
@@ -67,30 +73,66 @@ export const HomepageBody: React.FC = (props) => {
 				</Link>
 			</ButtonRow>
 
-			<div>
+			{(eventGroupID && points?.points_settings) && <div>
 				<h3>Points</h3>
-				<table className="ecms-table">
-					<thead>
-						<tr>
-							<th>Team</th>
-							<th>Wins</th>
-							<th>Draws</th>
-							<th>Loss</th>
-							<th>Points</th>
-						</tr>
-					</thead>
-					<tbody>
-						{
-							points.map((point, index) => (
-								<tr key={index}>
-									<td>{point.name}</td>
-									<td>{point.points}</td>
-								</tr>
-							))
-						}
-					</tbody>
-				</table>
-			</div>
+				{
+					(points?.points_settings && points?.points_settings?.module_id === PointsSystems.MATCHES) &&
+					<table className="ecms-table">
+						<thead>
+							<tr>
+								<th>Team</th>
+								<th>Wins</th>
+								<th>Draws</th>
+								<th>Loss</th>
+								<th>Points</th>
+							</tr>
+						</thead>
+						<tbody>
+							{
+								Array.isArray(points) && points?.points.map((point, index) => (
+									<tr key={index}>
+										<td>{point.name}</td>
+										<td>{(point.data as TeamPoints).wins ?? "0"}</td>
+										<td>{(point.data as TeamPoints).draws ?? "0"}</td>
+										<td>{(point.data as TeamPoints).losses ?? "0"}</td>
+										<td>{point.points}</td>
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
+				}
+
+				{
+					eventGroupID && points?.points_settings && points?.points_settings?.module_id === PointsSystems.THRESHOLDS &&
+					<table className="ecms-table">
+						<thead>
+							<tr>
+								<th>Team</th>
+								<th>Points</th>
+							</tr>
+						</thead>
+						<tbody>
+							{
+								Array.isArray(points) && points?.points.map((point, index) => (
+									<tr key={index}>
+										<td>{point.name}</td>
+										<td>{point.points}</td>
+									</tr>
+								))
+							}
+						</tbody>
+					</table>
+				}
+				
+			</div>}
+
+			{
+				points?.points_settings?.module_id === PointsSystems.THRESHOLDS &&
+				<div>
+					<h3>By competitor</h3>
+				</div>
+			}
 		</>
 	);
 };

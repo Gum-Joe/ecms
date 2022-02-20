@@ -29,6 +29,9 @@ Field should be the same as "points" if not a group. */
   /** Set to true if this has been overridden manually.
 If true, do not overwrite the points or sum_points stored here. */
   overriden: boolean;
+
+  /** Extra data for points (e.g. wins/draws/losses for matches) */
+  data: unknown;
 }
 
 /**

@@ -33,33 +33,54 @@ export default async function calculatePoints(event_group_id: events_and_groupsI
 	switch (settings.module_id) {
 		case "thresholds":
 			logger.debug("Using thresholds points system...");
-			await scoreThresholds(event_group_id, knex, settings.config as PointsThresholds, settings.points_settings_id);
+			try {
+				await scoreThresholds(event_group_id, knex, settings.config as PointsThresholds, settings.points_settings_id);
+			} catch (err) {
+				logger.error("ERROR Calculating and storing thresholds!");
+				throw err;
+			}
+			
 			break;
 		case "matches":
 			logger.debug("Using matches scoring system...");
 			const points = await scoreMatches(event_group_id, knex, settings.config as PointsMatches);
 			// From https://stackoverflow.com/questions/22957032/knex-transaction-with-promises
-			await knex.transaction(async function (t) {
+			await knex.transaction(function (t) {
 				// Now for each team, record points!
+				const promises: Promise<any>[] = [];
 				for (const [ team, pointsForTeam ] of points.entries()) {
 					logger.debug(`Inserting points for ${team}...`);
-					await knex("store_overall_points")
+					promises.push(knex("store_overall_points")
 						.transacting(t)
 						.insert({
 							points_settings_id: settings.points_settings_id,
 							team_id: team,
-							points: pointsForTeam,
-							sum_points: pointsForTeam
+							points: pointsForTeam.points,
+							sum_points: pointsForTeam.points,
+							data: pointsForTeam,
 						})
+						// https://www.postgresqltutorial.com/postgresql-upsert/
+						.onConflict(["points_settings_id", "team_id"])
+						.merge()
 						.catch(function (e) {
+							logger.error(e);
+							logger.error("Rolling back changes!");
 							t.rollback();
 							throw e;
-						});
+						}));
 
 				}
-				return await t.commit();
+				return Promise.all(promises)
+					.then(() => {
+						logger.debug("Done.");
+						t.commit();
+					})
+					.catch(function (err) {
+						logger.error("Error waiting for insertions to finish!");
+						logger.error(err);
+					});
 			});
-			logger.debug("Done.");
+			
 			break;
 
 	}

@@ -16,6 +16,9 @@
 			"skipFiles": [
 				"<node_internals>/**"
 			],
+			"env": {
+				"DEBUG": "knex:tx"
+			},
 			"runtimeArgs": ["nodemon"],
 			"type": "pwa-node",
 			"outputCapture": "std",
