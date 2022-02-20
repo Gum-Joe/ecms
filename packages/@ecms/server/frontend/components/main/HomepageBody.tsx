@@ -89,7 +89,7 @@ export const HomepageBody: React.FC = (props) => {
 						</thead>
 						<tbody>
 							{
-								Array.isArray(points) && points?.points.map((point, index) => (
+								Array.isArray(points?.points) && points?.points.map((point, index) => (
 									<tr key={index}>
 										<td>{point.name}</td>
 										<td>{(point.data as TeamPoints).wins ?? "0"}</td>
@@ -114,7 +114,7 @@ export const HomepageBody: React.FC = (props) => {
 						</thead>
 						<tbody>
 							{
-								Array.isArray(points) && points?.points.map((point, index) => (
+								Array.isArray(points?.points) && points?.points.map((point, index) => (
 									<tr key={index}>
 										<td>{point.name}</td>
 										<td>{point.points}</td>

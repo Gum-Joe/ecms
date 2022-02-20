@@ -73,7 +73,7 @@ export default async function calculatePoints(event_group_id: events_and_groupsI
 				return Promise.all(promises)
 					.then(() => {
 						logger.debug("Done.");
-						t.commit();
+						//t.commit();
 					})
 					.catch(function (err) {
 						logger.error("Error waiting for insertions to finish!");
